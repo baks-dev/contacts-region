@@ -1,0 +1,13 @@
+admin:
+
+  page:
+    index: 'Regional contacts'
+    new: 'Add a regional contact'
+    edit: 'Edit regional contact'
+    delete: 'Delete a regional contact'
+
+  breadcrumb:
+    index: 'Regional contacts'
+    new: 'Add a regional contact'
+    edit: 'Edit regional contact'
+    delete: 'Delete a regional contact'

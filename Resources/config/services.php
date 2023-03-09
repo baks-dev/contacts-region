@@ -35,9 +35,9 @@ return static function (ContainerConfigurator $configurator)
 
     /** Services */
 	
-//	$services->load($namespace.'\Controller\\', __DIR__.'/../../Controller')
-//		->tag('controller.service_arguments')
-//	;
+	$services->load($namespace.'\Controller\\', __DIR__.'/../../Controller')
+		->tag('controller.service_arguments')
+	;
 	
 //	$services->load($namespace.'\Repository\\', __DIR__.'/../../Repository')
 //		->exclude(__DIR__.'/../../Repository/**/*DTO.php')

@@ -33,7 +33,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[RoleSecurity(['ROLE_ADMIN', 'ROLE_CONTACTS_REGION_NEW'])]
 final class NewController extends AbstractController
 {
-	#[Route('/admin/contact/region/new/{id}', name: 'admin.newedit.new', methods: ['GET', 'POST'])]
+	#[Route('/admin/contact/region/new', name: 'admin.newedit.new', methods: ['GET', 'POST'])]
 	public function new(
 		Request $request,
 	) : Response
