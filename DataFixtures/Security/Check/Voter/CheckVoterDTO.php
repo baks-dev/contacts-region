@@ -21,19 +21,33 @@
  *  THE SOFTWARE.
  */
 
-namespace BaksDev\Contacts\Region\Entity\Call\Info;
+namespace BaksDev\Orders\Order\DataFixtures\Security\Check\Voter;
 
-interface ContactsRegionCallInfoInterface
+use BaksDev\Users\Groups\Group\Entity\CheckRole\CheckVoter\CheckVoterInterface;
+use BaksDev\Users\Groups\Role\Type\VoterPrefix\VoterPrefix;
+use Symfony\Component\Validator\Constraints as Assert;
+
+final class CheckVoterDTO implements CheckVoterInterface
 {
-	public function getAddress();
-	
-	
-	public function getEmail();
-	
-	
-	public function getLatitude();
-	
-	
-	public function getLength();
-	
+    /** Префикс правила */
+    #[Assert\NotBlank]
+    private VoterPrefix $voter;
+    
+    /**
+     * @return VoterPrefix
+     */
+    public function getVoter() : VoterPrefix
+    {
+        return $this->voter;
+    }
+    
+    /**
+     * @param VoterPrefix $voter
+     */
+    public function setVoter(VoterPrefix $voter) : void
+    {
+        $this->voter = $voter;
+    }
+
 }
+

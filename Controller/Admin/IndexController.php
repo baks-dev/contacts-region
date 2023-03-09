@@ -21,19 +21,43 @@
  *  THE SOFTWARE.
  */
 
-namespace BaksDev\Contacts\Region\Entity\Call\Info;
+declare(strict_types=1);
 
-interface ContactsRegionCallInfoInterface
+namespace BaksDev\Contacts\Region\Controller\Admin;
+
+use BaksDev\Core\Controller\AbstractController;
+use BaksDev\Core\Form\Search\SearchDTO;
+use BaksDev\Core\Form\Search\SearchForm;
+use BaksDev\Core\Services\Security\RoleSecurity;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+#[RoleSecurity(['ROLE_ADMIN', 'ROLE_CONTACTS_REGION'])]
+final class IndexController extends AbstractController
 {
-	public function getAddress();
-	
-	
-	public function getEmail();
-	
-	
-	public function getLatitude();
-	
-	
-	public function getLength();
-	
+	#[Route('/admin/contacts/region/{page<\d+>}', name: 'admin.index', methods: ['GET', 'POST'])]
+	public function index(
+		Request $request,
+		//AllInterface $all,
+		int $page = 0,
+	) : Response {
+		
+		dd('ROLE_CONTACTS_REGION');
+		
+		/* Поиск */
+		$search = new SearchDTO();
+		$searchForm = $this->createForm(SearchForm::class, $search);
+		$searchForm->handleRequest($request);
+		
+		/* Получаем список */
+		$contacts = $all->get($search);
+		
+		return $this->render(
+			[
+				'data' => $contacts->getData(),
+				'search' => $searchForm->createView(),
+			]); 
+	}
 }

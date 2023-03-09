@@ -26,6 +26,8 @@ declare(strict_types=1);
 namespace BaksDev\Contacts\Region\Entity\Call\Info;
 
 use BaksDev\Contacts\Region\Entity\Call\ContactsRegionCall;
+use BaksDev\Contacts\Region\Type\Call\Email\ContactRegionEmail;
+use BaksDev\Contacts\Region\Type\Call\Gps\ContactRegionGps;
 use BaksDev\Users\User\Entity\User;
 use BaksDev\Users\User\Type\Id\UserUid;
 use BaksDev\Core\Entity\EntityEvent;
@@ -47,31 +49,31 @@ class ContactsRegionCallInfo extends EntityEvent
 {
 	public const TABLE = 'contacts_region_call_info';
 	
-	/** ID события */
+	/** ID колл-центра */
 	#[ORM\Id]
 	#[ORM\OneToOne(inversedBy: 'info', targetEntity: ContactsRegionCall::class)]
 	#[ORM\JoinColumn(name: 'call', referencedColumnName: 'id')]
 	private ContactsRegionCall $call;
 	
-	/** Адрес */
-	#[ORM\Column(type: Types::STRING)]
+	/** Адрес колл-центра */
+	#[ORM\Column(type: Types::STRING, nullable: true)]
 	private ?string $address = null;
 	
-	/** Email */
-	#[ORM\Column(type: Types::STRING)]
-	private ?string $email = null;
+	/** Контактный Email */
+	#[ORM\Column(type: ContactRegionEmail::TYPE, nullable: true)]
+	private ?ContactRegionEmail $email = null;
 	
 	/** Режим работы: */
-	#[ORM\Column(type: Types::STRING)]
+	#[ORM\Column(type: Types::STRING, nullable: true)]
 	private ?string $working = null;
 
 	/** GPS широта:*/
-	#[ORM\Column(type: Types::STRING)]
-	private ?string $latitude = null;
+	#[ORM\Column(type: Types::STRING, nullable: true)]
+	private ?ContactRegionGps $latitude = null;
 	
 	/** GPS долгота:*/
-	#[ORM\Column(type: Types::STRING)]
-	private ?string $length = null;
+	#[ORM\Column(type: Types::STRING, nullable: true)]
+	private ?ContactRegionGps $length = null;
 	
 	
 	public function __construct(ContactsRegionCall $call)
@@ -84,6 +86,17 @@ class ContactsRegionCallInfo extends EntityEvent
 	{
 		if($dto instanceof ContactsRegionCallInfoInterface)
 		{
+			if(
+				empty($dto->getAddress()) &&
+				empty($dto->getEmail()) &&
+				empty($dto->getLatitude()) &&
+				empty($dto->getLength())
+			)
+			{
+				return false;
+			}
+			
+			
 			return parent::getDto($dto);
 		}
 		

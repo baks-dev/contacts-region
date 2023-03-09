@@ -21,19 +21,52 @@
  *  THE SOFTWARE.
  */
 
-namespace BaksDev\Contacts\Region\Entity\Call\Info;
+namespace BaksDev\Orders\Order\DataFixtures\Security\Role\Voter\Trans;
 
-interface ContactsRegionCallInfoInterface
+use BaksDev\Users\Groups\Role\Entity\Voters\Trans\VoterTransInterface;
+use BaksDev\Core\Type\Locale\Locale;
+
+final class VoterTransDTO implements VoterTransInterface
 {
-	public function getAddress();
-	
-	
-	public function getEmail();
-	
-	
-	public function getLatitude();
-	
-	
-	public function getLength();
-	
+    
+    /** Локаль */
+    private Locale $local;
+    
+    /** Название */
+    private string $name;
+    
+    /**
+     * @return Locale
+     */
+    public function getLocal() : Locale
+    {
+        return $this->local;
+    }
+    
+    /**
+     * @param Locale $local
+     */
+    public function setLocal(Locale $local) : void
+    {
+        $this->local = $local;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getName() : string
+    {
+        return $this->name;
+    }
+    
+    /**
+     * @param string $name
+     */
+    public function setName(string $name) : void
+    {
+        $this->name = $name;
+    }
+    
+    
 }
+
