@@ -1,0 +1,17 @@
+{% trans_default_domain('user.contacts.region') %}
+
+{% block contact_region_field_row %}
+	
+	{# <label class="form-label">{{ 'label'|trans }}</label> #}
+	<label class="form-label">label {{ form.vars.label }}</label>
+	
+	<div class="d-flex flex-column align-items-center pb-3 radio-buttons gap-3"
+			data-buttons="true"
+			style='clear: both'>
+		
+		{{ form_widget(form) }}
+	</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,32 @@
+admin:
+
+  page:
+    index: 'Regional contacts'
+    new: 'Add a regional contact'
+    edit: 'Edit regional contact'
+    delete: 'Delete a regional contact'
+
+  breadcrumb:
+    index: 'Regional contacts'
+    new: 'Add a regional contact'
+    edit: 'Edit regional contact'
+    delete: 'Delete a regional contact'
+
+
+  success:
+    new: 'Regional contact successfully added'
+    update: 'Regional contact updated successfully'
+    delete: 'Regional contact successfully removed to trash'
+    restore: 'Regional contact successfully restored'
+
+  danger:
+    new: '%s: Error when adding a regional contact'
+    update: '%s: Error updating regional contact'
+    delete: '%s: Error when deleting a regional contact'
+    restore: '%s: Error when restoring a regional contact'
+  form:
+    header:
+      delete: 'Delete regional contacts'
+    label:
+      delete: 'Are you sure you want to delete the region'
+      pickup: 'Point of issue of orders'

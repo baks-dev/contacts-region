@@ -1,0 +1,8 @@
+{
+  "namespaces": [
+    {
+      "namespace": "contacts-region",
+      "path": "Resources/view"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+
+# Роль
+ROLE_CONTACTS_REGION:
+  name: 'Региональные контакты'
+  desc: 'Региональные контакты, пункты самовывоза и склады'
+
+# Правила
+ROLE_CONTACTS_REGION_INDEX:
+  name: 'Просмотр'
+  desc: ''
+
+ROLE_CONTACTS_REGION_NEW:
+  name: 'Добавить'
+  desc: ''
+
+ROLE_CONTACTS_REGION_EDIT:
+  name: 'Редактировать'
+  desc: ''
+
+ROLE_CONTACTS_REGION_DELETE:
+  name: 'Удалить'
+  desc: ''
+
+
+

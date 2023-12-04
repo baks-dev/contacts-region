@@ -1,0 +1,287 @@
+{% trans_default_domain 'admin.contacts.region' %}
+
+
+{% set call = form.call %}
+
+<div class='d-flex gap-3 border  p-3 rounded-3 mb-3'>
+
+    <div class='w-100'>
+
+
+        <div class="card w-100 border-light mb-3">
+
+            <div class="card-header border-light bg-body">
+                <div class="card-title d-flex gap-3">
+
+                    {#{{ form_row(call.delete, {
+                        label: '<span class="svg-icon svg-icon-2 text-nowrap">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+                                                <rect opacity="0.5" x="7.05025" y="15.5356" width="12" height="2" rx="1" transform="rotate(-45 7.05025 15.5356)" fill="currentColor"></rect>
+                                                <rect x="8.46447" y="7.05029" width="12" height="2" rx="1" transform="rotate(45 8.46447 7.05029)" fill="currentColor"></rect>
+                                            </svg></span>',
+                        attr: {
+                            class: 'btn-outline-danger btn-sm del-item-call border-0',
+                            'data-delete' : 'item_'~call.vars.id
+                        }
+                    }) }}#}
+
+                    <h4>
+                        Настройки локали колл-центра
+                    </h4>
+
+                </div>
+            </div>
+
+
+            <div class="card-body pb-0">
+                {# НАСТРОЙКИ ЛОКАЛИ #}
+                {{ include(_self|replace({ "_call.html.twig": "trans/_trans.html.twig" })) }}
+            </div>
+        </div>
+
+
+        <div class="card border-light mb-3">
+            <div class="card-header border-light bg-body">
+                <div class="card-title">
+                    <h4>
+                        Дополнительные настройки
+                    </h4>
+                </div>
+            </div>
+
+            <div class="card-body pb-0">
+                {# НАСТРОЙКИ ЛОКАЛИ #}
+
+                <div class='d-flex justify-content-between gap-3'>
+                    {{ include(_self|replace({ "_call.html.twig": "cover/_cover.html.twig" })) }}
+
+                    {# Основные настройки #}
+                    <div>
+
+
+
+
+                        {#  Сортирвока #}
+                        {{ form_label(call.sort, 'sort'|trans({}, 'core')) }}
+
+                        <div class="input-group mb-3">
+							<span class="input-group-text"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="16" fill="currentColor"
+                                                                class="bi bi-sort-numeric-down" viewBox="0 0 16 16">
+							<path d="M12.438 1.668V7H11.39V2.684h-.051l-1.211.859v-.969l1.262-.906h1.046z"/>
+							<path fill-rule="evenodd"
+                                  d="M11.36 14.098c-1.137 0-1.708-.657-1.762-1.278h1.004c.058.223.343.45.773.45.824 0 1.164-.829 1.133-1.856h-.059c-.148.39-.57.742-1.261.742-.91 0-1.72-.613-1.72-1.758 0-1.148.848-1.835 1.973-1.835 1.09 0 2.063.636 2.063 2.687 0 1.867-.723 2.848-2.145 2.848zm.062-2.735c.504 0 .933-.336.933-.972 0-.633-.398-1.008-.94-1.008-.52 0-.927.375-.927 1 0 .64.418.98.934.98z"/>
+							<path d="M4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z"/>
+						</svg></span>
+                            {{ form_widget(call.sort) }}
+                        </div>
+
+
+                        <h6 class='my-3'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                            </svg>
+                            <span class='ms-3'>Координаты на карте</span>
+                        </h6>
+
+                        {{ form_row(call.info.latitude, { label: 'Широта'|trans }) }}
+                        {{ form_row(call.info.longitude, { label: 'Долгота'|trans }) }}
+                    </div>
+
+                </div>
+
+                <div class="d-flex gap-3">
+                    <div class="flex-fill d-flex justify-content-around pb-3 radio-buttons gap-3" data-buttons="true">
+
+                        <label class="btn p-3 border-dashed rounded-3 w-100 {{ call.pickup.vars.data ? 'active' }}">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+								<span class="h5">
+									<div class="form-check d-flex align-items-center">
+										{{ form_widget(call.pickup, { label: false }) }}
+										<span>
+											{{ 'admin.form.label.pickup'|trans }}
+										</span>
+									</div>
+								</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="flex-fill d-flex justify-content-around pb-3 radio-buttons gap-3" data-buttons="true">
+                        <label class="btn p-3 border-dashed rounded-3 w-100 {{ call.stock.vars.data ? 'active' }}">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+								<span class="h5">
+									<div class="form-check d-flex align-items-center">
+										{{ form_widget(call.stock, { label: false }) }}
+										<span>
+											Склад
+										</span>
+									</div>
+								</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                {{ form_row(call.profile, { label: 'Материально ответственный', placeholder: 'Выберите профиль из списка...' }) }}
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class='w-100'>
+
+
+
+        <div class="card w-100 border rounded-3 mb-3">
+
+            <div class="card-header border-light bg-body">
+                <div class="card-title">
+                    <h4>
+                        Региональные настройки
+                    </h4>
+                </div>
+            </div>
+
+            <div class="card-body pb-0 d-flex gap-3">
+                {# НАСТРОЙКИ ЛОКАЛИ #}
+                {# {{ include(_self|replace({ "form.html.twig": "_trans.html.twig" })) }} #}
+
+                <div class='w-50'>
+                    {#  Сортирвока #}
+                    {{ form_label(form.sort, 'sort'|trans({}, 'core')) }}
+
+                    <div class="input-group mb-3">
+							<span class="input-group-text"><svg xmlns="http://www.w3.org/2000/svg"
+                                                                width="16"
+                                                                height="16"
+                                                                fill="currentColor"
+                                                                class="bi bi-sort-numeric-down"
+                                                                viewBox="0 0 16 16">
+							<path d="M12.438 1.668V7H11.39V2.684h-.051l-1.211.859v-.969l1.262-.906h1.046z" />
+							<path fill-rule="evenodd"
+                                  d="M11.36 14.098c-1.137 0-1.708-.657-1.762-1.278h1.004c.058.223.343.45.773.45.824 0 1.164-.829 1.133-1.856h-.059c-.148.39-.57.742-1.261.742-.91 0-1.72-.613-1.72-1.758 0-1.148.848-1.835 1.973-1.835 1.09 0 2.063.636 2.063 2.687 0 1.867-.723 2.848-2.145 2.848zm.062-2.735c.504 0 .933-.336.933-.972 0-.633-.398-1.008-.94-1.008-.52 0-.927.375-.927 1 0 .64.418.98.934.98z" />
+							<path d="M4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z" />
+						</svg></span>
+                        {{ form_widget(form.sort) }}
+                    </div>
+                </div>
+                <div class='w-50'>
+                    {{ form_row(form.region, { label : 'Регион', placeholder : 'Выберите регион из списка...', attr : { 'data-select' : 'select2' } }) }}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card w-100 border-light mb-3">
+
+            <div class="card-header border-light bg-body">
+                <div class="card-title">
+                    <h4>
+                        Контактная информация
+                    </h4>
+                </div>
+            </div>
+
+            <div class="card-body pb-0">
+
+                {{ include(_self|replace({ "_call.html.twig": "info/_info.html.twig" })) }}
+            </div>
+
+        </div>
+
+
+        <div class="card w-100 border-light">
+
+            <div class="card-header border-light bg-body">
+                <div class="card-title">
+                    <h4>
+                        Контактные номера телефонов
+                    </h4>
+                </div>
+            </div>
+
+
+            <div class="card-body  pb-0 offer-variation-collection" id='{{ call.vars.id }}-collection'>
+
+                <div class='d-flex gap-3 mb-3'>
+                    <div class='w-75'>
+                        {{ 'Название '|trans }}
+                        <span class='small text-muted ms-3'>
+							<small>тел, факс, оператор</small>
+						</span>
+                    </div>
+                    <div class='w-50'>
+                        {{ 'Контактный телефон'|trans }}
+                    </div>
+                </div>
+
+                {% for phone in call.phone %}
+                    <div class='mb-3' id='item_{{ phone.vars.id }}'>
+                        {{ include(_self|replace({ "_call.html.twig": "phone/_phone.html.twig" })) }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            {# НАСТРОЙКИ ЛОКАЛИ #}
+
+
+            <div class="card-footer border-light bg-body d-flex justify-content-between align-items-center">
+
+
+                {# <button type="button"
+							class="btn btn-sm btn-outline-primary border-0 variation-image-add-collection"
+							data-prototype="{{ include(_self|replace({ "_collection.html.twig": "prototype.image.html.twig"}))| e('html_attr') }}"
+							data-offer="{{ offer.vars.name }}"
+							data-variation="{{ variation.vars.name }}"
+							data-index="{{ variation.image.count }}"
+							data-id='{{ variation.vars.id }}'
+					> #}
+
+
+                {# Добавить множественный вариант  #}
+                <button type="button"
+                        class="btn btn-sm btn-outline-primary border-0 phone-add-collection"
+                        data-prototype="{{ include(_self|replace({ "_call.html.twig": "phone/_phone.prototype.html.twig" }) )|e('html_attr') }}"
+
+                        data-collection="{{ call.vars.id }}-collection"
+                        data-index="{{ call.phone.count }}"
+                        data-call="{{ call.vars.name }}"
+
+                >
+						<span class="svg-icon svg-icon-2">
+							<svg xmlns="http://www.w3.org/2000/svg"
+                                 width="24"
+                                 height="24"
+                                 viewBox="0 0 24 24"
+                                 fill="none">
+								<rect opacity="0.5"
+                                      x="11"
+                                      y="18"
+                                      width="12"
+                                      height="2"
+                                      rx="1"
+                                      transform="rotate(-90 11 18)"
+                                      fill="currentColor">
+							</rect>
+								<rect x="6" y="11" width="12" height="2" rx="1" fill="currentColor"></rect>
+							</svg>
+						</span>
+                    Добавить еще контактный телефон
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+

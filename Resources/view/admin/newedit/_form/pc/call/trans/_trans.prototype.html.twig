@@ -1,0 +1,67 @@
+{% trans_default_domain 'admin.contacts.region' %}
+
+{% set identifier = call.translate.vars.id %}
+{% set local =  form_row(call.translate.vars.prototype.local, { attr : { value : '__call_translate__' }  })  %}
+
+{% set name =  form_row(call.translate.vars.prototype.name, {
+	label : 'Название регионального центра'|trans
+})  %}
+
+{% set description =  form_row(call.translate.vars.prototype.description, {
+	label : 'Кратское описание'|trans
+})  %}
+
+
+
+{% if baks_settings.locales|length > 1 %}
+	
+	<ul class="nav nav-pills gap-3 mb-3" id="nav-{{ identifier }}" role="tablist">
+		
+		{% for translate in baks_settings.locales %}
+			
+			<li class="nav-item" role="presentation">
+				<button class="btn fw-bolder nav-link{{ app.request.locale == translate ? ' active' : '' }}"
+						data-bs-toggle="tab"
+						type="button"
+						role="tab"
+						aria-selected="true"
+						
+						id="nav-{{ identifier }}-{{ translate }}-tab"
+						data-bs-target="#nav-{{ identifier }}-{{ translate }}"
+						aria-controls="nav-{{ identifier }}-{{ translate }}"
+				>
+					<small class="text-uppercase px-3">{{ translate|trans({}, 'core') }}</small>
+				</button>
+			</li>
+		
+		{% endfor %}
+	</ul>
+
+{% endif %}
+
+
+<div class="tab-content" id="nav-{{ identifier }}-content">
+	
+	
+	{% for translate in baks_settings.locales %}
+		
+		<div class="tab-pane fade{{ app.request.locale == translate ? ' show active' : '' }}"
+				id="nav-{{ identifier }}-{{ translate }}" role="tabpanel"
+				aria-labelledby="nav-{{ identifier }}-{{ translate }}-tab">
+			
+			{# Локаль #}
+			{{ local|replace({ '__call_translate__' : translate })|raw }}
+			
+			{#  Название товара  #}
+			{{ name|replace({ '__call_translate__' : translate })|raw }}
+			
+			{#  Краткое описание  #}
+			{{ description|replace({ '__call_translate__' : translate })|raw }}
+		
+		</div>
+	{% endfor %}
+	
+
+</div>
+
+

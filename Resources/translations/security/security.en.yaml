@@ -1,0 +1,19 @@
+ROLE_CONTACTS_REGION:
+  name: 'Regional contacts'
+  desc: 'Regional contacts, pickup points and warehouses'
+
+ROLE_CONTACTS_REGION_INDEX:
+  name: 'View'
+  desc: ''
+
+ROLE_CONTACTS_REGION_NEW:
+  name: 'Add'
+  desc: ''
+
+ROLE_CONTACTS_REGION_EDIT:
+  name: 'Edit'
+  desc: ''
+
+ROLE_CONTACTS_REGION_DELETE:
+  name: 'Delete'
+  desc: ''
