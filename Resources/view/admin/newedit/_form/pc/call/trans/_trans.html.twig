@@ -35,8 +35,7 @@
 	{% for translate in call.translate %}
 		
 		<div class="tab-pane fade{{ app.request.locale == translate.vars.value.local? ' show active' : '' }}"
-				id="nav-{{ identifier }}-{{ translate.vars.value.local }}" role="tabpanel"
-				aria-labelledby="nav-{{ identifier }}-{{ translate.vars.value.local }}-tab">
+				id="nav-{{ identifier }}-{{ translate.vars.value.local }}" role="tabpanel">
 			
 			{# Локаль #}
 			{{ form_row(translate.local) }}

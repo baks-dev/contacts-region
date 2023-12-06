@@ -46,8 +46,7 @@
 	{% for translate in baks_settings.locales %}
 		
 		<div class="tab-pane fade{{ app.request.locale == translate ? ' show active' : '' }}"
-				id="nav-{{ identifier }}-{{ translate }}" role="tabpanel"
-				aria-labelledby="nav-{{ identifier }}-{{ translate }}-tab">
+				id="nav-{{ identifier }}-{{ translate }}" role="tabpanel">
 			
 			{# Локаль #}
 			{{ local|replace({ '__call_translate__' : translate })|raw }}
