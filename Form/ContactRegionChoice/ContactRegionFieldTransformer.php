@@ -39,6 +39,10 @@ final class ContactRegionFieldTransformer implements DataTransformerInterface
 	
 	public function transform(mixed $value): ContactRegionFieldDTO
     {
+        if($value && !preg_match('{^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$}Di', $value))
+        {
+            $value = null;
+        }
 		
 		$ContactRegionFieldDTO = new ContactRegionFieldDTO();
 		

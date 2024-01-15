@@ -79,6 +79,8 @@ final class ContactRegionFieldForm extends AbstractType
                 'attr' => ['class' => 'change_region_field'],
             ]);
 
+
+
         $builder
             ->add('call', ChoiceType::class, [
 
@@ -91,11 +93,17 @@ final class ContactRegionFieldForm extends AbstractType
                 //'disabled' => true
             ]);
 
+
+
+
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
             function (FormEvent $event) use ($options): void {
                 $form = $event->getForm();
+
                 $data = $form->getNormData();
+
+                //dump($form);
 
                 if ($data->getCall() && $data->getRegion())
                 {
@@ -129,6 +137,21 @@ final class ContactRegionFieldForm extends AbstractType
             }
         );
 
+
+//        $builder->addEventListener(
+//            FormEvents::POST_SUBMIT,
+//            function (FormEvent $event): void {
+//
+//                $form = $event->getForm()->getParent();
+//
+//                $region = $event->getData();
+//
+//                //dump( $form);
+//                dd($region);
+//
+//            });
+
+
         $builder->get('region')->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event): void {
@@ -140,9 +163,12 @@ final class ContactRegionFieldForm extends AbstractType
 
                     $form = $event->getForm()->getParent();
 
-
                     if ($callChoice)
                     {
+
+                        //dd($callChoice);
+
+
                         $form
                             ->add('call', ChoiceType::class, [
                                 'choices' => $callChoice,
@@ -164,7 +190,8 @@ final class ContactRegionFieldForm extends AbstractType
                                 'required' => true,
                                 'placeholder' => 'Выберите пункт выдачи товаров'
                             ]);
-                    } else
+                    }
+                    else
                     {
                         $form
                             ->add('call', ChoiceType::class, [
@@ -186,6 +213,7 @@ final class ContactRegionFieldForm extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ContactRegionFieldDTO::class,
+            'validation_groups' => false
         ]);
     }
 }
