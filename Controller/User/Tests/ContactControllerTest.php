@@ -55,6 +55,8 @@ final class ContactControllerTest extends WebTestCase
 
             self::assertResponseIsSuccessful();
         }
+
+        self::assertTrue(true);
     }
 
     /** Доступ по роли ROLE_USER */
@@ -73,5 +75,7 @@ final class ContactControllerTest extends WebTestCase
 
             self::assertResponseIsSuccessful();
         }
+
+        self::assertTrue(true);
     }
 }

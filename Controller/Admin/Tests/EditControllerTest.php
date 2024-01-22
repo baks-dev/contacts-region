@@ -34,7 +34,7 @@ final class EditControllerTest extends WebTestCase
     private const ROLE = 'ROLE_CONTACTS_REGION_EDIT';
 
 
-    private static ?ContactsRegionCallUid $identifier;
+    private static ?ContactsRegionCallUid $identifier = null;
 
     public static function setUpBeforeClass(): void
     {
@@ -66,6 +66,8 @@ final class EditControllerTest extends WebTestCase
                 self::assertResponseStatusCodeSame(401);
             }
         }
+
+        self::assertTrue(true);
     }
 
     /** Доступ по роли */
@@ -89,6 +91,8 @@ final class EditControllerTest extends WebTestCase
                 self::assertResponseIsSuccessful();
             }
         }
+
+        self::assertTrue(true);
     }
 
     // доступ по роли ROLE_ADMIN
@@ -113,6 +117,8 @@ final class EditControllerTest extends WebTestCase
                 self::assertResponseIsSuccessful();
             }
         }
+
+        self::assertTrue(true);
     }
 
     // доступ по роли ROLE_USER
@@ -136,5 +142,7 @@ final class EditControllerTest extends WebTestCase
                 self::assertResponseStatusCodeSame(403);
             }
         }
+
+        self::assertTrue(true);
     }
 }

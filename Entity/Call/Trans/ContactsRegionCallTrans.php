@@ -30,6 +30,7 @@ use BaksDev\Core\Entity\EntityEvent;
 use BaksDev\Core\Type\Locale\Locale;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use BaksDev\Elastic\Attribute as ES;
 use InvalidArgumentException;
 use Symfony\Component\Validator\Constraints as Assert;
 
