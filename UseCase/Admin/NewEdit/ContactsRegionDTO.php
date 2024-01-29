@@ -25,25 +25,31 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\UseCase\Admin\NewEdit;
 
+use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEventInterface;
+use BaksDev\Contacts\Region\Type\Event\ContactsRegionEventUid;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class ContactsRegionDTO //implements ContactsRegionEventInterface
+/** @see ContactsRegionEvent */
+final class ContactsRegionDTO implements ContactsRegionEventInterface
 {
     /** Идентификатор региона */
     #[Assert\NotBlank]
     #[Assert\Uuid]
     private ?RegionUid $region = null;
 
+    #[Assert\Uuid]
+    private ?ContactsRegionEventUid $id = null;
+
     /** Колл-центр */
-    private Call\ContactsRegionCallDTO $call;
+    private Call\ContactsRegionCallDTO $calls;
 
     /** Сортировка */
     private int $sort = 500;
 
     public function __construct()
     {
-        $this->call = new Call\ContactsRegionCallDTO();
+        $this->calls = new Call\ContactsRegionCallDTO();
     }
     
     /** Идентификатор региона */
@@ -57,20 +63,37 @@ final class ContactsRegionDTO //implements ContactsRegionEventInterface
         $this->region = $region;
     }
 
+    /**
+     * Id
+     */
+
+
+    public function setId(?ContactsRegionEventUid $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function getEvent(): ?ContactsRegionEventUid
+    {
+        return $this->id;
+    }
+
+
     /** Колл-центры */
 
 
 
 
-    public function getCall(): Call\ContactsRegionCallDTO
+    public function getCalls(): Call\ContactsRegionCallDTO
     {
-        return $this->call;
+        return $this->calls;
     }
 
 
-    public function setCall(Call\ContactsRegionCallDTO $call): void
+    public function setCalls(Call\ContactsRegionCallDTO $calls): void
     {
-        $this->call = $call;
+        $this->calls = $calls;
     }
 
 
@@ -84,6 +107,7 @@ final class ContactsRegionDTO //implements ContactsRegionEventInterface
     {
         $this->sort = $sort;
     }
+
 
 
 }

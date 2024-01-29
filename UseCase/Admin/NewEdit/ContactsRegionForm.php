@@ -81,7 +81,7 @@ final class ContactsRegionForm extends AbstractType
 //			'mapped' => false,
 //		]);
 
-        $builder->add('call', Call\ContactsRegionCallForm::class);
+        $builder->add('calls', Call\ContactsRegionCallForm::class);
 		
 		/*$builder->add('call', Call\ContactsRegionCallForm::class, [
 			'entry_type' => Call\ContactsRegionCallForm::class,

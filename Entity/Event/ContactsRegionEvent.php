@@ -86,7 +86,7 @@ class ContactsRegionEvent extends EntityEvent
     public function __construct()
     {
         $this->id = new ContactsRegionEventUid();
-        $this->modify = new ContactsRegionModify($this);
+        //$this->modify = new ContactsRegionModify($this);
         $this->call = new ArrayCollection();
     }
 
@@ -134,6 +134,7 @@ class ContactsRegionEvent extends EntityEvent
 
     public function setEntity($dto): mixed
     {
+
         if ($dto instanceof ContactsRegionEventInterface || $dto instanceof self)
         {
             return parent::setEntity($dto);

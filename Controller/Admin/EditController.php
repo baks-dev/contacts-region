@@ -33,6 +33,7 @@ use BaksDev\Contacts\Region\UseCase\Admin\NewEdit\ContactsRegionHandler;
 use BaksDev\Core\Controller\AbstractController;
 use BaksDev\Core\Listeners\Event\Security\RoleSecurity;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,19 +49,32 @@ final class EditController extends AbstractController
         Request $request,
         #[MapEntity] Entity\Call\ContactsRegionCall $ContactsRegionCall,
         ContactsRegionHandler $contactsRegionHandler,
+        EntityManagerInterface $entityManager
     ): Response {
-        
+
+
+//        $ContactsRegionEvent = $ContactsRegionCall->getEvent();
+//        $ContactsRegionDTO = new ContactsRegionDTO();
+//        $ContactsRegionEvent->getDto($ContactsRegionDTO);
+//
+//
+//        dump($ContactsRegionEvent);
+//        dd($ContactsRegionDTO);
+
+        $entityManager->clear();
         /**
          * @var RegionUid $ContactsRegion
          */
         $ContactsRegion = $ContactsRegionCall->getEvent()->getMain();
 
+
         $ContactsRegionDTO = new ContactsRegionDTO();
         $ContactsRegionDTO->setRegion($ContactsRegion);
+        $ContactsRegionDTO->setId($ContactsRegionCall->getEvent()->getId());
 
         $ContactsRegionCallDTO = new ContactsRegionCallDTO();
         $ContactsRegionCall->getDto($ContactsRegionCallDTO);
-        $ContactsRegionDTO->setCall($ContactsRegionCallDTO);
+        $ContactsRegionDTO->setCalls($ContactsRegionCallDTO);
 
         // Форма добавления
         $form = $this->createForm(ContactsRegionForm::class, $ContactsRegionDTO);

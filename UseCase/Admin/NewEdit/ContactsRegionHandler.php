@@ -25,47 +25,131 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\UseCase\Admin\NewEdit;
 
-use BaksDev\Contacts\Region\Entity;
+//use BaksDev\Contacts\Region\Entity;
 use BaksDev\Contacts\Region\Entity\Call\ContactsRegionCall;
+use BaksDev\Contacts\Region\Entity\ContactsRegion;
+use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEvent;
 use BaksDev\Contacts\Region\Messenger\ContactRegionMessage;
+use BaksDev\Core\Entity\AbstractHandler;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Files\Resources\Upload\Image\ImageUploadInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use DomainException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class ContactsRegionHandler
+final class ContactsRegionHandler extends AbstractHandler
 {
-    private EntityManagerInterface $entityManager;
+    //    private EntityManagerInterface $entityManager;
+    //
+    //    private ValidatorInterface $validator;
+    //
+    //    private LoggerInterface $logger;
+    //
+    //    private ImageUploadInterface $imageUpload;
+    //
+    //    private MessageDispatchInterface $messageDispatch;
+    //
+    //    public function __construct(
+    //        EntityManagerInterface $entityManager,
+    //        ValidatorInterface $validator,
+    //        LoggerInterface $logger,
+    //        ImageUploadInterface $imageUpload,
+    //        MessageDispatchInterface $messageDispatch,
+    //    ) {
+    //        $this->entityManager = $entityManager;
+    //        $this->validator = $validator;
+    //        $this->logger = $logger;
+    //        $this->imageUpload = $imageUpload;
+    //        $this->messageDispatch = $messageDispatch;
+    //    }
 
-    private ValidatorInterface $validator;
+    public function handle(ContactsRegionDTO $command): string|ContactsRegion
+    {
+        $Main = $this->entityManager->getRepository(ContactsRegion::class)->findOneBy(
+            ['id' => $command->getRegion()]
+        );
 
-    private LoggerInterface $logger;
+        /** Валидация DTO  */
+        $this->validatorCollection->add($command);
 
-    private ImageUploadInterface $imageUpload;
+        $this->main = $Main ?: new ContactsRegion($command->getRegion());
+        $this->event = new ContactsRegionEvent();
 
-    private MessageDispatchInterface $messageDispatch;
 
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        ValidatorInterface $validator,
-        LoggerInterface $logger,
-        ImageUploadInterface $imageUpload,
-        MessageDispatchInterface $messageDispatch,
-    ) {
-        $this->entityManager = $entityManager;
-        $this->validator = $validator;
-        $this->logger = $logger;
-        $this->imageUpload = $imageUpload;
-        $this->messageDispatch = $messageDispatch;
+        try
+        {
+            $Main ? $this->preUpdate($command, true) : $this->prePersist($command);
+        }
+        catch(DomainException $errorUniqid)
+        {
+            return $errorUniqid->getMessage();
+        }
+
+
+        $ContactsRegionCallDTO = $command->getCalls();
+        $newContactsRegionCall = true;
+
+
+        /** @var ContactsRegionCall $call */
+        foreach($this->event->getCall() as $call)
+        {
+            if($call->getConst()->equals($ContactsRegionCallDTO->getConst()))
+            {
+
+                $call->setEntity($ContactsRegionCallDTO);
+
+                /** TODO: Загрузка обложки */
+
+//                if($ContactsRegionCallDTO->getCover()->file !== null)
+//                {
+//                    $ContactsRegionCallCover = $ContactsRegionCallDTO->getCover()->getEntityUpload();
+//                    $this->imageUpload->upload($ContactsRegionCallDTO->getCover()->file, $ContactsRegionCallCover);
+//                }
+
+                $newContactsRegionCall = false;
+            }
+        }
+
+        /* Добавляем новый */
+        if($newContactsRegionCall)
+        {
+            $ContactsRegionCall = new ContactsRegionCall($this->event);
+            $ContactsRegionCall->setEntity($ContactsRegionCallDTO);
+            $this->entityManager->persist($ContactsRegionCall);
+        }
+
+        /** Валидация всех объектов */
+        if($this->validatorCollection->isInvalid())
+        {
+            return $this->validatorCollection->getErrorUniqid();
+        }
+
+        $this->entityManager->flush();
+
+        //        /* Отправляем сообщение в шину */
+        //        $this->messageDispatch->dispatch(
+        //            message: new ProductSignMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
+        //            transport: 'products-sign'
+        //        );
+
+        /* Отправляем событие в шину  */
+        $this->messageDispatch->dispatch(
+            message: new ContactRegionMessage($this->main->getId(), $this->main->getEvent()),
+            transport: 'contacts-region'
+        );
+
+
+        return $this->main;
     }
 
-    public function handle(ContactsRegionDTO $command): string|Entity\ContactsRegion
+
+    public function _handle(ContactsRegionDTO $command): string|Entity\ContactsRegion
     {
         /* Валидация DTO */
         $errors = $this->validator->validate($command);
 
-        if (count($errors) > 0)
+        if(count($errors) > 0)
         {
             /** Ошибка валидации */
             $uniqid = uniqid('', false);
@@ -81,11 +165,11 @@ final class ContactsRegionHandler
             ['id' => $command->getRegion()]
         );
 
-        if ($Main)
+        if($Main)
         {
             $EventRepo = $this->entityManager->getRepository(Entity\Event\ContactsRegionEvent::class)->find($Main->getEvent());
 
-            if ($EventRepo === null)
+            if($EventRepo === null)
             {
                 $uniqid = uniqid('', false);
                 $errorsString = sprintf(
@@ -119,13 +203,13 @@ final class ContactsRegionHandler
         $newContactsRegionCall = true;
 
         /** @var ContactsRegionCall $call */
-        foreach ($Event->getCall() as $call)
+        foreach($Event->getCall() as $call)
         {
-            if ($call->getConst()->equals($ContactsRegionCallDTO->getConst()))
+            if($call->getConst()->equals($ContactsRegionCallDTO->getConst()))
             {
                 $call->setEntity($ContactsRegionCallDTO);
 
-                if ($ContactsRegionCallDTO->getCover()->file !== null)
+                if($ContactsRegionCallDTO->getCover()->file !== null)
                 {
                     $ContactsRegionCallCover = $ContactsRegionCallDTO->getCover()->getEntityUpload();
                     $this->imageUpload->upload($ContactsRegionCallDTO->getCover()->file, $ContactsRegionCallCover);
@@ -136,13 +220,12 @@ final class ContactsRegionHandler
         }
 
         /* Добавляем новый */
-        if ($newContactsRegionCall)
+        if($newContactsRegionCall)
         {
             $ContactsRegionCall = new ContactsRegionCall($Event);
             $ContactsRegionCall->setEntity($ContactsRegionCallDTO);
             $this->entityManager->persist($ContactsRegionCall);
         }
-
 
 
         /* присваиваем событие корню */
