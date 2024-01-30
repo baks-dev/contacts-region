@@ -49,11 +49,14 @@ final class ContactRegionFieldForm extends AbstractType
         ContactRegionChoiceInterface $regionChoice,
         ContactCallRegionChoiceInterface $callChoice,
         ContactCallRegionInterface $callRegion,
-    ) {
+    )
+    {
         $this->regionChoice = $regionChoice;
         $this->callChoice = $callChoice;
         $this->callRegion = $callRegion;
     }
+
+    private $region = null;
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -65,10 +68,10 @@ final class ContactRegionFieldForm extends AbstractType
         $builder
             ->add('region', ChoiceType::class, [
                 'choices' => $regionChoice,
-                'choice_value' => function (?RegionUid $region) {
+                'choice_value' => function(?RegionUid $region) {
                     return $region?->getValue();
                 },
-                'choice_label' => function (RegionUid $region) {
+                'choice_label' => function(RegionUid $region) {
                     return $region->getOption();
                 },
                 'label' => false,
@@ -78,7 +81,6 @@ final class ContactRegionFieldForm extends AbstractType
                 'placeholder' => 'Выберите регион из списка...',
                 'attr' => ['class' => 'change_region_field'],
             ]);
-
 
 
         $builder
@@ -94,92 +96,136 @@ final class ContactRegionFieldForm extends AbstractType
             ]);
 
 
-
+        //        $builder->addEventListener(
+        //            FormEvents::PRE_SET_DATA,
+        //            function (FormEvent $event) use ($options): void {
+        //
+        //                $form = $event->getForm();
+        //                $data = $event->getData();
+        //
+        //               if($data)
+        //               {
+        //                   dd($event->getData());
+        //               }
+        //
+        //                dump('PRE_SET_DATA');
+        //
+        ////                if($data)
+        ////                {
+        ////                    dd($data);
+        ////                }
+        //
+        //            });
 
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
-            function (FormEvent $event) use ($options): void {
+            function(FormEvent $event) use ($options): void {
                 $form = $event->getForm();
 
                 $data = $form->getNormData();
 
                 //dump($form);
 
-                if ($data->getCall() && $data->getRegion())
+                $callChoice = null;
+
+                if($this->region)
+                {
+                    $callChoice = $this->callChoice->fetchCallRegion($this->region);
+                }
+
+                if($data->getCall() && $data->getRegion())
                 {
                     $callChoice = $this->callChoice->fetchCallRegion($data->getRegion());
-
-                    if ($callChoice)
-                    {
-                        $form
-                            ->add('call', ChoiceType::class, [
-                                'choices' => $callChoice,
-                                'choice_value' => function (?ContactsRegionCallUid $call) {
-                                    return $call?->getValue();
-                                },
-                                'choice_label' => function (ContactsRegionCallUid $call) {
-                                    return $call->getName();
-                                },
-
-                                'choice_attr' => function (ContactsRegionCallUid $choice) {
-                                    return ['data-lati' => $choice->getAttr(), 'data-longi' => $choice->getOption()];
-                                },
-
-                                'attr' => ['data-address' => 'true'],
-                                'label' => false,
-                                'expanded' => false,
-                                'multiple' => false,
-                                'required' => true,
-                                'placeholder' => 'Выберите пункт выдачи товаров'
-                            ]);
-                    }
                 }
+
+
+                if($callChoice)
+                {
+                    $form
+                        ->add('call', ChoiceType::class, [
+                            'choices' => $callChoice,
+                            'choice_value' => function(?ContactsRegionCallUid $call) {
+                                return $call?->getValue();
+                            },
+                            'choice_label' => function(ContactsRegionCallUid $call) {
+                                return $call->getName();
+                            },
+
+                            'choice_attr' => function(ContactsRegionCallUid $choice) {
+                                return ['data-lati' => $choice->getAttr(), 'data-longi' => $choice->getOption()];
+                            },
+
+                            'attr' => ['data-address' => 'true'],
+                            'label' => false,
+                            'expanded' => false,
+                            'multiple' => false,
+                            'required' => true,
+                            'placeholder' => 'Выберите пункт выдачи товаров'
+                        ]);
+                }
+
+                if(!$data->getCall() && $data->getRegion())
+                {
+                    $form
+                        ->add('call', ChoiceType::class, [
+
+                            'label' => false,
+                            'expanded' => false,
+                            'multiple' => false,
+                            'required' => true,
+                            'placeholder' => 'Нет пуктов выдачи в указанном регионе',
+                            //'disabled' => true
+                        ]);
+                }
+
             }
         );
 
 
-//        $builder->addEventListener(
-//            FormEvents::POST_SUBMIT,
-//            function (FormEvent $event): void {
-//
-//                $form = $event->getForm()->getParent();
-//
-//                $region = $event->getData();
-//
-//                //dump( $form);
-//                dd($region);
-//
-//            });
+        //        $builder->addEventListener(
+        //            FormEvents::POST_SUBMIT,
+        //            function (FormEvent $event): void {
+        //
+        //                $form = $event->getForm()->getParent();
+        //
+        //                $data = $event->getData();
+        //
+        //                $form->add('value', self::class, ['label' => false]);
+        //
+        //
+        //                //dump( $form);
+        //                //dd($region);
+        //
+        //            });
 
 
         $builder->get('region')->addEventListener(
             FormEvents::POST_SUBMIT,
-            function (FormEvent $event): void {
+            function(FormEvent $event): void {
                 $region = $event->getForm()->getData();
 
-                if ($region)
+                if($region)
                 {
                     $callChoice = $this->callChoice->fetchCallRegion($region);
 
                     $form = $event->getForm()->getParent();
 
-                    if ($callChoice)
+                    $this->region = $region;
+
+
+                    if($callChoice)
                     {
-
-                        //dd($callChoice);
-
-
                         $form
                             ->add('call', ChoiceType::class, [
                                 'choices' => $callChoice,
-                                'choice_value' => function (?ContactsRegionCallUid $call) {
+                                'choice_value' => function(?ContactsRegionCallUid $call) {
                                     return $call?->getValue();
                                 },
-                                'choice_label' => function (ContactsRegionCallUid $call) {
+                                'choice_label' => function(ContactsRegionCallUid $call) {
                                     return $call->getName();
                                 },
 
-                                'choice_attr' => function (ContactsRegionCallUid $choice) {
+                                'choice_attr' => function(ContactsRegionCallUid $choice) {
                                     return ['data-lati' => $choice->getAttr(), 'data-longi' => $choice->getOption()];
                                 },
 
@@ -204,6 +250,9 @@ final class ContactRegionFieldForm extends AbstractType
                                 //'disabled' => true
                             ]);
                     }
+
+                    // $form->getParent()->add('value', self::class, ['label' => false]);
+
                 }
             }
         );

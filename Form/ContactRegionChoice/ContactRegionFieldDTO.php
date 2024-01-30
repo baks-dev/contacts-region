@@ -33,7 +33,7 @@ final class ContactRegionFieldDTO
 {
 	/** Регион доставки */
 	#[Assert\Uuid]
-	private ?RegionUid $region;
+	private ?RegionUid $region = null;
 	
 	/** Пункт выдачи товаров */
 	#[Assert\Uuid]
