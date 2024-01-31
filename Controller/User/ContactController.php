@@ -24,6 +24,8 @@ use BaksDev\Contacts\Region\Repository\ContactCallByRegion\ContactCallByRegionIn
 use BaksDev\Contacts\Region\Repository\ContactCallDetail\ContactCallDetailInterface;
 use BaksDev\Contacts\Region\Repository\ContactRegionDefault\ContactRegionDefaultInterface;
 use BaksDev\Core\Controller\AbstractController;
+use BaksDev\Core\Form\Search\SearchDTO;
+use BaksDev\Core\Form\Search\SearchForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -39,7 +41,8 @@ final class ContactController extends AbstractController
         ContactCallDetailInterface $callDetail,
         ContactRegionDefaultInterface $defaultRegion,
         ContactCallByRegionInterface $callRegion,
-    ): Response {
+    ): Response
+    {
         $RegionFilterDTO = new RegionFilterDTO();
         $DefaultRegion = $defaultRegion->getDefaultCallRegion();
         $RegionFilterDTO->setRegion($DefaultRegion);
@@ -48,13 +51,21 @@ final class ContactController extends AbstractController
         $form = $this->createForm(RegionFilterForm::class, $RegionFilterDTO);
         $form->handleRequest($request);
 
-        $calls =
-            $callRegion->fetchContactCallByRegionAssociative($RegionFilterDTO->getRegion());
+        $calls = $callRegion
+            ->fetchContactCallByRegionAssociative($RegionFilterDTO->getRegion());
+
+        // Поиск по всему сайту
+        $allSearch = new SearchDTO($request);
+        $allSearchForm = $this->createForm(SearchForm::class, $allSearch, [
+            'action' => $this->generateUrl('core:search'),
+        ]);
+
 
         return $this->render([
             'regions' => $callDetail->fetchContactCallAllAssociative(),
             'calls' => $calls,
             'form' => $form->createView(),
+            'all_search' => $allSearchForm->createView(),
         ]);
     }
 }
