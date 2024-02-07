@@ -43,9 +43,9 @@ final class ContactRegionFieldTransformer implements DataTransformerInterface
         {
             $value = null;
         }
-		
+
 		$ContactRegionFieldDTO = new ContactRegionFieldDTO();
-		
+
 		if($value)
 		{
 			$ContactsRegionCallUid = $this->callRegion->getContactCall(new ContactsRegionCallUid($value));
@@ -56,11 +56,11 @@ final class ContactRegionFieldTransformer implements DataTransformerInterface
 				$ContactRegionFieldDTO->setCall($ContactsRegionCallUid);
 			}
 		}
-		
+
 		return $ContactRegionFieldDTO;
 	}
-	
-	
+
+
 	public function reverseTransform(mixed $value) : ?string
 	{
 		/** @var ContactRegionFieldDTO $value */

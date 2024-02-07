@@ -28,6 +28,8 @@ namespace BaksDev\Contacts\Region\Twig;
 use BaksDev\Contacts\Region\Choice\ContactsRegionFieldChoice;
 use BaksDev\Contacts\Region\Repository\ContactCallDetail\ContactCallDetailInterface;
 use BaksDev\Contacts\Region\Type\Call\ContactsRegionCallUid;
+use BaksDev\Users\Profile\UserProfile\Repository\UserProfileById\UserProfileByIdInterface;
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Extension\AbstractExtension;
@@ -35,14 +37,20 @@ use Twig\TwigFunction;
 
 final class ContactsRegionExtension extends AbstractExtension
 {
-    private ContactCallDetailInterface $callDetail;
+//    private ContactCallDetailInterface $callDetail;
+//
+//    public function __construct(ContactCallDetailInterface $callDetail)
+//    {
+//        $this->callDetail = $callDetail;
+//    }
 
-    public function __construct(ContactCallDetailInterface $callDetail)
-    {
-        $this->callDetail = $callDetail;
+    private UserProfileByIdInterface $userProfile;
+
+    public function __construct(UserProfileByIdInterface $userProfile) {
+        $this->userProfile = $userProfile;
     }
 
-	public function getFunctions() : array
+    public function getFunctions() : array
 	{
 	    return [
 	    	new TwigFunction(ContactsRegionFieldChoice::TYPE, [$this, 'content'], ['needs_environment' => true, 'is_safe' => ['html']]),
@@ -53,8 +61,13 @@ final class ContactsRegionExtension extends AbstractExtension
 
 	public function content(Environment $twig, string $value): string
 	{
-	    $data = $this->callDetail->fetchContactCallDetailById(new ContactsRegionCallUid($value));
-        
+	    //$data = $this->callDetail->fetchContactCallDetailById(new ContactsRegionCallUid($value));
+	    $data = $this->userProfile->fetchUserProfileAssociative(new UserProfileUid($value));
+
+        dump($data);
+
+        return '';
+
 	    try
 	    {
 	        return $twig->render('@Template/ContactsRegion/content.html.twig', ['value' => $data]);
