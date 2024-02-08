@@ -64,7 +64,7 @@ final class ContactsRegionExtension extends AbstractExtension
 	    //$data = $this->callDetail->fetchContactCallDetailById(new ContactsRegionCallUid($value));
 	    $data = $this->userProfile->fetchUserProfileAssociative(new UserProfileUid($value));
 
-        dump($data);
+        //dump($data);
 
         return '';
 
