@@ -42,9 +42,7 @@ final class ContactsRegionCallPhoneForm extends AbstractType
 		
 		/** Контактный телефон */
 		$builder->add('phone', TextType::class);
-		
-		$builder->add('delete', ButtonType::class);
-		
+
 		/** Удалить */
 		$builder->add(
 			'delete',

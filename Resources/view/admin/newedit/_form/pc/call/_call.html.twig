@@ -248,7 +248,8 @@
 
                 {# Добавить множественный вариант  #}
                 <button type="button"
-                        class="btn btn-sm btn-outline-primary border-0 phone-add-collection"
+                        id="delivery_transport_form_add_driver"
+                        class="btn btn-sm btn-outline-primary border-0"
                         data-prototype="{{ include(_self|replace({ "_call.html.twig": "phone/_phone.prototype.html.twig" }) )|e('html_attr') }}"
 
                         data-collection="{{ call.vars.id }}-collection"
