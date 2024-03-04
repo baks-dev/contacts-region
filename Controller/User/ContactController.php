@@ -57,7 +57,7 @@ final class ContactController extends AbstractController
         // Поиск по всему сайту
         $allSearch = new SearchDTO($request);
         $allSearchForm = $this->createForm(SearchForm::class, $allSearch, [
-            'action' => $this->generateUrl('core:search'),
+            'action' => $this->generateUrl('contacts-region:admin.index'),
         ]);
 
 
