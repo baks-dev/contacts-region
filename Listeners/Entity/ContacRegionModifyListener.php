@@ -25,11 +25,13 @@ namespace BaksDev\Contacts\Region\Listeners\Entity;
 
 use BaksDev\Contacts\Region\Entity\Modify\ContactsRegionModify;
 use BaksDev\Core\Type\Ip\IpAddress;
+use BaksDev\Users\User\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 
 #[AsEntityListener(event: Events::prePersist, method: 'prePersist', entity: ContactsRegionModify::class)]
 final class ContacRegionModifyListener
@@ -49,10 +51,17 @@ final class ContacRegionModifyListener
     public function prePersist(ContactsRegionModify $data, LifecycleEventArgs $event) : void
     {
         $token = $this->token->getToken();
-        
-        if($token)
-        {
+
+        if ($token) {
+
             $data->setUsr($token->getUser());
+
+            if($token instanceof SwitchUserToken)
+            {
+                /** @var User $originalUser */
+                $originalUser = $token->getOriginalToken()->getUser();
+                $data->setUsr($originalUser);
+            }
         }
         
         /* Если пользователь не из консоли */
