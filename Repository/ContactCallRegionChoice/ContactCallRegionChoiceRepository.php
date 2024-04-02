@@ -32,7 +32,7 @@ use BaksDev\Contacts\Region\Entity as ContactsEntity;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use BaksDev\Contacts\Region\Type\Call\ContactsRegionCallUid;
 
-final class ContactCallRegionChoice implements ContactCallRegionChoiceInterface
+final class ContactCallRegionChoiceRepository implements ContactCallRegionChoiceInterface
 {
     private EntityManagerInterface $entityManager;
 

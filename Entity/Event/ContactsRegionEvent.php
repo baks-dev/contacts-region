@@ -62,19 +62,16 @@ class ContactsRegionEvent extends EntityEvent
     private ?RegionUid $region;
 
     /** One To One */
-    // #[ORM\OneToOne(mappedBy: 'event', targetEntity: ContactsRegionLogo::class, cascade: ['all'])]
+    // #[ORM\OneToOne(targetEntity: ContactsRegionLogo::class, mappedBy: 'event',  cascade: ['all'])]
     // private ?ContactsRegionOne $one = null;
 
     /** Модификатор */
-    #[ORM\OneToOne(mappedBy: 'event', targetEntity: ContactsRegionModify::class, cascade: ['all'])]
+    #[ORM\OneToOne(targetEntity: ContactsRegionModify::class, mappedBy: 'event', cascade: ['all'])]
     private ContactsRegionModify $modify;
 
-    //	/** Перевод */
-    //	#[ORM\OneToMany(mappedBy: 'event', targetEntity: ContactsRegionTrans::class, cascade: ['all'])]
-    //	private Collection $translate;
 
     /** Колл-центры */
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: ContactsRegionCall::class, cascade: ['all'])]
+    #[ORM\OneToMany(targetEntity: ContactsRegionCall::class, mappedBy: 'event', cascade: ['all'])]
     #[ORM\OrderBy(['sort' => 'ASC'])]
     private Collection $call;
 

@@ -34,7 +34,7 @@ use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Reference\Region\Entity as RegionEntity;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class AllContactsRegion implements AllContactsRegionInterface
+final class AllContactsRegionRepository implements AllContactsRegionInterface
 {
 
     private TranslatorInterface $translator;

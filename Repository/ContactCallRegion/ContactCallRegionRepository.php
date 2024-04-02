@@ -30,7 +30,7 @@ use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEvent;
 use BaksDev\Contacts\Region\Type\Call\ContactsRegionCallUid;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class ContactCallRegion implements ContactCallRegionInterface
+final class ContactCallRegionRepository implements ContactCallRegionInterface
 {
 	private EntityManagerInterface $entityManager;
 	

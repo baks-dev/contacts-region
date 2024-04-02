@@ -33,7 +33,7 @@ use BaksDev\Reference\Region\Entity as RegionEntity;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class ContactCallDetail implements ContactCallDetailInterface
+final class ContactCallDetailRepository implements ContactCallDetailInterface
 {
 
     private TranslatorInterface $translator;

@@ -70,6 +70,8 @@ final class ContactsRegionHandler extends AbstractHandler
             ['id' => $command->getRegion()]
         );
 
+        $command->setId($Main?->getEvent());
+
         /** Валидация DTO  */
         $this->validatorCollection->add($command);
 

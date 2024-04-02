@@ -48,8 +48,6 @@ final class NewController extends AbstractController
 
         $ContactsRegionDTO = new ContactsRegionDTO();
 
-
-
         // Форма
         $form = $this->createForm(ContactsRegionForm::class, $ContactsRegionDTO);
         $form->handleRequest($request);

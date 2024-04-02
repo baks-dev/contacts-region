@@ -29,7 +29,7 @@ use BaksDev\Contacts\Region\Entity as ContactsRegionEntity;
 use BaksDev\Core\Doctrine\ORMQueryBuilder;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 
-final class ContactRegionDefault implements ContactRegionDefaultInterface
+final class ContactRegionDefaultRepository implements ContactRegionDefaultInterface
 {
 
     private ORMQueryBuilder $ORMQueryBuilder;

@@ -31,7 +31,7 @@ use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Core\Type\Gps\GpsLatitude;
 use BaksDev\Core\Type\Gps\GpsLongitude;
 
-final class ContactCallByGeocode implements ContactCallByGeocodeInterface
+final class ContactCallByGeocodeRepository implements ContactCallByGeocodeInterface
 {
 
     private DBALQueryBuilder $DBALQueryBuilder;

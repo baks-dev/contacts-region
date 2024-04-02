@@ -32,7 +32,7 @@ use BaksDev\Reference\Region\Entity as RegionEntity;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class ContactCallByRegion implements ContactCallByRegionInterface
+final class ContactCallByRegionRepository implements ContactCallByRegionInterface
 {
     private TranslatorInterface $translator;
     private DBALQueryBuilder $DBALQueryBuilder;

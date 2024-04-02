@@ -76,24 +76,24 @@ class ContactsRegionCall extends EntityEvent
     private ?UserProfileUid $profile = null;
 
     /** Обложка */
-    #[ORM\OneToOne(mappedBy: 'call', targetEntity: Cover\ContactsRegionCallCover::class, cascade: ['all'])]
+    #[ORM\OneToOne(targetEntity: Cover\ContactsRegionCallCover::class, mappedBy: 'call', cascade: ['all'])]
     #[ORM\OrderBy(['sort' => 'ASC'])]
     private ?Cover\ContactsRegionCallCover $cover = null;
 
     /** Перевод */
     #[Assert\Valid]
     #[Assert\Count(min: 1)]
-    #[ORM\OneToMany(mappedBy: 'call', targetEntity: ContactsRegionCallTrans::class, cascade: ['all'])]
+    #[ORM\OneToMany(targetEntity: ContactsRegionCallTrans::class, mappedBy: 'call', cascade: ['all'])]
     private Collection $translate;
 
     /** Контактные номера телефонов Колл-центра */
     #[Assert\Valid]
-    #[ORM\OneToMany(mappedBy: 'call', targetEntity: ContactsRegionCallPhone::class, cascade: ['all'])]
+    #[ORM\OneToMany(targetEntity: ContactsRegionCallPhone::class, mappedBy: 'call', cascade: ['all'])]
     private Collection $phone;
 
     /** Контактная информация */
     #[Assert\Valid]
-    #[ORM\OneToOne(mappedBy: 'call', targetEntity: ContactsRegionCallInfo::class, cascade: ['all'])]
+    #[ORM\OneToOne(targetEntity: ContactsRegionCallInfo::class, mappedBy: 'call', cascade: ['all'])]
     private ContactsRegionCallInfo $info;
 
     /** Пункт самовывоза (выводит в списки пунктов самовывоза) */

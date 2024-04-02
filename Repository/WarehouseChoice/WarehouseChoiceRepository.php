@@ -33,7 +33,7 @@ use BaksDev\Users\Address\Entity\GeocodeAddress;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class WarehouseChoice implements WarehouseChoiceInterface
+final class WarehouseChoiceRepository implements WarehouseChoiceInterface
 {
 
     private TranslatorInterface $translator;
