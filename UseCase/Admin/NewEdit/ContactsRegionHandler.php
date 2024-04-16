@@ -78,7 +78,6 @@ final class ContactsRegionHandler extends AbstractHandler
         $this->main = $Main ?: new ContactsRegion($command->getRegion());
         $this->event = new ContactsRegionEvent();
 
-
         try
         {
             $Main ? $this->preUpdate($command, true) : $this->prePersist($command);
@@ -88,6 +87,9 @@ final class ContactsRegionHandler extends AbstractHandler
             return $errorUniqid->getMessage();
         }
 
+
+        dump($Main);
+        dd($this->event);
 
         $ContactsRegionCallDTO = $command->getCalls();
         $newContactsRegionCall = true;
