@@ -63,4 +63,9 @@ final class ContactsRegionFieldChoice implements FieldsChoiceInterface, Referenc
     {
         return RegionUid::class;
     }
+
+    public function constraints(): ?array
+    {
+        return null;
+    }
 }
