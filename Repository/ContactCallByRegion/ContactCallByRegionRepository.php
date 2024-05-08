@@ -25,87 +25,91 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\Repository\ContactCallByRegion;
 
-use BaksDev\Contacts\Region\Entity as ContactsRegionEntity;
+
+use BaksDev\Contacts\Region\Entity\Call\ContactsRegionCall;
+use BaksDev\Contacts\Region\Entity\Call\Cover\ContactsRegionCallCover;
+use BaksDev\Contacts\Region\Entity\Call\Info\ContactsRegionCallInfo;
+use BaksDev\Contacts\Region\Entity\Call\Phone\ContactsRegionCallPhone;
+use BaksDev\Contacts\Region\Entity\Call\Trans\ContactsRegionCallTrans;
+use BaksDev\Contacts\Region\Entity\ContactsRegion;
+use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEvent;
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Core\Type\Locale\Locale;
-use BaksDev\Reference\Region\Entity as RegionEntity;
+use BaksDev\Reference\Region\Entity\Event\RegionEvent;
+use BaksDev\Reference\Region\Entity\Region;
+use BaksDev\Reference\Region\Entity\Trans\RegionTrans;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContactCallByRegionRepository implements ContactCallByRegionInterface
 {
-    private TranslatorInterface $translator;
     private DBALQueryBuilder $DBALQueryBuilder;
-
 
     public function __construct(
         DBALQueryBuilder $DBALQueryBuilder,
-        TranslatorInterface $translator,
     )
     {
-
-        $this->translator = $translator;
         $this->DBALQueryBuilder = $DBALQueryBuilder;
     }
 
 
     public function fetchContactCallByRegionAssociative(?RegionUid $region, bool $pickup = false): ?array
     {
-        $qb = $this->DBALQueryBuilder->createQueryBuilder(self::class);
+        $dbal = $this->DBALQueryBuilder
+            ->createQueryBuilder(self::class)
+            ->bindLocal();
 
-        $qb->setParameter('local', new Locale($this->translator->getLocale()), Locale::TYPE);
 
-        $qb->from(ContactsRegionEntity\ContactsRegion::TABLE, 'contact_region');
+        $dbal->from(ContactsRegion::class, 'contact_region');
 
         if($region)
         {
-            $qb->where('contact_region.id = :region');
-            $qb->setParameter('region', $region, RegionUid::TYPE);
+            $dbal->where('contact_region.id = :region');
+            $dbal->setParameter('region', $region, RegionUid::TYPE);
         }
 
-        $qb->join('contact_region', RegionEntity\Region::TABLE, 'region', 'region.id = contact_region.id');
-
-        $qb->join('region',
-            RegionEntity\Event\RegionEvent::TABLE,
-            'region_event',
-            'region_event.id = region.event AND region_event.active = true'
+        $dbal->leftJoin(
+            'contact_region',
+            Region::class,
+            'region',
+            'region.id = contact_region.id'
         );
 
-        $qb->addSelect('region_trans.name AS region_name')
-            ->addGroupBy('region_trans.name');
-        $qb->addSelect('region_trans.description AS region_description')
-            ->addGroupBy('region_trans.description');
+        $dbal
+            ->join(
+                'region',
+                RegionEvent::class,
+                'region_event',
+                'region_event.id = region.event AND region_event.active = true'
+            );
 
-        $qb->leftJoin('region_event',
-            RegionEntity\Trans\RegionTrans::TABLE,
-            'region_trans',
-            'region_trans.event = region_event.id AND region_trans.local = :local'
-        );
+        $dbal
+            ->addSelect('region_trans.name AS region_name')
+            ->addSelect('region_trans.description AS region_description')
+            ->leftJoin(
+                'region_event',
+                RegionTrans::class,
+                'region_trans',
+                'region_trans.event = region_event.id AND region_trans.local = :local'
+            );
 
-        $qb->leftJoin('contact_region',
-            ContactsRegionEntity\Event\ContactsRegionEvent::TABLE,
-            'contact_region_event',
-            'contact_region_event.id = contact_region.event'
-        );
-
-        $qb->leftJoin('contact_region_event',
-            ContactsRegionEntity\Call\ContactsRegionCall::TABLE,
+        $dbal->leftJoin(
+            'contact_region',
+            ContactsRegionCall::class,
             'contact_region_call',
-            'contact_region_call.event = contact_region_event.id'.($pickup ? ' AND contact_region_call.pickup = true' : '')
+            'contact_region_call.event = contact_region.event AND contact_region_call.active = true '.($pickup ? ' AND contact_region_call.pickup = true' : '')
         );
 
-        $qb->addSelect('contact_region_call_trans.name AS call_name')
-            ->addGroupBy('contact_region_call_trans.name');
-        $qb->addSelect('contact_region_call_trans.description AS call_description')
-            ->addGroupBy('contact_region_call_trans.description');
+        $dbal
+            ->addSelect('contact_region_call_trans.name AS call_name')
+            ->addSelect('contact_region_call_trans.description AS call_description')
+            ->leftJoin('contact_region_call',
+                ContactsRegionCallTrans::class,
+                'contact_region_call_trans',
+                'contact_region_call_trans.call = contact_region_call.id AND contact_region_call_trans.local = :local'
+            );
 
-        $qb->leftJoin('contact_region_call',
-            ContactsRegionEntity\Call\Trans\ContactsRegionCallTrans::TABLE,
-            'contact_region_call_trans',
-            'contact_region_call_trans.call = contact_region_call.id AND contact_region_call_trans.local = :local'
-        );
-
-        $qb->addSelect("JSON_AGG
+        $dbal->addSelect("JSON_AGG
 		( DISTINCT
 				
 					JSONB_BUILD_OBJECT
@@ -118,57 +122,49 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
 		"
         );
 
-        $qb->leftJoin('contact_region_call',
-            ContactsRegionEntity\Call\Phone\ContactsRegionCallPhone::TABLE,
+        $dbal->leftJoin(
+            'contact_region_call',
+            ContactsRegionCallPhone::class,
             'contact_region_call_phone',
             'contact_region_call_phone.call = contact_region_call.id'
         );
 
-        $qb->addSelect('contact_region_call_info.address AS call_address')
-            ->addGroupBy('contact_region_call_info.address');
-        $qb->addSelect('contact_region_call_info.email AS call_email')
-            ->addGroupBy('contact_region_call_info.email');
-        $qb->addSelect('contact_region_call_info.working AS call_working')
-            ->addGroupBy('contact_region_call_info.working');
-        $qb->addSelect('contact_region_call_info.latitude AS call_latitude')
-            ->addGroupBy('contact_region_call_info.latitude');
-        $qb->addSelect('contact_region_call_info.longitude AS call_longitude')
-            ->addGroupBy('contact_region_call_info.longitude');
+        $dbal
+            ->addSelect('contact_region_call_info.address AS call_address')
+            ->addSelect('contact_region_call_info.email AS call_email')
+            ->addSelect('contact_region_call_info.working AS call_working')
+            ->addSelect('contact_region_call_info.latitude AS call_latitude')
+            ->addSelect('contact_region_call_info.longitude AS call_longitude')
+            ->leftJoin('contact_region_call',
+                ContactsRegionCallInfo::class,
+                'contact_region_call_info',
+                'contact_region_call_info.call = contact_region_call.id'
+            );
 
-        $qb->leftJoin('contact_region_call',
-            ContactsRegionEntity\Call\Info\ContactsRegionCallInfo::TABLE,
-            'contact_region_call_info',
-            'contact_region_call_info.call = contact_region_call.id'
-        );
-
-        $qb->addSelect("
+        $dbal->addSelect("
 			CASE
-				WHEN contact_region_call_cover.name IS NOT NULL THEN
-					CONCAT ( '/upload/".ContactsRegionEntity\Call\Cover\ContactsRegionCallCover::TABLE."' , '/', contact_region_call_cover.name)
+				WHEN contact_region_call_cover.name IS NOT NULL 
+				THEN CONCAT ( '/upload/".$dbal->table(ContactsRegionCallCover::class)."' , '/', contact_region_call_cover.name)
 				ELSE NULL
 			END AS call_cover_name
 		")
-            ->addGroupBy('contact_region_call_cover.name');
-
-        $qb->addSelect('contact_region_call_cover.ext AS call_cover_ext')
-            ->addGroupBy('contact_region_call_cover.ext');
-        $qb->addSelect('contact_region_call_cover.cdn AS call_cover_cdn')
-            ->addGroupBy('contact_region_call_cover.cdn');
-
-
-        $qb->leftJoin('contact_region_call',
-            ContactsRegionEntity\Call\Cover\ContactsRegionCallCover::TABLE,
-            'contact_region_call_cover',
-            'contact_region_call_cover.call = contact_region_call.id'
-        );
+            ->addSelect('contact_region_call_cover.ext AS call_cover_ext')
+            ->addSelect('contact_region_call_cover.cdn AS call_cover_cdn')
+            ->leftJoin(
+                'contact_region_call',
+                ContactsRegionCallCover::class,
+                'contact_region_call_cover',
+                'contact_region_call_cover.call = contact_region_call.id'
+            );
 
 
-        $qb->addGroupBy('contact_region_call.sort');
-        $qb->addOrderBy('contact_region_call.sort');
+        $dbal->addGroupBy('contact_region_call.sort');
+        $dbal->addOrderBy('contact_region_call.sort');
 
+        $dbal->allGroupByExclude();
 
         /* Кешируем результат DBAL */
-        return $qb
+        return $dbal
             ->enableCache('contacts-region', 86400)
             ->fetchAllAssociative();
 
