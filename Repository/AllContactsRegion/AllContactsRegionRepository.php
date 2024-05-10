@@ -25,133 +25,147 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\Repository\AllContactsRegion;
 
-use BaksDev\Contacts\Region\Entity as ContactsRegionEntity;
+
+use BaksDev\Contacts\Region\Entity\Call\ContactsRegionCall;
+use BaksDev\Contacts\Region\Entity\Call\Cover\ContactsRegionCallCover;
+use BaksDev\Contacts\Region\Entity\Call\Trans\ContactsRegionCallTrans;
+use BaksDev\Contacts\Region\Entity\ContactsRegion;
+use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEvent;
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Core\Form\Search\SearchDTO;
 use BaksDev\Core\Services\Paginator\PaginatorInterface;
-use BaksDev\Core\Services\Switcher\SwitcherInterface;
-use BaksDev\Core\Type\Locale\Locale;
-use BaksDev\Reference\Region\Entity as RegionEntity;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use BaksDev\Reference\Region\Entity\Event\RegionEvent;
+use BaksDev\Reference\Region\Entity\Region;
+use BaksDev\Reference\Region\Entity\Trans\RegionTrans;
 
 final class AllContactsRegionRepository implements AllContactsRegionInterface
 {
-
-    private TranslatorInterface $translator;
-
-    private SwitcherInterface $switcher;
-
     private PaginatorInterface $paginator;
 
-    private mixed $trans;
     private DBALQueryBuilder $DBALQueryBuilder;
 
+    private ?SearchDTO $search = null;
+
     public function __construct(
-       DBALQueryBuilder $DBALQueryBuilder,
-        TranslatorInterface $translator,
-        SwitcherInterface   $switcher,
-        PaginatorInterface  $paginator
+        DBALQueryBuilder $DBALQueryBuilder,
+        PaginatorInterface $paginator
     )
     {
-        $this->translator = $translator;
-        $this->switcher = $switcher;
         $this->paginator = $paginator;
         $this->DBALQueryBuilder = $DBALQueryBuilder;
     }
 
+    public function search(SearchDTO $search): self
+    {
+        $this->search = $search;
+        return $this;
+    }
+
+
     /**
      * Метод возвращает массив всех добавленных региональных контактов
      */
-    public function fetchAllContactsRegionAssociative(SearchDTO $search): PaginatorInterface
+    public function findAllPaginator(): PaginatorInterface
     {
-        $qb = $this->DBALQueryBuilder->createQueryBuilder(self::class);
+        $dbal = $this->DBALQueryBuilder
+            ->createQueryBuilder(self::class)
+            ->bindLocal();
 
-        $locale = new Locale($this->translator->getLocale());
-        $qb->setParameter('local', $locale, Locale::TYPE);
+        $dbal
+            ->select('contact.id')
+            ->addSelect('contact.event')
+            ->from(ContactsRegion::class, 'contact');
 
-        $qb->select('contact.id');
-        $qb->addSelect('contact.event');
+        $dbal
+            ->addSelect('event.sort AS event_sort')
+            ->join(
+                'contact',
+                ContactsRegionEvent::class,
+                'event',
+                'event.id = contact.event'
+            );
 
-        $qb->addSelect('event.sort AS event_sort');
-
-        $qb->from(ContactsRegionEntity\ContactsRegion::TABLE, 'contact');
-        $qb->join(
+        $dbal->leftJoin(
             'contact',
-            ContactsRegionEntity\Event\ContactsRegionEvent::TABLE,
-            'event',
-            'event.id = contact.event'
+            Region::class,
+            'region',
+            'region.id = contact.id'
         );
 
-        $qb->join('contact', RegionEntity\Region::TABLE, 'region', 'region.id = contact.id');
-
-        $qb->join(
+        $dbal->join(
             'region',
-            RegionEntity\Event\RegionEvent::TABLE,
+            RegionEvent::class,
             'region_event',
             'region_event.id = region.event'
         );
 
-        $qb->addSelect('region_trans.name AS region_name');
-        $qb->addSelect('region_trans.description AS region_description');
-        $qb->leftJoin(
-            'region_event',
-            RegionEntity\Trans\RegionTrans::TABLE,
-            'region_trans',
-            'region_trans.event = region_event.id AND region_trans.local = :local'
-        );
+        $dbal
+            ->addSelect('region_trans.name AS region_name')
+            ->addSelect('region_trans.description AS region_description')
+            ->leftJoin(
+                'region_event',
+                RegionTrans::class,
+                'region_trans',
+                'region_trans.event = region_event.id AND region_trans.local = :local'
+            );
 
-        $qb->addSelect('call.id AS call_id');
-        $qb->addSelect('call.sort AS call_sort');
-        $qb->addSelect('call.pickup AS call_pickup');
-        $qb->addSelect('call.stock AS call_stock');
-        $qb->leftJoin('event', ContactsRegionEntity\Call\ContactsRegionCall::TABLE, 'call', 'call.event = event.id');
+        $dbal
+            ->addSelect('call.id AS call_id')
+            ->addSelect('call.sort AS call_sort')
+            ->addSelect('call.pickup AS call_pickup')
+            ->addSelect('call.stock AS call_stock')
+            ->addSelect('call.active AS call_active')
+            ->leftJoin(
+                'event',
+                ContactsRegionCall::class,
+                'call',
+                'call.event = event.id'
+            );
 
-        $qb->addSelect('call_trans.name AS call_name');
-        $qb->addSelect('call_trans.description AS call_description');
-
-
-        $qb->leftJoin(
-            'call',
-            ContactsRegionEntity\Call\Trans\ContactsRegionCallTrans::TABLE,
-            'call_trans',
-            'call_trans.call = call.id AND call_trans.local = :local'
-        );
+        $dbal
+            ->addSelect('call_trans.name AS call_name')
+            ->addSelect('call_trans.description AS call_description')
+            ->leftJoin(
+                'call',
+                ContactsRegionCallTrans::class,
+                'call_trans',
+                'call_trans.call = call.id AND call_trans.local = :local'
+            );
 
         // Обложка
-        $qb->addSelect('cover.ext AS call_cover_ext');
-        $qb->addSelect('cover.cdn AS call_cover_cdn');
-
-        $qb->addSelect(
-            "
+        $dbal
+            ->addSelect('cover.ext AS call_cover_ext')
+            ->addSelect('cover.cdn AS call_cover_cdn')
+            ->addSelect(
+                "
 			CASE
-			   WHEN cover.name IS NOT NULL THEN
-					CONCAT ( '/upload/" . ContactsRegionEntity\Call\Cover\ContactsRegionCallCover::TABLE . "' , '/', cover.name)
+			   WHEN cover.name IS NOT NULL 
+			   THEN CONCAT ( '/upload/".$dbal->table(ContactsRegionCallCover::class)."' , '/', cover.name)
 			   ELSE NULL
 			END AS call_cover_name
 		"
-        );
-
-        $qb->leftJoin(
-            'event',
-            ContactsRegionEntity\Call\Cover\ContactsRegionCallCover::TABLE,
-            'cover',
-            'cover.call = call.id'
-        );
+            )
+            ->leftJoin(
+                'event',
+                ContactsRegionCallCover::class,
+                'cover',
+                'cover.call = call.id'
+            );
 
         // Поиск
-        if ($search->getQuery())
+        if($this->search?->getQuery())
         {
 
-            $qb
-                ->createSearchQueryBuilder($search)
+            $dbal
+                ->createSearchQueryBuilder($this->search)
                 ->addSearchLike('call_trans.name')
                 ->addSearchLike('region_trans.name');
         }
 
-        // $qb->orderBy('event.sort, contact_trans.name, call.sort');
-        $qb->orderBy('event.sort, call.sort');
+        // $dbal->orderBy('event.sort, contact_trans.name, call.sort');
+        $dbal->orderBy('event.sort, call.sort');
 
-        return $this->paginator->fetchAllAssociative($qb);
+        return $this->paginator->fetchAllAssociative($dbal);
 
 
     }

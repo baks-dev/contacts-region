@@ -83,7 +83,7 @@ class ContactsRegionCall extends EntityEvent
     /** Перевод */
     #[Assert\Valid]
     #[Assert\Count(min: 1)]
-    #[ORM\OneToMany(targetEntity: ContactsRegionCallTrans::class, mappedBy: 'call', cascade: ['all'])]
+    #[ORM\OneToMany(targetEntity: ContactsRegionCallTrans::class, mappedBy: 'call', cascade: ['all'], fetch: 'EAGER')]
     private Collection $translate;
 
     /** Контактные номера телефонов Колл-центра */
@@ -188,5 +188,14 @@ class ContactsRegionCall extends EntityEvent
 		
 		return $name;
 	}
+
+
+    public function deactivate(): self
+    {
+        $this->active = false;
+        return $this;
+    }
+
+
 
 }

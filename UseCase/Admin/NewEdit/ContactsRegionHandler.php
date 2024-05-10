@@ -33,6 +33,7 @@ use BaksDev\Contacts\Region\Messenger\ContactRegionMessage;
 use BaksDev\Core\Entity\AbstractHandler;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Files\Resources\Upload\Image\ImageUploadInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use DomainException;
 use Psr\Log\LoggerInterface;
@@ -66,6 +67,7 @@ final class ContactsRegionHandler extends AbstractHandler
 
     public function handle(ContactsRegionDTO $command): string|ContactsRegion
     {
+
         $Main = $this->entityManager->getRepository(ContactsRegion::class)->findOneBy(
             ['id' => $command->getRegion()]
         );
@@ -87,40 +89,28 @@ final class ContactsRegionHandler extends AbstractHandler
             return $errorUniqid->getMessage();
         }
 
-
-        dump($Main);
-        dd($this->event);
-
         $ContactsRegionCallDTO = $command->getCalls();
-        $newContactsRegionCall = true;
 
-
-        /** @var ContactsRegionCall $call */
-        foreach($this->event->getCall() as $call)
-        {
-            if($call->getConst()->equals($ContactsRegionCallDTO->getConst()))
-            {
-
-                $call->setEntity($ContactsRegionCallDTO);
-
-                /** TODO: Загрузка обложки */
-
-//                if($ContactsRegionCallDTO->getCover()->file !== null)
-//                {
-//                    $ContactsRegionCallCover = $ContactsRegionCallDTO->getCover()->getEntityUpload();
-//                    $this->imageUpload->upload($ContactsRegionCallDTO->getCover()->file, $ContactsRegionCallCover);
-//                }
-
-                $newContactsRegionCall = false;
+        $filter = $this->event->getCall()->filter(
+            function(ContactsRegionCall $element) use ($ContactsRegionCallDTO) {
+                return $element->getConst()->equals($ContactsRegionCallDTO->getConst());
             }
-        }
+        );
 
         /* Добавляем новый */
-        if($newContactsRegionCall)
+        if($filter->isEmpty())
         {
             $ContactsRegionCall = new ContactsRegionCall($this->event);
             $ContactsRegionCall->setEntity($ContactsRegionCallDTO);
             $this->entityManager->persist($ContactsRegionCall);
+        }
+        // Обновляем существующий
+        else
+        {
+            $this->entityManager->clear();
+
+            // $this->entityManager->clear();
+            $filter->current()->setEntity($ContactsRegionCallDTO);
         }
 
         /** Валидация всех объектов */
@@ -130,12 +120,6 @@ final class ContactsRegionHandler extends AbstractHandler
         }
 
         $this->entityManager->flush();
-
-        //        /* Отправляем сообщение в шину */
-        //        $this->messageDispatch->dispatch(
-        //            message: new ProductSignMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
-        //            transport: 'products-sign'
-        //        );
 
         /* Отправляем событие в шину  */
         $this->messageDispatch->dispatch(

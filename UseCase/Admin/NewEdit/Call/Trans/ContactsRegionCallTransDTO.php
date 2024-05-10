@@ -30,6 +30,7 @@ use ReflectionProperty;
 use Symfony\Component\Validator\Constraints as Assert;
 use BaksDev\Core\Type\Locale\Locale;
 
+/** @see ContactsRegionCallTrans */
 final class ContactsRegionCallTransDTO implements ContactsRegionCallTransInterface
 {
 	

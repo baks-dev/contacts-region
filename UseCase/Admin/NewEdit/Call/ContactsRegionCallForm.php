@@ -97,7 +97,10 @@ final class ContactsRegionCallForm extends AbstractType
         /** Склад (выводит в списки складских помещений) */
 		$builder->add('stock', CheckboxType::class, ['required' => false]);
 
-		/** Сортировка */
+        /** Флаг активности */
+        $builder->add('active', CheckboxType::class, ['required' => false]);
+
+        /** Сортировка */
 		$builder->add('sort', IntegerType::class);
 		
 		$builder->add('cover', ContactsRegionCallCoverForm::class);

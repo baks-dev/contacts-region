@@ -53,7 +53,9 @@ final class IndexController extends AbstractController
         $searchForm->handleRequest($request);
 
         // Получаем список
-        $contacts = $allContactsRegion->fetchAllContactsRegionAssociative($search);
+        $contacts = $allContactsRegion
+            ->search($search)
+            ->findAllPaginator();
 
         return $this->render(
             [

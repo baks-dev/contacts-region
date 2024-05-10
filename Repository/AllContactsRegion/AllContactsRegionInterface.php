@@ -28,8 +28,11 @@ use BaksDev\Core\Services\Paginator\PaginatorInterface;
 
 interface AllContactsRegionInterface
 {
+
+    public function search(SearchDTO $search): self;
+
     /**
      * Метод возвращает массив всех добавленных региональных контактов
      */
-    public function fetchAllContactsRegionAssociative(SearchDTO $search) : PaginatorInterface;
+    public function findAllPaginator() : PaginatorInterface;
 }

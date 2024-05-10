@@ -31,6 +31,7 @@ use BaksDev\Contacts\Region\UseCase\Admin\NewEdit\Call\Info\ContactsRegionCallIn
 use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Types\Types;
 use ReflectionProperty;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -71,6 +72,9 @@ final class ContactsRegionCallDTO implements ContactsRegionCallInterface
 
     /** Сортировка */
     private int $sort = 500;
+
+    /** Флаг активности */
+    private bool $active = true;
 
     public function __construct()
     {
@@ -231,4 +235,21 @@ final class ContactsRegionCallDTO implements ContactsRegionCallInterface
     {
         $this->profile = $profile;
     }
+
+    /**
+     * Active
+     */
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
+        return $this;
+    }
+
+
+
 }
