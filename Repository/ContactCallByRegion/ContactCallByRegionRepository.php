@@ -163,7 +163,6 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
 
         $dbal->allGroupByExclude();
 
-        /* Кешируем результат DBAL */
         return $dbal
             ->enableCache('contacts-region', 86400)
             ->fetchAllAssociative();
