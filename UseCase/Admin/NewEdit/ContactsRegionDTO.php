@@ -25,9 +25,14 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\UseCase\Admin\NewEdit;
 
+use BaksDev\Contacts\Region\Entity\Call\ContactsRegionCall;
 use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEventInterface;
+use BaksDev\Contacts\Region\Type\Call\Const\ContactsRegionCallConst;
 use BaksDev\Contacts\Region\Type\Event\ContactsRegionEventUid;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use ReflectionProperty;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /** @see ContactsRegionEvent */
@@ -41,8 +46,11 @@ final class ContactsRegionDTO implements ContactsRegionEventInterface
     #[Assert\Uuid]
     private ?ContactsRegionEventUid $id = null;
 
-    /** Колл-центр */
+    /** Активный колл-центр */
     private Call\ContactsRegionCallDTO $calls;
+
+    /** Колл-центры */
+    private ArrayCollection $call;
 
     /** Сортировка */
     private int $sort = 500;
@@ -50,6 +58,7 @@ final class ContactsRegionDTO implements ContactsRegionEventInterface
     public function __construct()
     {
         $this->calls = new Call\ContactsRegionCallDTO();
+        $this->call = new ArrayCollection();
     }
     
     /** Идентификатор региона */
@@ -83,8 +92,6 @@ final class ContactsRegionDTO implements ContactsRegionEventInterface
     /** Колл-центры */
 
 
-
-
     public function getCalls(): Call\ContactsRegionCallDTO
     {
         return $this->calls;
@@ -108,6 +115,25 @@ final class ContactsRegionDTO implements ContactsRegionEventInterface
         $this->sort = $sort;
     }
 
+    /**
+     * Call
+     */
+    public function getCall(): ArrayCollection
+    {
+        return $this->call;
+    }
+
+    public function addCall(Call\ContactsRegionCallDTO $call): self
+    {
+        if (!(new ReflectionProperty($call, 'const'))->isInitialized($call)) {
+            $this->call->add($this->calls);
+            return $this;
+        }
+
+        $this->call->add($call);
+
+        return $this;
+    }
 
 
 }

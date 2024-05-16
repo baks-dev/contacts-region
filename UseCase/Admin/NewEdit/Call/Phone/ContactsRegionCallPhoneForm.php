@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\UseCase\Admin\NewEdit\Call\Phone;
 
+use BaksDev\Field\Pack\Phone\Form\PhoneFieldForm;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -41,7 +42,8 @@ final class ContactsRegionCallPhoneForm extends AbstractType
 		$builder->add('name', TextType::class, ['required' => false]);
 		
 		/** Контактный телефон */
-		$builder->add('phone', TextType::class);
+		//$builder->add('phone', TextType::class);
+		$builder->add('phone', PhoneFieldForm::class);
 
 		/** Удалить */
 		$builder->add(

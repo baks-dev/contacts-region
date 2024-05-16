@@ -68,9 +68,27 @@ final class ContactsRegionHandler extends AbstractHandler
     public function handle(ContactsRegionDTO $command): string|ContactsRegion
     {
 
-        $Main = $this->entityManager->getRepository(ContactsRegion::class)->findOneBy(
-            ['id' => $command->getRegion()]
-        );
+        $Main = $this->entityManager
+            ->getRepository(ContactsRegion::class)
+            ->find($command->getRegion());
+
+        /** Получаем событие */
+        if($Main)
+        {
+            $ContactsRegionEvent =
+                $this->entityManager
+                    ->getRepository(ContactsRegionEvent::class)
+                    ->find($Main?->getEvent());
+
+            if($ContactsRegionEvent)
+            {
+                $ContactsRegionEvent->getDto($command);
+            }
+
+            $this->entityManager->clear();
+        }
+
+
 
         $command->setId($Main?->getEvent());
 
@@ -104,20 +122,41 @@ final class ContactsRegionHandler extends AbstractHandler
             $ContactsRegionCall->setEntity($ContactsRegionCallDTO);
             $this->entityManager->persist($ContactsRegionCall);
         }
-        // Обновляем существующий
-        else
-        {
-            $this->entityManager->clear();
 
-            // $this->entityManager->clear();
-            $filter->current()->setEntity($ContactsRegionCallDTO);
-        }
+        // Обновляем существующий
+//        else
+//        {
+//
+//
+//            //$this->entityManager->clear();
+//
+//            //$ContactsRegionCall = $this->entityManager->getRepository(ContactsRegionCall::class)->findOneBy(['const' => $filter->current()->getConst()]);
+//
+//            //dd($ContactsRegionCall);
+//
+//            //$ContactsRegionCall->setEntity($ContactsRegionCallDTO);
+//            //$this->entityManager->flush();
+//
+//            //dd($ContactsRegionCall->setEntity($ContactsRegionCallDTO));
+//
+//            /** @var ContactsRegionCall $ContactsRegionCall */
+////            $ContactsRegionCall = $filter->current();
+////            $ContactsRegionCall->setEntity($ContactsRegionCallDTO);
+////
+////            dd($this->entityManager->getUnitOfWork()->getIdentityMap());
+//
+//
+//            //dd($this->event);
+//
+//
+//        }
 
         /** Валидация всех объектов */
         if($this->validatorCollection->isInvalid())
         {
             return $this->validatorCollection->getErrorUniqid();
         }
+
 
         $this->entityManager->flush();
 

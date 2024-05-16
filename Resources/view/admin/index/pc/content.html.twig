@@ -18,7 +18,7 @@
 			
 			<div class="w-100 d-flex align-items-center gap-3 justify-content-end">
 				
-				{% if is_granted(ROLE~'_NEW')  %}
+				{% if is_granted(ROLE~'_NEW') or is_granted('ROLE_ADMIN')  %}
 					<a href="{{ path('contacts-region:admin.newedit.new') }}" class="btn btn-primary fw-bolder" title="Добавить региональный контакт">
 						{{ 'btn.new'|trans({}, 'core.btn') }}
 					</a>

@@ -52,7 +52,7 @@ if ($addButtonCall) {
 
 
             /* Добавить контактный номер телефона */
-            (div.querySelector('.phone-add-collection'))?.addEventListener('click', addPhone);
+            (div.querySelector('#contacts_region_add_phone'))?.addEventListener('click', addPhone);
 
 
             /* Удаляем контактный номер телефона */
@@ -112,7 +112,7 @@ if ($addButtonCall) {
 
 /** Добавить контактный телефон */
 
-document.querySelectorAll('.phone-add-collection').forEach(function (item) {
+document.querySelectorAll('#contacts_region_add_phone').forEach(function (item) {
     item.addEventListener('click', addPhone);
 });
 
@@ -133,7 +133,7 @@ function addPhone() {
 
     let div = document.createElement('div');
     div.innerHTML = newForm;
-    div.id = 'item_contacts_region_form_call_phone_' + index;
+    div.id = 'item_contacts_region_form_calls_phone_' + index;
     div.classList.add('mb-3');
 
     let $collection = document.getElementById(collection);
@@ -143,6 +143,17 @@ function addPhone() {
     (div.querySelector('.del-item-phone'))?.addEventListener('click', deletePhone);
 
     this.dataset.index = (index + 1).toString();
+
+    /** обновляем phone */
+    var inputs = document.querySelectorAll('input[type="tel"]');
+
+    Array.prototype.forEach.call(inputs, function(input) {
+
+        if(input.classList.contains('loaded') === false)
+        {
+            new InputMask(input)
+        }
+    })
 }
 
 document.querySelectorAll('.del-item-phone').forEach(function (item) {
@@ -150,9 +161,6 @@ document.querySelectorAll('.del-item-phone').forEach(function (item) {
 });
 
 function deletePhone() {
-
-    console.log(this.dataset.delete);
-
     document.getElementById(this.dataset.delete).remove();
 }
 
