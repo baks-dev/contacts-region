@@ -60,6 +60,8 @@ final class DeleteController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid() && $form->has('contacts_call_delete'))
         {
+            $this->refreshTokenForm($form);
+
             $ContactsRegionCall = $ContactsRegionCallDeleteHandler->handle($ContactsRegionCallDeleteDTO);
 
             if($ContactsRegionCall instanceof ContactsRegion)

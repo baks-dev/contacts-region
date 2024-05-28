@@ -82,6 +82,8 @@ final class EditController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid() && $form->has('contacts_region'))
         {
+            $this->refreshTokenForm($form);
+
             $ContactsRegion = $contactsRegionHandler->handle($ContactsRegionDTO);
 
             if ($ContactsRegion instanceof Entity\ContactsRegion)

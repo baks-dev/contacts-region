@@ -52,7 +52,10 @@ final class NewController extends AbstractController
         $form = $this->createForm(ContactsRegionForm::class, $ContactsRegionDTO);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() && $form->has('contacts_region')) {
+        if ($form->isSubmitted() && $form->isValid() && $form->has('contacts_region'))
+        {
+            $this->refreshTokenForm($form);
+
             $ContactsRegion = $contactsRegionHandler->handle($ContactsRegionDTO);
 
             if ($ContactsRegion instanceof ContactsRegion) {
