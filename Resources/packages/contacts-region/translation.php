@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2023.  Baks.dev <admin@baks.dev>
+ *  Copyright 2024.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -23,28 +23,16 @@
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Symfony\Config\TwigConfig;
+use BaksDev\Contacts\Region\BaksDevContactsRegionBundle;
+use Symfony\Config\FrameworkConfig;
 
-return static function(TwigConfig $config)
-{
-	$config->path(__DIR__.'/../view', 'contacts-region');
-	
-//	$namespace = 'BaksDev\Contacts\Region';
-	
-//	$services->load($namespace.'\Twig\\', __DIR__.'/../../Twig');
-//
-//
-//
-//	/** Абсолютный Путь для загрузки обложек способа оплаты */
-//	$configurator->parameters()->set(
-//		ContactsRegionCallCover::TABLE,
-//		'%kernel.project_dir%/public/upload/'.ContactsRegionCallCover::TABLE.'/'
-//	);
-//
-//	/** Относительный путь обложек способа оплаты */
-//	$config->global(ContactsRegionCallCover::TABLE)->value('/upload/'.ContactsRegionCallCover::TABLE.'/');
+return static function(FrameworkConfig $config) {
+
+    $config
+        ->translator()
+        ->paths([BaksDevContactsRegionBundle::PATH.'Resources/translations/']);
+
 };
-
 
 
 

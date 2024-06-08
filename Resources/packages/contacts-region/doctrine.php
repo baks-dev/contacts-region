@@ -23,6 +23,7 @@
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use BaksDev\Contacts\Region\BaksDevContactsRegionBundle;
 use BaksDev\Contacts\Region\Type\Call\Const\ContactsRegionCallConst;
 use BaksDev\Contacts\Region\Type\Call\Const\ContactsRegionCallConstType;
 use BaksDev\Contacts\Region\Type\Call\ContactsRegionCallType;
@@ -64,12 +65,10 @@ return static function(ContainerConfigurator $container, DoctrineConfig $doctrin
 
     $emDefault = $doctrine->orm()->entityManager('default')->autoMapping(true);
 
-    $MODULE = substr(__DIR__, 0, strpos(__DIR__, "Resources"));
-
 
     $emDefault->mapping('contacts-region')
         ->type('attribute')
-        ->dir($MODULE.'Entity')
+        ->dir(BaksDevContactsRegionBundle::PATH.'Entity')
         ->isBundle(false)
         ->prefix('BaksDev\Contacts\Region\Entity')
         ->alias('contacts-region');
