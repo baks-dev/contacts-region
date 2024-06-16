@@ -45,9 +45,12 @@ final class IndexController extends AbstractController
         AllContactsRegionInterface $allContactsRegion,
         int $page = 0,
     ): Response {
+
         // Поиск
         $search = new SearchDTO();
-        $searchForm = $this->createForm(SearchForm::class, $search,
+        $searchForm = $this->createForm(
+            SearchForm::class,
+            $search,
             ['action' => $this->generateUrl('contacts-region:admin.index')]
         );
         $searchForm->handleRequest($request);

@@ -41,8 +41,7 @@ final class ContactController extends AbstractController
         ContactCallDetailInterface $callDetail,
         ContactRegionDefaultInterface $defaultRegion,
         ContactCallByRegionInterface $callRegion,
-    ): Response
-    {
+    ): Response {
         $RegionFilterDTO = new RegionFilterDTO();
         $DefaultRegion = $defaultRegion->getDefaultCallRegion();
         $RegionFilterDTO->setRegion($DefaultRegion);

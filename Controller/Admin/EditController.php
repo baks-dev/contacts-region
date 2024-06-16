@@ -53,13 +53,13 @@ final class EditController extends AbstractController
     ): Response {
 
 
-//        $ContactsRegionEvent = $ContactsRegionCall->getEvent();
-//        $ContactsRegionDTO = new ContactsRegionDTO();
-//        $ContactsRegionEvent->getDto($ContactsRegionDTO);
-//
-//
-//        dump($ContactsRegionEvent);
-//        dd($ContactsRegionDTO);
+        //        $ContactsRegionEvent = $ContactsRegionCall->getEvent();
+        //        $ContactsRegionDTO = new ContactsRegionDTO();
+        //        $ContactsRegionEvent->getDto($ContactsRegionDTO);
+        //
+        //
+        //        dump($ContactsRegionEvent);
+        //        dd($ContactsRegionDTO);
 
         $entityManager->clear();
         /**
@@ -80,13 +80,13 @@ final class EditController extends AbstractController
         $form = $this->createForm(ContactsRegionForm::class, $ContactsRegionDTO);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() && $form->has('contacts_region'))
+        if($form->isSubmitted() && $form->isValid() && $form->has('contacts_region'))
         {
             $this->refreshTokenForm($form);
 
             $ContactsRegion = $contactsRegionHandler->handle($ContactsRegionDTO);
 
-            if ($ContactsRegion instanceof Entity\ContactsRegion)
+            if($ContactsRegion instanceof Entity\ContactsRegion)
             {
                 $this->addFlash('admin.page.edit', 'admin.success.update', 'admin.contacts.region');
 

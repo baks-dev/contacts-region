@@ -47,19 +47,18 @@ final class DeleteControllerTest extends WebTestCase
     }
 
 
-
     /** Доступ по без роли */
     public function testGuestFiled(): void
     {
         // Получаем одно из событий
         $ContactsRegionCall = self::$identifier;
 
-        if ($ContactsRegionCall)
+        if($ContactsRegionCall)
         {
             self::ensureKernelShutdown();
             $client = static::createClient();
 
-            foreach (TestUserAccount::getDevice() as $device)
+            foreach(TestUserAccount::getDevice() as $device)
             {
                 $client->setServerParameter('HTTP_USER_AGENT', $device);
 
@@ -79,11 +78,11 @@ final class DeleteControllerTest extends WebTestCase
         // Получаем одно из событий
         $ContactsRegionCall = self::$identifier;
 
-        if ($ContactsRegionCall)
+        if($ContactsRegionCall)
         {
             self::ensureKernelShutdown();
             $client = static::createClient();
-            foreach (TestUserAccount::getDevice() as $device)
+            foreach(TestUserAccount::getDevice() as $device)
             {
                 $usr = TestUserAccount::getModer(self::ROLE);
 
@@ -104,12 +103,12 @@ final class DeleteControllerTest extends WebTestCase
         // Получаем одно из событий
         $ContactsRegionCall = self::$identifier;
 
-        if ($ContactsRegionCall)
+        if($ContactsRegionCall)
         {
             self::ensureKernelShutdown();
             $client = static::createClient();
 
-            foreach (TestUserAccount::getDevice() as $device)
+            foreach(TestUserAccount::getDevice() as $device)
             {
                 $usr = TestUserAccount::getAdmin();
 
@@ -130,11 +129,11 @@ final class DeleteControllerTest extends WebTestCase
         // Получаем одно из событий
         $ContactsRegionCall = self::$identifier;
 
-        if ($ContactsRegionCall)
+        if($ContactsRegionCall)
         {
             self::ensureKernelShutdown();
             $client = static::createClient();
-            foreach (TestUserAccount::getDevice() as $device)
+            foreach(TestUserAccount::getDevice() as $device)
             {
                 $usr = TestUserAccount::getUsr();
 

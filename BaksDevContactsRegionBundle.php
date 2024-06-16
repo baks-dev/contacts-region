@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region;
 
+use BaksDev\Contacts\Region\Choice\ContactsRegionFieldChoice;
 use DirectoryIterator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -25,9 +26,6 @@ class BaksDevContactsRegionBundle extends AbstractBundle
 
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
-//        $path = self::PATH.'Resources/packages/contacts-region/services.php';
-//        $container->import($path);
-
         $services = $container->services()
             ->defaults()
             ->autowire()
@@ -40,5 +38,9 @@ class BaksDevContactsRegionBundle extends AbstractBundle
                 self::PATH.'**/*DTO.php',
             ]);
 
+
+        $services->set(ContactsRegionFieldChoice::class)
+            ->tag('baks.fields.choice')
+        ;
     }
 }

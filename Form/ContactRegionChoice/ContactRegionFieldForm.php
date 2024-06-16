@@ -49,8 +49,7 @@ final class ContactRegionFieldForm extends AbstractType
         ContactRegionChoiceInterface $regionChoice,
         ContactCallRegionChoiceInterface $callChoice,
         ContactCallRegionInterface $callRegion,
-    )
-    {
+    ) {
         $this->regionChoice = $regionChoice;
         $this->callChoice = $callChoice;
         $this->callRegion = $callRegion;
@@ -68,10 +67,10 @@ final class ContactRegionFieldForm extends AbstractType
         $builder
             ->add('region', ChoiceType::class, [
                 'choices' => $regionChoice,
-                'choice_value' => function(?RegionUid $region) {
+                'choice_value' => function (?RegionUid $region) {
                     return $region?->getValue();
                 },
-                'choice_label' => function(RegionUid $region) {
+                'choice_label' => function (RegionUid $region) {
                     return $region->getOption();
                 },
                 'label' => false,
@@ -119,7 +118,7 @@ final class ContactRegionFieldForm extends AbstractType
 
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
-            function(FormEvent $event) use ($options): void {
+            function (FormEvent $event) use ($options): void {
                 $form = $event->getForm();
 
                 $data = $form->getNormData();
@@ -144,14 +143,14 @@ final class ContactRegionFieldForm extends AbstractType
                     $form
                         ->add('call', ChoiceType::class, [
                             'choices' => $callChoice,
-                            'choice_value' => function(?ContactsRegionCallUid $call) {
+                            'choice_value' => function (?ContactsRegionCallUid $call) {
                                 return $call?->getValue();
                             },
-                            'choice_label' => function(ContactsRegionCallUid $call) {
+                            'choice_label' => function (ContactsRegionCallUid $call) {
                                 return $call->getName();
                             },
 
-                            'choice_attr' => function(ContactsRegionCallUid $choice) {
+                            'choice_attr' => function (ContactsRegionCallUid $choice) {
                                 return ['data-lati' => $choice->getAttr(), 'data-longi' => $choice->getOption()];
                             },
 
@@ -201,7 +200,7 @@ final class ContactRegionFieldForm extends AbstractType
 
         $builder->get('region')->addEventListener(
             FormEvents::POST_SUBMIT,
-            function(FormEvent $event): void {
+            function (FormEvent $event): void {
                 $region = $event->getForm()->getData();
 
                 if($region)
@@ -218,14 +217,14 @@ final class ContactRegionFieldForm extends AbstractType
                         $form
                             ->add('call', ChoiceType::class, [
                                 'choices' => $callChoice,
-                                'choice_value' => function(?ContactsRegionCallUid $call) {
+                                'choice_value' => function (?ContactsRegionCallUid $call) {
                                     return $call?->getValue();
                                 },
-                                'choice_label' => function(ContactsRegionCallUid $call) {
+                                'choice_label' => function (ContactsRegionCallUid $call) {
                                     return $call->getName();
                                 },
 
-                                'choice_attr' => function(ContactsRegionCallUid $choice) {
+                                'choice_attr' => function (ContactsRegionCallUid $choice) {
                                     return ['data-lati' => $choice->getAttr(), 'data-longi' => $choice->getOption()];
                                 },
 

@@ -47,8 +47,8 @@ final class DeleteController extends AbstractController
         Request $request,
         #[MapEntity] ContactsRegionCall $ContactsRegionCallEvent,
         ContactsRegionDeleteHandler $ContactsRegionCallDeleteHandler,
-    ): Response
-    {
+    ): Response {
+
         $ContactsRegionCallDeleteDTO = new ContactsRegionDeleteDTO();
         $ContactsRegionCallEvent->getDto($ContactsRegionCallDeleteDTO);
 

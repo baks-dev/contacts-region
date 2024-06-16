@@ -32,30 +32,30 @@ use BaksDev\Reference\Region\Type\Id\RegionUid;
 
 final class ContactsRegionFieldChoice implements FieldsChoiceInterface, ReferenceChoiceInterface
 {
-	public const TYPE = 'contacts_region_type';
-	
-	
-	public function equals($key) : bool
-	{
-		return $key === self::TYPE;
-	}
-	
-	public function type(): string
-	{
-		return 'contacts_region_type';
-	}
+    public const TYPE = 'contacts_region_type';
 
-	
-	public function domain(): string
-	{
-		return 'user.contacts.region';
-	}
 
-	/** Возвращает класс формы для рендера */
-	public function form(): string
-	{
-		return ContactRegionFieldForm::class;
-	}
+    public function equals($key): bool
+    {
+        return $key === self::TYPE;
+    }
+
+    public function type(): string
+    {
+        return 'contacts_region_type';
+    }
+
+
+    public function domain(): string
+    {
+        return 'user.contacts.region';
+    }
+
+    /** Возвращает класс формы для рендера */
+    public function form(): string
+    {
+        return ContactRegionFieldForm::class;
+    }
 
 
     /** Возвращает класс */

@@ -32,7 +32,7 @@ interface ContactCallByGeocodeInterface
     /**
      * Метод возвращает геолокацию регионального контакта по его неизменяемому идентификатору (CONST)
      */
-    public function fetchContactCallGeocodeByConst(ContactsRegionCallConst $const) : ?array;
+    public function fetchContactCallGeocodeByConst(ContactsRegionCallConst $const): ?array;
 
 
     /** Метод проверяет по геолокации, что имеется такой пункт самовывоза */
