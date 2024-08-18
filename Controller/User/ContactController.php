@@ -29,7 +29,7 @@ use BaksDev\Core\Form\Search\SearchForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[AsController]
 final class ContactController extends AbstractController
