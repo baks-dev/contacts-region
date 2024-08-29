@@ -78,7 +78,7 @@ final class ContactRegionFieldForm extends AbstractType
                 'multiple' => false,
                 'required' => true,
                 'placeholder' => 'Выберите регион из списка...',
-                'attr' => ['class' => 'change_region_field'],
+                'attr' => ['class' => 'change_region_field', 'data-select' => 'select2'],
             ]);
 
 
@@ -90,7 +90,7 @@ final class ContactRegionFieldForm extends AbstractType
                 'multiple' => false,
                 'required' => true,
                 'placeholder' => 'Выберите регион из списка...',
-                'attr' => ['data-address' => 'true'],
+                'attr' => ['data-address' => 'true', 'data-select' => 'select2'],
                 //'disabled' => true
             ]);
 
@@ -154,7 +154,7 @@ final class ContactRegionFieldForm extends AbstractType
                                 return ['data-lati' => $choice->getAttr(), 'data-longi' => $choice->getOption()];
                             },
 
-                            'attr' => ['data-address' => 'true'],
+                            'attr' => ['data-address' => 'true', 'data-select' => 'select2'],
                             'label' => false,
                             'expanded' => false,
                             'multiple' => false,
@@ -228,7 +228,7 @@ final class ContactRegionFieldForm extends AbstractType
                                     return ['data-lati' => $choice->getAttr(), 'data-longi' => $choice->getOption()];
                                 },
 
-                                'attr' => ['data-address' => 'true'],
+                                'attr' => ['data-address' => 'true', 'data-select' => 'select2'],
                                 'label' => false,
                                 'expanded' => false,
                                 'multiple' => false,
