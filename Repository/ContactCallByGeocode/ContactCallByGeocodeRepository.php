@@ -43,6 +43,7 @@ final class ContactCallByGeocodeRepository implements ContactCallByGeocodeInterf
 
 
     /**
+     *
      * Метод возвращает геолокацию регионального контакта по его неизменяемому идентификатору (CONST)
      */
     public function fetchContactCallGeocodeByConst(ContactsRegionCallConst $const) : ?array
