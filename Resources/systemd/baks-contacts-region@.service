@@ -10,7 +10,7 @@
 # systemctl stop baks-contacts-region@1.service
 
 [Unit]
-Description=Symfony messenger contacts-region %i
+Description=contacts-region
 StartLimitBurst=5
 StartLimitIntervalSec=0
 
