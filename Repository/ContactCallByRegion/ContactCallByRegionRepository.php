@@ -32,14 +32,11 @@ use BaksDev\Contacts\Region\Entity\Call\Info\ContactsRegionCallInfo;
 use BaksDev\Contacts\Region\Entity\Call\Phone\ContactsRegionCallPhone;
 use BaksDev\Contacts\Region\Entity\Call\Trans\ContactsRegionCallTrans;
 use BaksDev\Contacts\Region\Entity\ContactsRegion;
-use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEvent;
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
-use BaksDev\Core\Type\Locale\Locale;
-use BaksDev\Reference\Region\Entity\Event\RegionEvent;
+use BaksDev\Reference\Region\Entity\Invariable\RegionInvariable;
 use BaksDev\Reference\Region\Entity\Region;
 use BaksDev\Reference\Region\Entity\Trans\RegionTrans;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContactCallByRegionRepository implements ContactCallByRegionInterface
 {
@@ -78,19 +75,19 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
         $dbal
             ->join(
                 'region',
-                RegionEvent::class,
-                'region_event',
-                'region_event.id = region.event AND region_event.active = true'
+                RegionInvariable::class,
+                'region_invariable',
+                'region_invariable.main = region.id AND region_invariable.active = true'
             );
 
         $dbal
             ->addSelect('region_trans.name AS region_name')
             ->addSelect('region_trans.description AS region_description')
             ->leftJoin(
-                'region_event',
+                'region',
                 RegionTrans::class,
                 'region_trans',
-                'region_trans.event = region_event.id AND region_trans.local = :local'
+                'region_trans.event = region.event AND region_trans.local = :local'
             );
 
         $dbal->leftJoin(

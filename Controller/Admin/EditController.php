@@ -52,15 +52,6 @@ final class EditController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response {
 
-
-        //        $ContactsRegionEvent = $ContactsRegionCall->getEvent();
-        //        $ContactsRegionDTO = new ContactsRegionDTO();
-        //        $ContactsRegionEvent->getDto($ContactsRegionDTO);
-        //
-        //
-        //        dump($ContactsRegionEvent);
-        //        dd($ContactsRegionDTO);
-
         $entityManager->clear();
         /**
          * @var RegionUid $ContactsRegion
@@ -68,13 +59,16 @@ final class EditController extends AbstractController
         $ContactsRegion = $ContactsRegionCall->getEvent()->getMain();
 
 
+
         $ContactsRegionDTO = new ContactsRegionDTO();
         $ContactsRegionDTO->setRegion($ContactsRegion);
         $ContactsRegionDTO->setId($ContactsRegionCall->getEvent()->getId());
 
+
         $ContactsRegionCallDTO = new ContactsRegionCallDTO();
         $ContactsRegionCall->getDto($ContactsRegionCallDTO);
         $ContactsRegionDTO->setCalls($ContactsRegionCallDTO);
+
 
         // Форма добавления
         $form = $this->createForm(ContactsRegionForm::class, $ContactsRegionDTO);
@@ -97,6 +91,8 @@ final class EditController extends AbstractController
 
             return $this->redirectToReferer();
         }
+
+
 
         return $this->render(['form' => $form->createView()]);
     }

@@ -25,11 +25,20 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\Repository\ContactCallDetail;
 
-use BaksDev\Contacts\Region\Entity as ContactsRegionEntity;
+use BaksDev\Contacts\Region\Entity\Call\ContactsRegionCall;
+use BaksDev\Contacts\Region\Entity\Call\Cover\ContactsRegionCallCover;
+use BaksDev\Contacts\Region\Entity\Call\Info\ContactsRegionCallInfo;
+use BaksDev\Contacts\Region\Entity\Call\Phone\ContactsRegionCallPhone;
+use BaksDev\Contacts\Region\Entity\Call\Trans\ContactsRegionCallTrans;
+use BaksDev\Contacts\Region\Entity\ContactsRegion;
+use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEvent;
 use BaksDev\Contacts\Region\Type\Call\ContactsRegionCallUid;
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Core\Type\Locale\Locale;
-use BaksDev\Reference\Region\Entity as RegionEntity;
+use BaksDev\Reference\Region\Entity\Event\RegionEvent;
+use BaksDev\Reference\Region\Entity\Invariable\RegionInvariable;
+use BaksDev\Reference\Region\Entity\Region;
+use BaksDev\Reference\Region\Entity\Trans\RegionTrans;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -57,20 +66,28 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
     {
 
         $qb = $this->DBALQueryBuilder->createQueryBuilder(self::class);
-        $qb->from(ContactsRegionEntity\Call\ContactsRegionCall::TABLE, 'call');
 
-        $qb->addSelect('call_trans.name')->addGroupBy('call_trans.name');
-        $qb->addSelect('call_trans.description')->addGroupBy('call_trans.description');
+        $qb->from(ContactsRegionCall::class, 'call');
+
+        $qb->addSelect('call_trans.name')
+            ->addGroupBy('call_trans.name');
+
+        $qb->addSelect('call_trans.description')
+            ->addGroupBy('call_trans.description');
 
 
         $qb->addSelect('call_info.address AS call_address')
             ->addGroupBy('call_info.address');
+
         $qb->addSelect('call_info.email AS call_email')
             ->addGroupBy('call_info.email');
+
         $qb->addSelect('call_info.working AS call_working')
             ->addGroupBy('call_info.working');
+
         $qb->addSelect('call_info.latitude AS call_latitude')
             ->addGroupBy('call_info.latitude');
+
         $qb->addSelect('call_info.longitude AS call_longitude')
             ->addGroupBy('call_info.longitude');
 
@@ -82,14 +99,14 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
 
         $qb->leftJoin(
             'call',
-            ContactsRegionEntity\Call\Info\ContactsRegionCallInfo::TABLE,
+            ContactsRegionCallInfo::class,
             'call_info',
             'call_info.call = call.id'
         );
 
         $qb->leftJoin(
             'call',
-            ContactsRegionEntity\Call\Trans\ContactsRegionCallTrans::TABLE,
+            ContactsRegionCallTrans::class,
             'call_trans',
             'call_trans.call = call.id AND call_trans.local = :local'
         );
@@ -109,7 +126,7 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
         );
 
         $qb->leftJoin('call',
-            ContactsRegionEntity\Call\Phone\ContactsRegionCallPhone::TABLE,
+            ContactsRegionCallPhone::class,
             'call_phone',
             'call_phone.call = call.id'
         );
@@ -134,15 +151,27 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
 
         $qb->setParameter('local', new Locale($this->translator->getLocale()), Locale::TYPE);
 
-        $qb->from(ContactsRegionEntity\ContactsRegion::TABLE, 'contact_region');
+        $qb->from(ContactsRegion::class, 'contact_region');
 
-        $qb->join('contact_region', RegionEntity\Region::TABLE, 'region', 'region.id = contact_region.id');
+        $qb->join(
+            'contact_region',
+            Region::class,
+            'region',
+            'region.id = contact_region.id'
+        );
 
         $qb->join(
             'region',
-            RegionEntity\Event\RegionEvent::TABLE,
+            RegionInvariable::class,
+            'region_invariable',
+            'region_invariable.main = region.id AND region_invariable.active = true'
+        );
+
+        $qb->join(
+            'region',
+            RegionEvent::class,
             'region_event',
-            'region_event.id = region.event AND region_event.active = true'
+            'region_event.id = region.event'
         );
 
         $qb->addSelect('region_trans.name AS region_name')
@@ -151,22 +180,22 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
             ->addGroupBy('region_trans.description');
 
         $qb->leftJoin(
-            'region_event',
-            RegionEntity\Trans\RegionTrans::TABLE,
+            'region',
+            RegionTrans::class,
             'region_trans',
-            'region_trans.event = region_event.id AND region_trans.local = :local'
+            'region_trans.event = region.event AND region_trans.local = :local'
         );
 
         $qb->leftJoin(
             'contact_region',
-            ContactsRegionEntity\Event\ContactsRegionEvent::TABLE,
+            ContactsRegionEvent::class,
             'contact_region_event',
             'contact_region_event.id = contact_region.event'
         );
 
         $qb->leftJoin(
             'contact_region_event',
-            ContactsRegionEntity\Call\ContactsRegionCall::TABLE,
+            ContactsRegionCall::class,
             'contact_region_call',
             'contact_region_call.event = contact_region_event.id'
         );
@@ -192,7 +221,7 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
 
 						'call_cover_name', CASE
 						   WHEN contact_region_call_cover.name IS NOT NULL THEN
-								CONCAT ( '/upload/".ContactsRegionEntity\Call\Cover\ContactsRegionCallCover::TABLE."' , '/', contact_region_call_cover.name)
+								CONCAT ( '/upload/".$qb->table(ContactsRegionCallCover::class)."' , '/', contact_region_call_cover.name)
 						   ELSE NULL
 						END,
 					
@@ -207,7 +236,7 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
 
         $qb->leftJoin(
             'contact_region_call',
-            ContactsRegionEntity\Call\Trans\ContactsRegionCallTrans::TABLE,
+            ContactsRegionCallTrans::class,
             'contact_region_call_trans',
             'contact_region_call_trans.call = contact_region_call.id AND contact_region_call_trans.local = :local'
         );
@@ -230,21 +259,21 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
 
         $qb->leftJoin(
             'contact_region_call',
-            ContactsRegionEntity\Call\Phone\ContactsRegionCallPhone::TABLE,
+            ContactsRegionCallPhone::class,
             'contact_region_call_phone',
             'contact_region_call_phone.call = contact_region_call.id'
         );
 
         $qb->leftJoin(
             'contact_region_call',
-            ContactsRegionEntity\Call\Info\ContactsRegionCallInfo::TABLE,
+            ContactsRegionCallInfo::class,
             'contact_region_call_info',
             'contact_region_call_info.call = contact_region_call.id'
         );
 
         $qb->leftJoin(
             'contact_region_call',
-            ContactsRegionEntity\Call\Cover\ContactsRegionCallCover::TABLE,
+            ContactsRegionCallCover::class,
             'contact_region_call_cover',
             'contact_region_call_cover.call = contact_region_call.id'
         );

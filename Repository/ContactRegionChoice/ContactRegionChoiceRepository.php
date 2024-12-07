@@ -28,7 +28,9 @@ namespace BaksDev\Contacts\Region\Repository\ContactRegionChoice;
 use BaksDev\Contacts\Region\Entity\ContactsRegion;
 use BaksDev\Core\Doctrine\ORMQueryBuilder;
 use BaksDev\Core\Type\Locale\Locale;
-use BaksDev\Reference\Region\Entity as RegionEntity;
+use BaksDev\Reference\Region\Entity\Invariable\RegionInvariable;
+use BaksDev\Reference\Region\Entity\Region;
+use BaksDev\Reference\Region\Entity\Trans\RegionTrans;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -52,35 +54,40 @@ final class ContactRegionChoiceRepository implements ContactRegionChoiceInterfac
     {
         $qb = $this->ORMQueryBuilder->createQueryBuilder(self::class);
 
-        $select = sprintf('new %s(region.id, region_trans.name)', RegionUid::class);
+        $select = sprintf('new %s(region.id, trans.name)', RegionUid::class);
         $qb->select($select);
 
         $qb->from(ContactsRegion::class, 'contact');
 
 
-        $qb->join(RegionEntity\Region::class,
+        $qb->join(Region::class,
             'region',
             'WITH',
             'region.id = contact.id'
         );
 
 
-        $qb->join(RegionEntity\Event\RegionEvent::class,
-            'region_event',
+        $qb->join(RegionInvariable::class,
+            'invariable',
             'WITH',
-            'region_event.id = region.event AND region_event.active = true'
+            'invariable.main = region.id AND invariable.active = true'
         );
 
-        $qb->leftJoin(RegionEntity\Trans\RegionTrans::class,
-            'region_trans',
-            'WITH',
-            'region_trans.event = region_event.id AND region_trans.local = :local'
-        );
 
-        $qb->setParameter('local', new Locale($this->translator->getLocale()), Locale::TYPE);
+        $qb
+            ->leftJoin(RegionTrans::class,
+                'trans',
+                'WITH',
+                'trans.event = region.event AND trans.local = :local'
+            )
+            ->setParameter(
+                'local',
+                new Locale($this->translator->getLocale()),
+                Locale::TYPE
+            );
 
-        $qb->orderBy('region_event.sort');
-        $qb->addOrderBy('region_trans.name');
+        $qb->orderBy('invariable.sort');
+        $qb->addOrderBy('trans.name');
 
         $qb->setMaxResults(1);
 
