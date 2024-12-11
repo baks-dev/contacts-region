@@ -25,51 +25,52 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\Repository\ContactCallByGeocode;
 
-use BaksDev\Contacts\Region\Entity as EntityCall;
+use BaksDev\Contacts\Region\Entity\Call\ContactsRegionCall;
+use BaksDev\Contacts\Region\Entity\Call\Info\ContactsRegionCallInfo;
+use BaksDev\Contacts\Region\Entity\ContactsRegion;
+use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEvent;
 use BaksDev\Contacts\Region\Type\Call\Const\ContactsRegionCallConst;
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Core\Type\Gps\GpsLatitude;
 use BaksDev\Core\Type\Gps\GpsLongitude;
 
-final class ContactCallByGeocodeRepository implements ContactCallByGeocodeInterface
+final readonly class ContactCallByGeocodeRepository implements ContactCallByGeocodeInterface
 {
-
-    private DBALQueryBuilder $DBALQueryBuilder;
-
-    public function __construct(DBALQueryBuilder $DBALQueryBuilder) {
-
-        $this->DBALQueryBuilder = $DBALQueryBuilder;
-    }
-
+    public function __construct(private DBALQueryBuilder $DBALQueryBuilder) {}
 
     /**
      *
      * Метод возвращает геолокацию регионального контакта по его неизменяемому идентификатору (CONST)
      */
-    public function fetchContactCallGeocodeByConst(ContactsRegionCallConst $const) : ?array
+    public function fetchContactCallGeocodeByConst(ContactsRegionCallConst $const): ?array
     {
         $qb = $this->DBALQueryBuilder->createQueryBuilder(self::class);
-        $qb->from(EntityCall\Call\ContactsRegionCall::TABLE, 'call');
 
-        $qb->addSelect('call_info.latitude AS call_latitude');
-        $qb->addSelect('call_info.longitude AS call_longitude');
+        $qb
+            ->from(ContactsRegionCall::class, 'call')
+            ->where('call.const = :const')
+            ->setParameter(
+                'const',
+                $const,
+                ContactsRegionCallConst::TYPE
+            );
 
         $qb->join('call',
-            EntityCall\ContactsRegion::TABLE,
+            ContactsRegion::class,
             'region',
             'region.event = call.event'
         );
 
-        $qb->join('call',
-            EntityCall\Call\Info\ContactsRegionCallInfo::TABLE,
-            'call_info',
-            'call_info.call = call.id'
-        );
 
+        $qb
+            ->addSelect('call_info.latitude AS call_latitude')
+            ->addSelect('call_info.longitude AS call_longitude')
+            ->join('call',
+                ContactsRegionCallInfo::class,
+                'call_info',
+                'call_info.call = call.id'
+            );
 
-        $qb->where('call.const = :const');
-
-        $qb->setParameter('const', $const, ContactsRegionCallConst::TYPE);
 
         /* Кешируем результат DBAL */
         return $qb
@@ -86,34 +87,37 @@ final class ContactCallByGeocodeRepository implements ContactCallByGeocodeInterf
     {
         $qbExist = $this->DBALQueryBuilder->createQueryBuilder(self::class);
 
-        //$qbExist->select('1');
-        $qbExist->from(EntityCall\Call\Info\ContactsRegionCallInfo::TABLE, 'info');
-        $qbExist->where('info.latitude = :latitude');
-        $qbExist->andWhere('info.longitude = :longitude');
+        $qbExist
+            ->from(ContactsRegionCallInfo::class, 'info');
+
+        $qbExist
+            ->where('info.latitude = :latitude')
+            ->setParameter('latitude', $latitude, GpsLatitude::TYPE);
+
+        $qbExist
+            ->andWhere('info.longitude = :longitude')
+            ->setParameter('longitude', $longitude, GpsLongitude::TYPE);
 
         $qbExist->join(
             'info',
-            EntityCall\Call\ContactsRegionCall::TABLE,
+            ContactsRegionCall::class,
             'call',
             'call.id = info.call AND call.pickup = true'
         );
 
         $qbExist->join(
             'call',
-            EntityCall\Event\ContactsRegionEvent::TABLE,
+            ContactsRegionEvent::class,
             'event',
             'event.id = call.event'
         );
 
         $qbExist->join(
             'event',
-            EntityCall\ContactsRegion::TABLE,
+            ContactsRegion::class,
             'region',
             'region.event = event.id'
         );
-
-        $qbExist->setParameter('latitude', $latitude, GpsLatitude::TYPE);
-        $qbExist->setParameter('longitude', $longitude, GpsLongitude::TYPE);
 
         return $qbExist->enableCache('contacts-region', 3600)->fetchExist();
 
