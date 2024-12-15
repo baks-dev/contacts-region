@@ -31,9 +31,9 @@ use Symfony\Component\Uid\AbstractUid;
 
 final class ContactsRegionCallConst extends Uid
 {
-    public const TEST = '0188a992-54e5-7743-923e-47fd6bb07097';
+    public const string TEST = '0188a992-54e5-7743-923e-47fd6bb07097';
 
-    public const TYPE = 'contacts_region_call_const';
+    public const string TYPE = 'contacts_region_call_const';
 
     private mixed $attr;
 

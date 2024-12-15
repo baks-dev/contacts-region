@@ -32,7 +32,7 @@ use BaksDev\Reference\Region\Type\Id\RegionUid;
 
 final class ContactsRegionFieldChoice implements FieldsChoiceInterface, ReferenceChoiceInterface
 {
-    public const TYPE = 'contacts_region_type';
+    public const string TYPE = 'contacts_region_type';
 
 
     public function equals($key): bool

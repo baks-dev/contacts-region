@@ -31,8 +31,8 @@ use Symfony\Component\Uid\AbstractUid;
 
 final class ContactsRegionEventUid extends Uid
 {
-    public const TEST = '0188a994-4ef5-7a43-bbf3-3ed6e99b2a5a';
+    public const string TEST = '0188a994-4ef5-7a43-bbf3-3ed6e99b2a5a';
 
-    public const TYPE = 'contacts_region_event';
+    public const string TYPE = 'contacts_region_event';
 
 }

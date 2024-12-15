@@ -6,9 +6,9 @@ use InvalidArgumentException;
 
 final class ContactRegionEmail
 {
-    public const TEST = 'test@test.local';
+    public const string TEST = 'test@test.local';
 
-    public const TYPE = 'contact_region_email';
+    public const string TYPE = 'contact_region_email';
 
     private string $value;
 

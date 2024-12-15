@@ -7,7 +7,7 @@ use InvalidArgumentException;
 final class ContactRegionGps
 {
 
-	public const TYPE = 'contact_region_gps';
+    public const string TYPE = 'contact_region_gps';
 	
 	private $value;
 
