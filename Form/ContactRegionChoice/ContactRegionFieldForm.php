@@ -95,27 +95,6 @@ final class ContactRegionFieldForm extends AbstractType
             ]);
 
 
-        //        $builder->addEventListener(
-        //            FormEvents::PRE_SET_DATA,
-        //            function (FormEvent $event) use ($options): void {
-        //
-        //                $form = $event->getForm();
-        //                $data = $event->getData();
-        //
-        //               if($data)
-        //               {
-        //                   dd($event->getData());
-        //               }
-        //
-        //                dump('PRE_SET_DATA');
-        //
-        ////                if($data)
-        ////                {
-        ////                    dd($data);
-        ////                }
-        //
-        //            });
-
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
             function (FormEvent $event) use ($options): void {
