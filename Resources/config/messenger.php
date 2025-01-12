@@ -38,6 +38,18 @@ return static function (FrameworkConfig $framework) {
 
     ;
 
+    $messenger
+        ->transport('contacts-region-low')
+        ->dsn('%env(MESSENGER_TRANSPORT_DSN)%')
+        ->options(['queue_name' => 'contacts-region'])
+        ->failureTransport('failed-contacts-region')
+        ->retryStrategy()
+        ->maxRetries(1)
+        ->delay(1000)
+        ->maxDelay(1)
+        ->multiplier(2)
+        ->service(null);
+
     $failure = $framework->messenger();
 
     $failure->transport('failed-contacts-region')
