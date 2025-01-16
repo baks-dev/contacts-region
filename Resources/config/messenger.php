@@ -26,7 +26,7 @@ return static function (FrameworkConfig $framework) {
 
     $messenger
         ->transport('contacts-region')
-        ->dsn('redis://%env(REDIS_PASSWORD)%@%env(REDIS_HOST)%:%env(REDIS_PORT)%?dbindex=%env(REDIS_TABLE)&auto_setup=true')
+        ->dsn('redis://%env(REDIS_PASSWORD)%@%env(REDIS_HOST)%:%env(REDIS_PORT)%?dbindex=%env(REDIS_TABLE)%&auto_setup=true')
         ->options(['stream' => 'contacts-region'])
         ->failureTransport('failed-contacts-region')
         ->retryStrategy()
