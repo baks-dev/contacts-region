@@ -30,31 +30,17 @@ use BaksDev\Contacts\Region\Messenger\ContactRegionMessage;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class ContactsRegionDeleteHandler
+final readonly class ContactsRegionDeleteHandler
 {
-    private EntityManagerInterface $entityManager;
-
-    private ValidatorInterface $validator;
-
-    private LoggerInterface $logger;
-    private MessageDispatchInterface $messageDispatch;
-
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        ValidatorInterface $validator,
-        LoggerInterface $logger,
-        MessageDispatchInterface $messageDispatch
-
-    )
-    {
-        $this->entityManager = $entityManager;
-        $this->validator = $validator;
-        $this->logger = $logger;
-        $this->messageDispatch = $messageDispatch;
-    }
+        #[Target('contactsRegionLogger')] private LoggerInterface $logger,
+        private EntityManagerInterface $entityManager,
+        private ValidatorInterface $validator,
+        private MessageDispatchInterface $messageDispatch
+    ) {}
 
 
     public function handle(

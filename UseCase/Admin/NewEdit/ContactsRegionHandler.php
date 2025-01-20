@@ -25,46 +25,16 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\UseCase\Admin\NewEdit;
 
-//use BaksDev\Contacts\Region\Entity;
+
 use BaksDev\Contacts\Region\Entity\Call\ContactsRegionCall;
 use BaksDev\Contacts\Region\Entity\ContactsRegion;
 use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEvent;
 use BaksDev\Contacts\Region\Messenger\ContactRegionMessage;
 use BaksDev\Core\Entity\AbstractHandler;
-use BaksDev\Core\Messenger\MessageDispatchInterface;
-use BaksDev\Files\Resources\Upload\Image\ImageUploadInterface;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManagerInterface;
 use DomainException;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class ContactsRegionHandler extends AbstractHandler
 {
-    //    private EntityManagerInterface $entityManager;
-    //
-    //    private ValidatorInterface $validator;
-    //
-    //    private LoggerInterface $logger;
-    //
-    //    private ImageUploadInterface $imageUpload;
-    //
-    //    private MessageDispatchInterface $messageDispatch;
-    //
-    //    public function __construct(
-    //        EntityManagerInterface $entityManager,
-    //        ValidatorInterface $validator,
-    //        LoggerInterface $logger,
-    //        ImageUploadInterface $imageUpload,
-    //        MessageDispatchInterface $messageDispatch,
-    //    ) {
-    //        $this->entityManager = $entityManager;
-    //        $this->validator = $validator;
-    //        $this->logger = $logger;
-    //        $this->imageUpload = $imageUpload;
-    //        $this->messageDispatch = $messageDispatch;
-    //    }
-
     public function handle(ContactsRegionDTO $command): string|ContactsRegion
     {
 
