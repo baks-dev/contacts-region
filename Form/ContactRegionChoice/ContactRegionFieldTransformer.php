@@ -29,42 +29,38 @@ use BaksDev\Contacts\Region\Repository\ContactCallRegion\ContactCallRegionInterf
 use BaksDev\Contacts\Region\Type\Call\ContactsRegionCallUid;
 use Symfony\Component\Form\DataTransformerInterface;
 
-final class ContactRegionFieldTransformer implements DataTransformerInterface
+final readonly class ContactRegionFieldTransformer implements DataTransformerInterface
 {
-	private ContactCallRegionInterface $callRegion;
-	
-	public function __construct(ContactCallRegionInterface $callRegion) {
-		$this->callRegion = $callRegion;
-	}
-	
-	public function transform(mixed $value): ContactRegionFieldDTO
+    public function __construct(private ContactCallRegionInterface $callRegion) {}
+
+    public function transform(mixed $value): ContactRegionFieldDTO
     {
         if($value && !preg_match('{^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$}Di', $value))
         {
             $value = null;
         }
 
-		$ContactRegionFieldDTO = new ContactRegionFieldDTO();
+        $ContactRegionFieldDTO = new ContactRegionFieldDTO();
 
-		if($value)
-		{
-			$ContactsRegionCallUid = $this->callRegion->getContactCall(new ContactsRegionCallUid($value));
-			
-			if($ContactsRegionCallUid)
-			{
-				$ContactRegionFieldDTO->setRegion($ContactsRegionCallUid->getAttr());
-				$ContactRegionFieldDTO->setCall($ContactsRegionCallUid);
-			}
-		}
+        if($value)
+        {
+            $ContactsRegionCallUid = $this->callRegion->getContactCall(new ContactsRegionCallUid($value));
 
-		return $ContactRegionFieldDTO;
-	}
+            if($ContactsRegionCallUid)
+            {
+                $ContactRegionFieldDTO->setRegion($ContactsRegionCallUid->getAttr());
+                $ContactRegionFieldDTO->setCall($ContactsRegionCallUid);
+            }
+        }
+
+        return $ContactRegionFieldDTO;
+    }
 
 
-	public function reverseTransform(mixed $value) : ?string
-	{
-		/** @var ContactRegionFieldDTO $value */
-		return (string) $value->getCall()?->getValue();
-	}
-	
+    public function reverseTransform(mixed $value): ?string
+    {
+        /** @var ContactRegionFieldDTO $value */
+        return (string) $value->getCall()?->getValue();
+    }
+
 }

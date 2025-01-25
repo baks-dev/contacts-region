@@ -25,12 +25,12 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\Repository\ContactCallRegionChoice;
 
-use BaksDev\Core\Type\Locale\Locale;
-use Doctrine\ORM\EntityManagerInterface;
-use BaksDev\Reference\Region\Type\Id\RegionUid;
 use BaksDev\Contacts\Region\Entity as ContactsEntity;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use BaksDev\Contacts\Region\Type\Call\ContactsRegionCallUid;
+use BaksDev\Core\Type\Locale\Locale;
+use BaksDev\Reference\Region\Type\Id\RegionUid;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContactCallRegionChoiceRepository implements ContactCallRegionChoiceInterface
 {
@@ -44,8 +44,13 @@ final class ContactCallRegionChoiceRepository implements ContactCallRegionChoice
         $this->translator = $translator;
     }
 
-    public function fetchCallRegion(RegionUid $region): ?array
+    public function fetchCallRegion(?RegionUid $region): ?array
     {
+        if(is_null($region))
+        {
+            return null;
+        }
+
         $qb = $this->entityManager->createQueryBuilder();
 
         $select = sprintf('new %s(call.id, trans.name, info.latitude, info.longitude)', ContactsRegionCallUid::class);

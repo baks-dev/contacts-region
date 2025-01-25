@@ -23,9 +23,7 @@
 
 namespace BaksDev\Contacts\Region\Form\RegionFilter;
 
-
 use BaksDev\Contacts\Region\Repository\ContactRegionChoice\ContactRegionChoiceInterface;
-use BaksDev\Reference\Region\Repository\ReferenceRegionChoice\ReferenceRegionChoiceInterface;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -34,43 +32,29 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class RegionFilterForm extends AbstractType
 {
-	
-	private ContactRegionChoiceInterface $regionChoice;
-	
-	
-	public function __construct(
-		//ReferenceRegionChoiceInterface $regionChoice,
-		ContactRegionChoiceInterface $regionChoice
-	)
-	{
-		
-		$this->regionChoice = $regionChoice;
-	}
-	
-	public function buildForm(FormBuilderInterface $builder, array $options) : void
-	{
-		$builder->add('region', ChoiceType::class, [
-			'choices' => $this->regionChoice->getRegionChoice(),
-			'choice_value' => function(?RegionUid $region) {
-				return $region?->getValue();
-			},
-			'choice_label' => function(RegionUid $region) {
-				return $region->getOption();
-			},
-			'label' => false
-		]);
-		
-	}
-	
-	public function configureOptions(OptionsResolver $resolver) : void
-	{
-		$resolver->setDefaults
-		(
-			[
-				'data_class' => RegionFilterDTO::class,
-				'method' => 'POST',
-			]
-		);
-	}
-	
+    public function __construct(private readonly ContactRegionChoiceInterface $regionChoice) {}
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder->add('region', ChoiceType::class, [
+            'choices' => $this->regionChoice->getRegionChoice(),
+            'choice_value' => function(?RegionUid $region) {
+                return $region instanceof RegionUid ? $region->getValue() : null;
+            },
+            'choice_label' => function(RegionUid $region) {
+                return $region->getOption();
+            },
+            'label' => false
+        ]);
+
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => RegionFilterDTO::class,
+            'method' => 'POST',
+        ]);
+    }
+
 }

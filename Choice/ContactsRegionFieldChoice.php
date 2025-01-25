@@ -34,7 +34,6 @@ final class ContactsRegionFieldChoice implements FieldsChoiceInterface, Referenc
 {
     public const string TYPE = 'contacts_region_type';
 
-
     public function equals($key): bool
     {
         return $key === self::TYPE;

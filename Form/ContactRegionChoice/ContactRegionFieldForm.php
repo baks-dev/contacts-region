@@ -39,23 +39,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ContactRegionFieldForm extends AbstractType
 {
-    private ContactRegionChoiceInterface $regionChoice;
-
-    private ContactCallRegionChoiceInterface $callChoice;
-
-    private ContactCallRegionInterface $callRegion;
+    private ?RegionUid $region = null;
 
     public function __construct(
-        ContactRegionChoiceInterface $regionChoice,
-        ContactCallRegionChoiceInterface $callChoice,
-        ContactCallRegionInterface $callRegion,
-    ) {
-        $this->regionChoice = $regionChoice;
-        $this->callChoice = $callChoice;
-        $this->callRegion = $callRegion;
-    }
-
-    private $region = null;
+        private readonly ContactRegionChoiceInterface $regionChoice,
+        private readonly ContactCallRegionChoiceInterface $callChoice,
+        private readonly ContactCallRegionInterface $callRegion,
+    ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -67,10 +57,10 @@ final class ContactRegionFieldForm extends AbstractType
         $builder
             ->add('region', ChoiceType::class, [
                 'choices' => $regionChoice,
-                'choice_value' => function (?RegionUid $region) {
+                'choice_value' => function(?RegionUid $region) {
                     return $region?->getValue();
                 },
-                'choice_label' => function (RegionUid $region) {
+                'choice_label' => function(RegionUid $region) {
                     return $region->getOption();
                 },
                 'label' => false,
@@ -91,45 +81,37 @@ final class ContactRegionFieldForm extends AbstractType
                 'required' => true,
                 'placeholder' => 'Выберите регион из списка...',
                 'attr' => ['data-address' => 'true', 'data-select' => 'select2'],
-                //'disabled' => true
             ]);
 
 
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
-            function (FormEvent $event) use ($options): void {
+            function(FormEvent $event): void {
+
                 $form = $event->getForm();
 
                 $data = $form->getNormData();
 
-                //dump($form);
-
-                $callChoice = null;
-
-                if($this->region)
-                {
-                    $callChoice = $this->callChoice->fetchCallRegion($this->region);
-                }
+                $callChoice = $this->callChoice->fetchCallRegion($this->region);
 
                 if($data->getCall() && $data->getRegion())
                 {
                     $callChoice = $this->callChoice->fetchCallRegion($data->getRegion());
                 }
 
-
                 if($callChoice)
                 {
                     $form
                         ->add('call', ChoiceType::class, [
                             'choices' => $callChoice,
-                            'choice_value' => function (?ContactsRegionCallUid $call) {
+                            'choice_value' => function(?ContactsRegionCallUid $call) {
                                 return $call?->getValue();
                             },
-                            'choice_label' => function (ContactsRegionCallUid $call) {
+                            'choice_label' => function(ContactsRegionCallUid $call) {
                                 return $call->getName();
                             },
 
-                            'choice_attr' => function (ContactsRegionCallUid $choice) {
+                            'choice_attr' => function(ContactsRegionCallUid $choice) {
                                 return ['data-lati' => $choice->getAttr(), 'data-longi' => $choice->getOption()];
                             },
 
@@ -151,8 +133,7 @@ final class ContactRegionFieldForm extends AbstractType
                             'expanded' => false,
                             'multiple' => false,
                             'required' => true,
-                            'placeholder' => 'Нет пуктов выдачи в указанном регионе',
-                            //'disabled' => true
+                            'placeholder' => 'Нет пунктов выдачи в указанном регионе',
                         ]);
                 }
 
@@ -160,50 +141,38 @@ final class ContactRegionFieldForm extends AbstractType
         );
 
 
-        //        $builder->addEventListener(
-        //            FormEvents::POST_SUBMIT,
-        //            function (FormEvent $event): void {
-        //
-        //                $form = $event->getForm()->getParent();
-        //
-        //                $data = $event->getData();
-        //
-        //                $form->add('value', self::class, ['label' => false]);
-        //
-        //
-        //                //dump( $form);
-        //                //dd($region);
-        //
-        //            });
-
-
         $builder->get('region')->addEventListener(
             FormEvents::POST_SUBMIT,
-            function (FormEvent $event): void {
+            function(FormEvent $event): void {
+
                 $region = $event->getForm()->getData();
 
                 if($region)
                 {
-                    $callChoice = $this->callChoice->fetchCallRegion($region);
-
                     $form = $event->getForm()->getParent();
+
+                    if(is_null($form))
+                    {
+                        return;
+                    }
 
                     $this->region = $region;
 
+                    $callChoice = $this->callChoice->fetchCallRegion($this->region);
 
                     if($callChoice)
                     {
                         $form
                             ->add('call', ChoiceType::class, [
                                 'choices' => $callChoice,
-                                'choice_value' => function (?ContactsRegionCallUid $call) {
+                                'choice_value' => function(?ContactsRegionCallUid $call) {
                                     return $call?->getValue();
                                 },
-                                'choice_label' => function (ContactsRegionCallUid $call) {
+                                'choice_label' => function(ContactsRegionCallUid $call) {
                                     return $call->getName();
                                 },
 
-                                'choice_attr' => function (ContactsRegionCallUid $choice) {
+                                'choice_attr' => function(ContactsRegionCallUid $choice) {
                                     return ['data-lati' => $choice->getAttr(), 'data-longi' => $choice->getOption()];
                                 },
 
@@ -224,13 +193,9 @@ final class ContactRegionFieldForm extends AbstractType
                                 'expanded' => false,
                                 'multiple' => false,
                                 'required' => true,
-                                'placeholder' => 'Нет пуктов выдачи в указанном регионе',
-                                //'disabled' => true
+                                'placeholder' => 'Нет пунктов выдачи в указанном регионе',
                             ]);
                     }
-
-                    // $form->getParent()->add('value', self::class, ['label' => false]);
-
                 }
             }
         );

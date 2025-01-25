@@ -50,14 +50,14 @@ final class EditController extends AbstractController
         #[MapEntity] Entity\Call\ContactsRegionCall $ContactsRegionCall,
         ContactsRegionHandler $contactsRegionHandler,
         EntityManagerInterface $entityManager
-    ): Response {
+    ): Response
+    {
 
         $entityManager->clear();
         /**
          * @var RegionUid $ContactsRegion
          */
         $ContactsRegion = $ContactsRegionCall->getEvent()->getMain();
-
 
 
         $ContactsRegionDTO = new ContactsRegionDTO();
@@ -91,7 +91,6 @@ final class EditController extends AbstractController
 
             return $this->redirectToReferer();
         }
-
 
 
         return $this->render(['form' => $form->createView()]);
