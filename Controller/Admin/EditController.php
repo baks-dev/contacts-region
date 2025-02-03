@@ -71,8 +71,13 @@ final class EditController extends AbstractController
 
 
         // Форма добавления
-        $form = $this->createForm(ContactsRegionForm::class, $ContactsRegionDTO);
-        $form->handleRequest($request);
+        $form = $this
+            ->createForm(
+                type: ContactsRegionForm::class,
+                data: $ContactsRegionDTO,
+                options: ['action' => $this->generateUrl('contacts-region:admin.newedit.edit', ['id' => $ContactsRegionCall->getId()])]
+            )
+            ->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid() && $form->has('contacts_region'))
         {

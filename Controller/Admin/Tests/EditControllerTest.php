@@ -29,9 +29,9 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 final class EditControllerTest extends WebTestCase
 {
-    private const URL = '/admin/call/edit/%s';
+    private const string URL = '/admin/call/edit/%s';
 
-    private const ROLE = 'ROLE_CONTACTS_REGION_EDIT';
+    private const string ROLE = 'ROLE_CONTACTS_REGION_EDIT';
 
 
     private static ?ContactsRegionCallUid $identifier = null;

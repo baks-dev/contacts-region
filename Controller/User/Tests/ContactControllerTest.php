@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 final class ContactControllerTest extends WebTestCase
 {
-    private const URL = '/contact';
+    private const string URL = '/contact';
 
     /** Доступ по гостевому аккаунту */
     public function testGuestSuccessful(): void

@@ -53,11 +53,13 @@ final class DeleteController extends AbstractController
         $ContactsRegionCallDeleteDTO = new ContactsRegionDeleteDTO();
         $ContactsRegionCallEvent->getDto($ContactsRegionCallDeleteDTO);
 
-        $form = $this->createForm(ContactsRegionDeleteForm::class, $ContactsRegionCallDeleteDTO, [
-            'action' => $this->generateUrl('contacts-region:admin.delete', ['id' => $ContactsRegionCallDeleteDTO->getId()]),
-        ]);
-
-        $form->handleRequest($request);
+        $form = $this
+            ->createForm(
+                type: ContactsRegionDeleteForm::class,
+                data: $ContactsRegionCallDeleteDTO,
+                options: ['action' => $this->generateUrl('contacts-region:admin.delete', ['id' => $ContactsRegionCallDeleteDTO->getId()]),]
+            )
+            ->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid() && $form->has('contacts_call_delete'))
         {

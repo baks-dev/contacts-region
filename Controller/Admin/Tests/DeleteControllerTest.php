@@ -29,9 +29,9 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 final class DeleteControllerTest extends WebTestCase
 {
-    private const URL = '/admin/call/delete/%s';
+    private const string URL = '/admin/call/delete/%s';
 
-    private const ROLE = 'ROLE_CONTACTS_REGION_CALL_DELETE';
+    private const string ROLE = 'ROLE_CONTACTS_REGION_CALL_DELETE';
 
 
     private static ?ContactsRegionCallUid $identifier = null;

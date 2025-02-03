@@ -41,23 +41,33 @@ final class ContactController extends AbstractController
         ContactCallDetailInterface $callDetail,
         ContactRegionDefaultInterface $defaultRegion,
         ContactCallByRegionInterface $callRegion,
-    ): Response {
+    ): Response
+    {
+
         $RegionFilterDTO = new RegionFilterDTO();
         $DefaultRegion = $defaultRegion->getDefaultCallRegion();
         $RegionFilterDTO->setRegion($DefaultRegion);
 
         // Форма
-        $form = $this->createForm(RegionFilterForm::class, $RegionFilterDTO);
-        $form->handleRequest($request);
+        $form = $this
+            ->createForm(
+                type: RegionFilterForm::class,
+                data: $RegionFilterDTO,
+                options: ['action' => 'contacts-region:user.contact']
+
+            )
+            ->handleRequest($request);
 
         $calls = $callRegion
             ->fetchContactCallByRegionAssociative($RegionFilterDTO->getRegion());
 
         // Поиск по всему сайту
         $allSearch = new SearchDTO($request);
-        $allSearchForm = $this->createForm(SearchForm::class, $allSearch, [
-            'action' => $this->generateUrl('contacts-region:admin.index'),
-        ]);
+        $allSearchForm = $this->createForm(
+            type: SearchForm::class,
+            data: $allSearch,
+            options: ['action' => $this->generateUrl('contacts-region:admin.index')]
+        );
 
 
         return $this->render([

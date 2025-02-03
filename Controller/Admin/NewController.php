@@ -44,13 +44,19 @@ final class NewController extends AbstractController
     public function new(
         Request $request,
         ContactsRegionHandler $contactsRegionHandler,
-    ): Response {
+    ): Response
+    {
 
         $ContactsRegionDTO = new ContactsRegionDTO();
 
         // Форма
-        $form = $this->createForm(ContactsRegionForm::class, $ContactsRegionDTO);
-        $form->handleRequest($request);
+        $form = $this
+            ->createForm(
+                type: ContactsRegionForm::class,
+                data: $ContactsRegionDTO,
+                options: ['action' => $this->generateUrl('contacts-region:admin.newedit.new')]
+            )
+            ->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid() && $form->has('contacts_region'))
         {
