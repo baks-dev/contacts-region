@@ -33,7 +33,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 class VoterDelete implements VoterInterface
 {
 
-    public const VOTER = 'DELETE';
+    public const string VOTER = 'DELETE';
 
     public static function getVoter(): string
     {

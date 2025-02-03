@@ -33,7 +33,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 class VoterEdit implements VoterInterface
 {
 
-    public const VOTER = 'EDIT';
+    public const string VOTER = 'EDIT';
 
     public static function getVoter(): string
     {
