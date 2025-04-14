@@ -39,7 +39,6 @@ class PickupByGeolocationTest extends KernelTestCase
 {
     public function testUseCase(): void
     {
-
         /** @var PickupByGeolocationInterface $PickupByGeolocation */
         $PickupByGeolocation = self::getContainer()->get(PickupByGeolocationInterface::class);
 
@@ -47,6 +46,14 @@ class PickupByGeolocationTest extends KernelTestCase
             ->latitude(55.826149)
             ->longitude(37.350557)
             ->execute();
+
+        if(false === $PickupByGeolocationDTO)
+        {
+            echo PHP_EOL.'Не найден региональный контакт с геолокацией (55.826149 37.350557) : '.self::class.':'.__LINE__.PHP_EOL;
+
+            self::assertFalse(false);
+            return;
+        }
 
         self::assertInstanceOf(PickupByGeolocationDTO::class, $PickupByGeolocationDTO);
     }

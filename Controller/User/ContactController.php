@@ -62,7 +62,7 @@ final class ContactController extends AbstractController
             ->fetchContactCallByRegionAssociative($RegionFilterDTO->getRegion());
 
         // Поиск по всему сайту
-        $allSearch = new SearchDTO($request);
+        $allSearch = new SearchDTO();
         $allSearchForm = $this->createForm(
             type: SearchForm::class,
             data: $allSearch,

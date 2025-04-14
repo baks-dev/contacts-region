@@ -31,51 +31,43 @@ use BaksDev\Contacts\Region\Entity\ContactsRegion;
 use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEvent;
 use BaksDev\Contacts\Region\Messenger\ContactRegionMessage;
 use BaksDev\Core\Entity\AbstractHandler;
-use DomainException;
 
 final class ContactsRegionHandler extends AbstractHandler
 {
     public function handle(ContactsRegionDTO $command): string|ContactsRegion
     {
-
-        $Main = $this->entityManager
+        $Main = $this
             ->getRepository(ContactsRegion::class)
             ->find($command->getRegion());
 
+        $ContactsRegionEvent = new ContactsRegionEvent();
+
+
         /** Получаем событие */
-        if($Main)
+        if($Main instanceof ContactsRegion)
         {
             $ContactsRegionEvent =
-                $this->entityManager
+                $this
                     ->getRepository(ContactsRegionEvent::class)
-                    ->find($Main?->getEvent());
+                    ->find($Main->getEvent());
 
             if($ContactsRegionEvent)
             {
                 $ContactsRegionEvent->getDto($command);
             }
 
-            $this->entityManager->clear();
+            $this->clear();
         }
-
-
 
         $command->setId($Main?->getEvent());
 
-        /** Валидация DTO  */
-        $this->validatorCollection->add($command);
 
-        $this->main = $Main ?: new ContactsRegion($command->getRegion());
-        $this->event = new ContactsRegionEvent();
-
-        try
-        {
-            $Main ? $this->preUpdate($command, true) : $this->prePersist($command);
-        }
-        catch(DomainException $errorUniqid)
-        {
-            return $errorUniqid->getMessage();
-        }
+        $this
+            ->setCommand($command)
+            ->preEventPersistOrUpdate(
+                $Main ?: new ContactsRegion($command->getRegion()),
+                $ContactsRegionEvent
+            );
 
         $ContactsRegionCallDTO = $command->getCalls();
 
@@ -85,12 +77,13 @@ final class ContactsRegionHandler extends AbstractHandler
             }
         );
 
+
         /* Добавляем новый */
         if($filter->isEmpty())
         {
             $ContactsRegionCall = new ContactsRegionCall($this->event);
             $ContactsRegionCall->setEntity($ContactsRegionCallDTO);
-            $this->entityManager->persist($ContactsRegionCall);
+            $this->persist($ContactsRegionCall);
         }
 
         // Обновляем существующий
@@ -128,7 +121,7 @@ final class ContactsRegionHandler extends AbstractHandler
         }
 
 
-        $this->entityManager->flush();
+        $this->flush();
 
         /* Отправляем событие в шину  */
         $this->messageDispatch->dispatch(
@@ -138,104 +131,5 @@ final class ContactsRegionHandler extends AbstractHandler
 
 
         return $this->main;
-    }
-
-
-    public function _handle(ContactsRegionDTO $command): string|Entity\ContactsRegion
-    {
-        /* Валидация DTO */
-        $errors = $this->validator->validate($command);
-
-        if(count($errors) > 0)
-        {
-            /** Ошибка валидации */
-            $uniqid = uniqid('', false);
-            $this->logger->error(sprintf('%s: %s', $uniqid, $errors), [self::class.':'.__LINE__]);
-
-            return $uniqid;
-        }
-
-        $this->entityManager->clear();
-
-        /** @var Entity\ContactsRegion $Main */
-        $Main = $this->entityManager->getRepository(Entity\ContactsRegion::class)->findOneBy(
-            ['id' => $command->getRegion()]
-        );
-
-        if($Main)
-        {
-            $EventRepo = $this->entityManager->getRepository(Entity\Event\ContactsRegionEvent::class)->find($Main->getEvent());
-
-            if($EventRepo === null)
-            {
-                $uniqid = uniqid('', false);
-                $errorsString = sprintf(
-                    'Not found %s by id: %s',
-                    Entity\Event\ContactsRegionEvent::class,
-                    $Main->getEvent()
-                );
-                $this->logger->error($uniqid.': '.$errorsString);
-
-                return $uniqid;
-            }
-
-            $EventRepo->setEntity($command);
-            $EventRepo->setEntityManager($this->entityManager);
-            $Event = $EventRepo->cloneEntity();
-            //$this->entityManager->clear();
-
-        }
-        else
-        {
-            $Main = new Entity\ContactsRegion($command->getRegion());
-            $this->entityManager->persist($Main);
-
-            $Event = new Entity\Event\ContactsRegionEvent();
-            $Event->setMain($Main);
-        }
-
-        //$this->entityManager->persist($Event);
-
-        $ContactsRegionCallDTO = $command->getCall();
-        $newContactsRegionCall = true;
-
-        /** @var ContactsRegionCall $call */
-        foreach($Event->getCall() as $call)
-        {
-            if($call->getConst()->equals($ContactsRegionCallDTO->getConst()))
-            {
-                $call->setEntity($ContactsRegionCallDTO);
-
-                if($ContactsRegionCallDTO->getCover()->file !== null)
-                {
-                    $ContactsRegionCallCover = $ContactsRegionCallDTO->getCover()->getEntityUpload();
-                    $this->imageUpload->upload($ContactsRegionCallDTO->getCover()->file, $ContactsRegionCallCover);
-                }
-
-                $newContactsRegionCall = false;
-            }
-        }
-
-        /* Добавляем новый */
-        if($newContactsRegionCall)
-        {
-            $ContactsRegionCall = new ContactsRegionCall($Event);
-            $ContactsRegionCall->setEntity($ContactsRegionCallDTO);
-            $this->entityManager->persist($ContactsRegionCall);
-        }
-
-
-        /* присваиваем событие корню */
-        $Main->setEvent($Event);
-
-        $this->entityManager->flush();
-
-        /* Отправляем событие в шину  */
-        $this->messageDispatch->dispatch(
-            message: new ContactRegionMessage($Main->getId(), $Main->getEvent()),
-            transport: 'contacts-region'
-        );
-
-        return $Main;
     }
 }
