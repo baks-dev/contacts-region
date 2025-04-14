@@ -104,15 +104,8 @@ final class ContactsRegionCallForm extends AbstractType
 		$builder->add('sort', IntegerType::class);
 		
 		$builder->add('cover', ContactsRegionCallCoverForm::class);
-		
-		
-		/** Удалить */
-		/*$builder->add(
-			'delete',
-			ButtonType::class,
-			['label_html' => true]
-		);*/
-	}
+
+    }
 	
 	
 	public function configureOptions(OptionsResolver $resolver) : void
