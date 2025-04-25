@@ -61,17 +61,13 @@ class ContactsRegionEvent extends EntityEvent
     #[ORM\Column(type: RegionUid::TYPE, nullable: false)]
     private ?RegionUid $region;
 
-    /** One To One */
-    // #[ORM\OneToOne(targetEntity: ContactsRegionLogo::class, mappedBy: 'event',  cascade: ['all'])]
-    // private ?ContactsRegionOne $one = null;
-
     /** Модификатор */
-    #[ORM\OneToOne(targetEntity: ContactsRegionModify::class, mappedBy: 'event', cascade: ['all'])]
+    #[ORM\OneToOne(targetEntity: ContactsRegionModify::class, mappedBy: 'event', cascade: ['all'], fetch: 'EAGER')]
     private ContactsRegionModify $modify;
 
 
     /** Колл-центры */
-    #[ORM\OneToMany(targetEntity: ContactsRegionCall::class, mappedBy: 'event', cascade: ['all'])]
+    #[ORM\OneToMany(targetEntity: ContactsRegionCall::class, mappedBy: 'event', cascade: ['all'], fetch: 'EAGER')]
     #[ORM\OrderBy(['sort' => 'ASC'])]
     private Collection $call;
 

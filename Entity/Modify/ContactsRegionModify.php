@@ -46,11 +46,9 @@ use InvalidArgumentException;
 #[ORM\Index(columns: ['action'])]
 class ContactsRegionModify extends EntityEvent
 {
-	public const TABLE = 'contacts_region_modify';
-	
 	/** ID события */
 	#[ORM\Id]
-	#[ORM\OneToOne(inversedBy: 'modify', targetEntity: ContactsRegionEvent::class)]
+    #[ORM\OneToOne(targetEntity: ContactsRegionEvent::class, inversedBy: 'modify')]
 	#[ORM\JoinColumn(name: 'event', referencedColumnName: 'id')]
 	private ContactsRegionEvent $event;
 	

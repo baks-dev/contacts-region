@@ -76,7 +76,7 @@ class ContactsRegionCall extends EntityEvent
     private ?UserProfileUid $profile = null;
 
     /** Обложка */
-    #[ORM\OneToOne(targetEntity: Cover\ContactsRegionCallCover::class, mappedBy: 'call', cascade: ['all'])]
+    #[ORM\OneToOne(targetEntity: Cover\ContactsRegionCallCover::class, mappedBy: 'call', cascade: ['all'], fetch: 'EAGER')]
     #[ORM\OrderBy(['sort' => 'ASC'])]
     private ?Cover\ContactsRegionCallCover $cover = null;
 
@@ -88,12 +88,12 @@ class ContactsRegionCall extends EntityEvent
 
     /** Контактные номера телефонов Колл-центра */
     #[Assert\Valid]
-    #[ORM\OneToMany(targetEntity: ContactsRegionCallPhone::class, mappedBy: 'call', cascade: ['all'])]
+    #[ORM\OneToMany(targetEntity: ContactsRegionCallPhone::class, mappedBy: 'call', cascade: ['all'], fetch: 'EAGER')]
     private Collection $phone;
 
     /** Контактная информация */
     #[Assert\Valid]
-    #[ORM\OneToOne(targetEntity: ContactsRegionCallInfo::class, mappedBy: 'call', cascade: ['all'])]
+    #[ORM\OneToOne(targetEntity: ContactsRegionCallInfo::class, mappedBy: 'call', cascade: ['all'], fetch: 'EAGER')]
     private ContactsRegionCallInfo $info;
 
     /** Пункт самовывоза (выводит в списки пунктов самовывоза) */

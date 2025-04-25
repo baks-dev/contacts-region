@@ -27,32 +27,22 @@ namespace BaksDev\Contacts\Region\Repository\ContactRegionChoice;
 
 use BaksDev\Contacts\Region\Entity\ContactsRegion;
 use BaksDev\Core\Doctrine\ORMQueryBuilder;
-use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Reference\Region\Entity\Invariable\RegionInvariable;
 use BaksDev\Reference\Region\Entity\Region;
 use BaksDev\Reference\Region\Entity\Trans\RegionTrans;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContactRegionChoiceRepository implements ContactRegionChoiceInterface
 {
-    private TranslatorInterface $translator;
-    private ORMQueryBuilder $ORMQueryBuilder;
 
-
-    public function __construct(
-        ORMQueryBuilder $ORMQueryBuilder,
-        TranslatorInterface $translator
-    )
-    {
-        $this->translator = $translator;
-        $this->ORMQueryBuilder = $ORMQueryBuilder;
-    }
+    public function __construct(private readonly ORMQueryBuilder $ORMQueryBuilder) {}
 
 
     public function getRegionChoice()
     {
-        $qb = $this->ORMQueryBuilder->createQueryBuilder(self::class);
+        $qb = $this->ORMQueryBuilder
+            ->createQueryBuilder(self::class)
+            ->bindLocal();
 
         $select = sprintf('new %s(region.id, trans.name)', RegionUid::class);
         $qb->select($select);
@@ -79,11 +69,6 @@ final class ContactRegionChoiceRepository implements ContactRegionChoiceInterfac
                 'trans',
                 'WITH',
                 'trans.event = region.event AND trans.local = :local'
-            )
-            ->setParameter(
-                'local',
-                new Locale($this->translator->getLocale()),
-                Locale::TYPE
             );
 
         $qb->orderBy('invariable.sort');

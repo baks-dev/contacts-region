@@ -41,13 +41,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'contacts_region_call_cover')]
 class ContactsRegionCallCover extends EntityEvent implements UploadEntityInterface
 {
-	public const TABLE = 'contacts_region_call_cover';
-	
 	/** Связь на событие */
     #[Assert\NotBlank]
     #[Assert\Uuid]
 	#[ORM\Id]
-	#[ORM\OneToOne(inversedBy: 'cover', targetEntity: ContactsRegionCall::class)]
+    #[ORM\OneToOne(targetEntity: ContactsRegionCall::class, inversedBy: 'cover')]
 	#[ORM\JoinColumn(name: 'call', referencedColumnName: 'id')]
 	private ContactsRegionCall $call;
 

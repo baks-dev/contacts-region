@@ -25,20 +25,15 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\Repository\ContactRegionDefault;
 
-use BaksDev\Contacts\Region\Entity as ContactsRegionEntity;
+use BaksDev\Contacts\Region\Entity\Call\ContactsRegionCall;
+use BaksDev\Contacts\Region\Entity\ContactsRegion;
+use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEvent;
 use BaksDev\Core\Doctrine\ORMQueryBuilder;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 
 final class ContactRegionDefaultRepository implements ContactRegionDefaultInterface
 {
-
-    private ORMQueryBuilder $ORMQueryBuilder;
-
-    public function __construct(ORMQueryBuilder $ORMQueryBuilder)
-    {
-        $this->ORMQueryBuilder = $ORMQueryBuilder;
-    }
-
+    public function __construct(private readonly ORMQueryBuilder $ORMQueryBuilder) {}
 
     public function getDefaultCallRegion(): ?RegionUid
     {
@@ -47,15 +42,15 @@ final class ContactRegionDefaultRepository implements ContactRegionDefaultInterf
         $select = sprintf('new %s(contact.id)', RegionUid::class);
         $qb->select($select);
 
-        $qb->from(ContactsRegionEntity\ContactsRegion::class, 'contact');
+        $qb->from(ContactsRegion::class, 'contact');
 
-        $qb->join(ContactsRegionEntity\Event\ContactsRegionEvent::class,
+        $qb->join(ContactsRegionEvent::class,
             'contact_event',
             'WITH',
             'contact_event.id = contact.event'
         );
 
-        $qb->join(ContactsRegionEntity\Call\ContactsRegionCall::class,
+        $qb->join(ContactsRegionCall::class,
             'contact_call',
             'WITH',
             'contact_call.event = contact_event.id AND contact_call.active = true'
@@ -66,7 +61,9 @@ final class ContactRegionDefaultRepository implements ContactRegionDefaultInterf
         $qb->setMaxResults(1);
 
         /* Кешируем результат ORM */
-        return $qb->enableCache('contacts-region', 86400)->getOneOrNullResult();
+        return $qb
+            ->enableCache('contacts-region', '1 day')
+            ->getOneOrNullResult();
 
     }
 

@@ -25,56 +25,52 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\Repository\WarehouseChoice;
 
-use BaksDev\Contacts\Region\Entity as ContactsRegionEntity;
+use BaksDev\Contacts\Region\Entity\Call\ContactsRegionCall;
+use BaksDev\Contacts\Region\Entity\Call\Info\ContactsRegionCallInfo;
+use BaksDev\Contacts\Region\Entity\Call\Trans\ContactsRegionCallTrans;
+use BaksDev\Contacts\Region\Entity\ContactsRegion;
+use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEvent;
 use BaksDev\Contacts\Region\Type\Call\Const\ContactsRegionCallConst;
 use BaksDev\Core\Doctrine\ORMQueryBuilder;
-use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Users\Address\Entity\GeocodeAddress;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class WarehouseChoiceRepository implements WarehouseChoiceInterface
 {
 
-    private TranslatorInterface $translator;
-    private ORMQueryBuilder $ORMQueryBuilder;
-
-    public function __construct(ORMQueryBuilder $ORMQueryBuilder, TranslatorInterface $translator)
-    {
-
-        $this->translator = $translator;
-        $this->ORMQueryBuilder = $ORMQueryBuilder;
-    }
+    public function __construct(private readonly ORMQueryBuilder $ORMQueryBuilder) {}
 
     /**
      * Возвращает список всех складов c постоянными неизменяемыми идентификаторами
      */
     public function fetchAllWarehouse(): ?array
     {
-        $qb = $this->ORMQueryBuilder->createQueryBuilder(self::class);
+        $qb = $this->ORMQueryBuilder
+            ->createQueryBuilder(self::class)
+            ->bindLocal();
 
         $select = sprintf('new %s(warehouse.const, trans.name, CONCAT(geocode.latitude, \',\', geocode.longitude))', ContactsRegionCallConst::class);
 
         $qb->select($select);
 
-        $qb->from(ContactsRegionEntity\Call\ContactsRegionCall::class, 'warehouse');
+        $qb->from(ContactsRegionCall::class, 'warehouse');
 
         $qb->join(
-            ContactsRegionEntity\Event\ContactsRegionEvent::class,
+            ContactsRegionEvent::class,
             'event',
             'WITH',
             'event.id = warehouse.event',
         );
 
         $qb->join(
-            ContactsRegionEntity\ContactsRegion::class,
+            ContactsRegion::class,
             'contacts',
             'WITH',
             'contacts.event = event.id',
         );
 
         $qb->leftJoin(
-            ContactsRegionEntity\Call\Info\ContactsRegionCallInfo::class,
+            ContactsRegionCallInfo::class,
             'info',
             'WITH',
             'info.call = warehouse.id',
@@ -89,59 +85,64 @@ final class WarehouseChoiceRepository implements WarehouseChoiceInterface
 
 
         $qb->leftJoin(
-            ContactsRegionEntity\Call\Trans\ContactsRegionCallTrans::class,
+            ContactsRegionCallTrans::class,
             'trans',
             'WITH',
             'trans.call = warehouse.id AND trans.local = :local',
         );
-        $qb->setParameter('local', new Locale($this->translator->getLocale()), Locale::TYPE);
 
         $qb->where('warehouse.stock = true');
 
         /* Кешируем результат ORM */
-        return $qb->enableCache('contacts-region', 86400)->getResult();
+        return $qb->enableCache('contacts-region', '1 day')->getResult();
 
     }
 
     /** Возвращает список складов ответственного лица */
     public function fetchWarehouseByProfile(UserProfileUid $profile): ?array
     {
-        $qb = $this->ORMQueryBuilder->createQueryBuilder(self::class);
+        $qb = $this->ORMQueryBuilder
+            ->createQueryBuilder(self::class)
+            ->bindLocal();
 
         $select = sprintf('new %s(warehouse.const, trans.name)', ContactsRegionCallConst::class);
 
         $qb->select($select);
 
-        $qb->from(ContactsRegionEntity\Call\ContactsRegionCall::class, 'warehouse');
+        $qb->from(ContactsRegionCall::class, 'warehouse');
 
         $qb->join(
-            ContactsRegionEntity\Event\ContactsRegionEvent::class,
+            ContactsRegionEvent::class,
             'event',
             'WITH',
             'event.id = warehouse.event',
         );
 
         $qb->join(
-            ContactsRegionEntity\ContactsRegion::class,
+            ContactsRegion::class,
             'contacts',
             'WITH',
             'contacts.event = event.id',
         );
 
         $qb->leftJoin(
-            ContactsRegionEntity\Call\Trans\ContactsRegionCallTrans::class,
+            ContactsRegionCallTrans::class,
             'trans',
             'WITH',
             'trans.call = warehouse.id AND trans.local = :local',
         );
 
         $qb->where('warehouse.stock = true');
-        $qb->andWhere('warehouse.profile = :profile');
 
-        $qb->setParameter('local', new Locale($this->translator->getLocale()), Locale::TYPE);
-        $qb->setParameter('profile', $profile, UserProfileUid::TYPE);
+        $qb
+            ->andWhere('warehouse.profile = :profile')
+            ->setParameter(
+                key: 'profile',
+                value: $profile,
+                type: UserProfileUid::TYPE
+            );
 
         /* Кешируем результат ORM */
-        return $qb->enableCache('contacts-region', 86400)->getResult();
+        return $qb->enableCache('contacts-region', '1 day')->getResult();
     }
 }

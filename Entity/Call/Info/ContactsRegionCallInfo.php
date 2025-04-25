@@ -42,12 +42,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'contacts_region_call_info')]
 class ContactsRegionCallInfo extends EntityEvent
 {
-	public const TABLE = 'contacts_region_call_info';
-	
 	/** ID колл-центра */
     #[Assert\NotBlank]
 	#[ORM\Id]
-	#[ORM\OneToOne(inversedBy: 'info', targetEntity: ContactsRegionCall::class)]
+    #[ORM\OneToOne(targetEntity: ContactsRegionCall::class, inversedBy: 'info')]
 	#[ORM\JoinColumn(name: 'call', referencedColumnName: 'id')]
 	private ContactsRegionCall $call;
 	
