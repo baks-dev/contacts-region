@@ -46,8 +46,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'contacts_region_event')]
 class ContactsRegionEvent extends EntityEvent
 {
-    public const TABLE = 'contacts_region_event';
-
     /** ID */
     #[Assert\NotBlank]
     #[Assert\Uuid]

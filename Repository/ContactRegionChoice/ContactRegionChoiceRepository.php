@@ -34,9 +34,7 @@ use BaksDev\Reference\Region\Type\Id\RegionUid;
 
 final class ContactRegionChoiceRepository implements ContactRegionChoiceInterface
 {
-
     public function __construct(private readonly ORMQueryBuilder $ORMQueryBuilder) {}
-
 
     public function getRegionChoice()
     {
@@ -76,11 +74,8 @@ final class ContactRegionChoiceRepository implements ContactRegionChoiceInterfac
 
         $qb->setMaxResults(1);
 
-
         /* Кешируем результат ORM */
         return $qb->enableCache('contacts-region', 86400)->getResult();
 
-
     }
-
 }

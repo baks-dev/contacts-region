@@ -28,9 +28,9 @@ namespace BaksDev\Contacts\Region\Entity\Call\Trans;
 use BaksDev\Contacts\Region\Entity\Call\ContactsRegionCall;
 use BaksDev\Core\Entity\EntityEvent;
 use BaksDev\Core\Type\Locale\Locale;
+use BaksDev\Elastic\Attribute as ES;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use BaksDev\Elastic\Attribute as ES;
 use InvalidArgumentException;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -41,8 +41,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['name'])]
 class ContactsRegionCallTrans extends EntityEvent
 {
-    public const TABLE = 'contacts_region_call_trans';
-
     /** Связь на событие */
     #[Assert\NotBlank]
     #[Assert\Uuid]

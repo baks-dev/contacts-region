@@ -36,8 +36,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'contacts_region')]
 class ContactsRegion
 {
-    public const TABLE = 'contacts_region';
-
     /** ID */
     #[ORM\Id]
     #[ORM\Column(type: RegionUid::TYPE)]

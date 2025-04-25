@@ -50,8 +50,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['sort'])]
 class ContactsRegionCall extends EntityEvent
 {
-    public const TABLE = 'contacts_region_call';
-
     /** ID */
     #[Assert\NotBlank]
     #[Assert\Uuid]
