@@ -31,7 +31,7 @@
 
 	<script nonce='{{ csp_nonce() }}' type="text/javascript">
 
-		 document.getElementById('region_filter_form_region')?.addEventListener('change', () => {
+		 document.getElementById("region_filter_form_region")?.addEventListener("change", () => {
 			  let $form = document.forms.namedItem("region_filter_form");
 			  if ($form) { $form.submit(); }
 		  });
@@ -48,7 +48,7 @@
 				 /** Инициируем карту */
 				 setTimeout(function initYmaps() {
 
-					if (typeof ymaps == 'object') {
+					if (typeof ymaps == "object") {
 
 						ymaps.ready(init);
 
@@ -57,19 +57,19 @@
 
 							myMap = new ymaps.Map("map", {
 							center: [{{ current.call_latitude }}, {{ current.call_longitude }}],
-							controls: ['routeButtonControl', 'fullscreenControl'],
-							zoom: 16
+							controls: ["routeButtonControl", "fullscreenControl"],
+							zoom: 16,
 						});
 
-							let control = myMap.controls.get('routeButtonControl');
-							control.routePanel.state.set('to', '{{ current.call_address }}');
+							let control = myMap.controls.get("routeButtonControl");
+							control.routePanel.state.set("to", '{{ current.call_address }}');
 
 							/** Метка на карте */
 						   myMap.geoObjects.add(new ymaps.Placemark([{{ current.call_latitude }}, {{ current.call_longitude }}], {
-								balloonContent: '{{ current.call_address }}'
+								balloonContent: '{{ current.call_address }}',
 							}, {
-								preset: 'islands',
-								iconColor: '#4684D0'
+								preset: "islands",
+								iconColor: "#4684D0",
 							}));
 
 
@@ -112,30 +112,30 @@
 				}, 500);
 
 
-				 document.querySelectorAll('.map-change').forEach((el) => el.addEventListener('click', (e) => {
+				 document.querySelectorAll(".map-change").forEach((el) => el.addEventListener("click", (e) => {
 
 					if (myMap)
 						{
 							myMap.setCenter(
 									[el.dataset.latitude, el.dataset.longitude],
-									16
+									16,
 								);
 
 							/** Метка на карте */
 						   myMap.geoObjects.add(new ymaps.Placemark([el.dataset.latitude, el.dataset.longitude], {
-								balloonContent: el.dataset.address
+								balloonContent: el.dataset.address,
 							}, {
-								preset: 'islands',
-								iconColor: '#4684D0'
+								preset: "islands",
+								iconColor: "#4684D0",
 							}));
 
-						   let control = myMap.controls.get('routeButtonControl');
-							control.routePanel.state.set('to', el.dataset.address);
+						   let control = myMap.controls.get("routeButtonControl");
+							control.routePanel.state.set("to", el.dataset.address);
 
 
 
 					  /* Плавная прокрутка к элементу */
-						document.getElementById('map').scrollIntoView({block: "center", inline: "center", behavior: "smooth"});
+						document.getElementById("map").scrollIntoView({block: "center", inline: "center", behavior: "smooth"});
 
 						}
 

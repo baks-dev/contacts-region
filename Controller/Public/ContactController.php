@@ -16,7 +16,7 @@
  *
  */
 
-namespace BaksDev\Contacts\Region\Controller\User;
+namespace BaksDev\Contacts\Region\Controller\Public;
 
 use BaksDev\Contacts\Region\Form\RegionFilter\RegionFilterDTO;
 use BaksDev\Contacts\Region\Form\RegionFilter\RegionFilterForm;
@@ -35,7 +35,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ContactController extends AbstractController
 {
     /** Опт  */
-    #[Route('/contact', name: 'user.contact')]
+    #[Route('/contact', name: 'public.contact')]
     public function index(
         Request $request,
         ContactCallDetailInterface $callDetail,
@@ -53,7 +53,7 @@ final class ContactController extends AbstractController
             ->createForm(
                 type: RegionFilterForm::class,
                 data: $RegionFilterDTO,
-                options: ['action' => 'contacts-region:user.contact']
+                options: ['action' => 'contacts-region:public.contact']
 
             )
             ->handleRequest($request);

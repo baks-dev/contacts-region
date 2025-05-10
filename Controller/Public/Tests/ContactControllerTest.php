@@ -16,7 +16,7 @@
  *
  */
 
-namespace BaksDev\Contacts\Region\Controller\User\Tests;
+namespace BaksDev\Contacts\Region\Controller\Public\Tests;
 
 use BaksDev\Users\User\Tests\TestUserAccount;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -32,7 +32,7 @@ final class ContactControllerTest extends WebTestCase
     public function testGuestSuccessful(): void
     {
         self::ensureKernelShutdown();
-        $client = static::createClient();
+        $client = self::createClient();
         $client->request('GET', self::URL);
 
         self::assertResponseIsSuccessful();
@@ -42,7 +42,7 @@ final class ContactControllerTest extends WebTestCase
     public function testRoleAdminSuccessful(): void
     {
         self::ensureKernelShutdown();
-        $client = static::createClient();
+        $client = self::createClient();
 
         foreach(TestUserAccount::getDevice() as $device)
         {
@@ -63,7 +63,7 @@ final class ContactControllerTest extends WebTestCase
     public function testRoleUserFiled(): void
     {
         self::ensureKernelShutdown();
-        $client = static::createClient();
+        $client = self::createClient();
 
         foreach(TestUserAccount::getDevice() as $device)
         {
