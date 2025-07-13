@@ -53,7 +53,7 @@ final class ContactController extends AbstractController
             ->createForm(
                 type: RegionFilterForm::class,
                 data: $RegionFilterDTO,
-                options: ['action' => 'contacts-region:public.contact']
+                options: ['action' => $this->generateUrl('contacts-region:public.contact')],
 
             )
             ->handleRequest($request);
