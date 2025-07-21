@@ -35,7 +35,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ContactController extends AbstractController
 {
     /** Опт  */
-    #[Route('/contact', name: 'public.contact')]
+    #[Route('/old/contact', name: 'public.contact')]
     public function index(
         Request $request,
         ContactCallDetailInterface $callDetail,
