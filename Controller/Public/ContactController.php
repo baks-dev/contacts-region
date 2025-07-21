@@ -38,7 +38,9 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ContactController extends AbstractController
 {
     /**
-     * @deprecated
+     * @deprecated Использовать users-profile-user:public.contacts
+     * @see ContactsController
+     *
      */
     #[Route('/old/contact', name: 'public.contact')]
     public function index(
