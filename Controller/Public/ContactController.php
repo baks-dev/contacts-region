@@ -31,10 +31,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * @deprecated
+ */
 #[AsController]
 final class ContactController extends AbstractController
 {
-    /** Опт  */
+    /**
+     * @deprecated
+     */
     #[Route('/old/contact', name: 'public.contact')]
     public function index(
         Request $request,
