@@ -26,8 +26,6 @@
 namespace BaksDev\Contacts\Region\Twig;
 
 use BaksDev\Contacts\Region\Choice\ContactsRegionFieldChoice;
-use BaksDev\Contacts\Region\Repository\ContactCallDetail\ContactCallDetailInterface;
-use BaksDev\Contacts\Region\Type\Call\ContactsRegionCallUid;
 use BaksDev\Users\Profile\UserProfile\Repository\UserProfileById\UserProfileByIdInterface;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Twig\Environment;
@@ -62,7 +60,7 @@ final class ContactsRegionExtension extends AbstractExtension
 	public function content(Environment $twig, string $value): string
 	{
 	    //$data = $this->callDetail->fetchContactCallDetailById(new ContactsRegionCallUid($value));
-	    $data = $this->userProfile->fetchUserProfileAssociative(new UserProfileUid($value));
+        $data = $this->userProfile->find(new UserProfileUid($value));
 
         //dump($data);
 
