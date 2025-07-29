@@ -28,8 +28,10 @@ namespace BaksDev\Contacts\Region\Form\ContactRegionChoice;
 use BaksDev\Contacts\Region\Repository\ContactCallRegion\ContactCallRegionInterface;
 use BaksDev\Contacts\Region\Repository\ContactCallRegionChoice\ContactCallRegionChoiceInterface;
 use BaksDev\Contacts\Region\Repository\ContactRegionChoice\ContactRegionChoiceInterface;
-use BaksDev\Contacts\Region\Type\Call\ContactsRegionCallUid;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
+use BaksDev\Users\Profile\UserProfile\Repository\UserProfileByRegion\UserProfileByRegionInterface;
+use BaksDev\Users\Profile\UserProfile\Repository\UserProfileByRegion\UserProfileByRegionResult;
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -45,167 +47,75 @@ final class ContactRegionFieldForm extends AbstractType
         private readonly ContactRegionChoiceInterface $regionChoice,
         private readonly ContactCallRegionChoiceInterface $callChoice,
         private readonly ContactCallRegionInterface $callRegion,
+
+        private readonly UserProfileByRegionInterface $UserProfileByRegionRepository,
+
     ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->addModelTransformer(new ContactRegionFieldTransformer($this->callRegion));
-
-        /** Получаем список регионов */
-        $regionChoice = $this->regionChoice->getRegionChoice();
-
-        $builder
-            ->add('region', ChoiceType::class, [
-                'choices' => $regionChoice,
-                'choice_value' => function(?RegionUid $region) {
-                    return $region?->getValue();
-                },
-                'choice_label' => function(RegionUid $region) {
-                    return $region->getOption();
-                },
-                'label' => false,
-                'expanded' => false,
-                'multiple' => false,
-                'required' => true,
-                'placeholder' => 'Выберите регион из списка...',
-                'attr' => ['class' => 'change_region_field', 'data-select' => 'select2'],
-            ]);
-
-
-        $builder
-            ->add('call', ChoiceType::class, [
-
-                'label' => false,
-                'expanded' => false,
-                'multiple' => false,
-                'required' => true,
-                'placeholder' => 'Выберите регион из списка...',
-                'attr' => ['data-address' => 'true', 'data-select' => 'select2'],
-            ]);
-
+        $builder->addModelTransformer(new ContactRegionFieldTransformer());
 
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
             function(FormEvent $event): void {
 
                 $form = $event->getForm();
-
+                /** @var ContactRegionFieldDTO $data */
                 $data = $form->getNormData();
 
-                $callChoice = $this->callChoice->fetchCallRegion($this->region);
+                $profiles = $this->UserProfileByRegionRepository
+                    ->onlyCurrentRegion()
+                    ->findAll();
 
-                if($data->getCall() && $data->getRegion())
+                /** Если не указан профиль пользователя - присваиваем по умолчанию первый элемент списка */
+                if(false === ($data->getProfile() instanceof UserProfileUid))
                 {
-                    $callChoice = $this->callChoice->fetchCallRegion($data->getRegion());
+                    $current = $profiles->current()?->getId();
+                    $data->setProfile($current);
                 }
 
-                if($callChoice)
-                {
-                    $form
-                        ->add('call', ChoiceType::class, [
-                            'choices' => $callChoice,
-                            'choice_value' => function(?ContactsRegionCallUid $call) {
-                                return $call?->getValue();
-                            },
-                            'choice_label' => function(ContactsRegionCallUid $call) {
-                                return $call->getName();
-                            },
+                $form
+                    ->add('profile', ChoiceType::class, [
+                        'choices' => $profiles,
+                        'choice_value' => function(UserProfileByRegionResult|UserProfileUid|null $profile) {
 
-                            'choice_attr' => function(ContactsRegionCallUid $choice) {
-                                return ['data-lati' => $choice->getAttr(), 'data-longi' => $choice->getOption()];
-                            },
+                            if($profile instanceof UserProfileUid)
+                            {
+                                return $profile->getValue();
+                            }
 
-                            'attr' => ['data-address' => 'true', 'data-select' => 'select2'],
-                            'label' => false,
-                            'expanded' => false,
-                            'multiple' => false,
-                            'required' => true,
-                            'placeholder' => 'Выберите пункт выдачи товаров'
-                        ]);
-                }
+                            return $profile?->getId();
+                        },
+                        'choice_label' => function(UserProfileByRegionResult $profile) {
+                            return $profile->getLocation();
+                        },
 
-                if(!$data->getCall() && $data->getRegion())
-                {
-                    $form
-                        ->add('call', ChoiceType::class, [
+                        'choice_attr' => function(UserProfileByRegionResult $profile) {
+                            return [
+                                'data-lati' => $profile->getLatitude(),
+                                'data-longi' => $profile->getLongitude(),
+                                'data-address' => 'true',
+                            ];
+                        },
 
-                            'label' => false,
-                            'expanded' => false,
-                            'multiple' => false,
-                            'required' => true,
-                            'placeholder' => 'Нет пунктов выдачи в указанном регионе',
-                        ]);
-                }
-
-            }
+                        'label' => false,
+                        'expanded' => true,
+                        'multiple' => false,
+                        'required' => true,
+                        'placeholder' => false,
+                    ]);
+            },
         );
 
 
-        $builder->get('region')->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function(FormEvent $event): void {
-
-                $region = $event->getForm()->getData();
-
-                if($region)
-                {
-                    $form = $event->getForm()->getParent();
-
-                    if(is_null($form))
-                    {
-                        return;
-                    }
-
-                    $this->region = $region;
-
-                    $callChoice = $this->callChoice->fetchCallRegion($this->region);
-
-                    if($callChoice)
-                    {
-                        $form
-                            ->add('call', ChoiceType::class, [
-                                'choices' => $callChoice,
-                                'choice_value' => function(?ContactsRegionCallUid $call) {
-                                    return $call?->getValue();
-                                },
-                                'choice_label' => function(ContactsRegionCallUid $call) {
-                                    return $call->getName();
-                                },
-
-                                'choice_attr' => function(ContactsRegionCallUid $choice) {
-                                    return ['data-lati' => $choice->getAttr(), 'data-longi' => $choice->getOption()];
-                                },
-
-                                'attr' => ['data-address' => 'true', 'data-select' => 'select2'],
-                                'label' => false,
-                                'expanded' => false,
-                                'multiple' => false,
-                                'required' => true,
-                                'placeholder' => 'Выберите пункт выдачи товаров'
-                            ]);
-                    }
-                    else
-                    {
-                        $form
-                            ->add('call', ChoiceType::class, [
-
-                                'label' => false,
-                                'expanded' => false,
-                                'multiple' => false,
-                                'required' => true,
-                                'placeholder' => 'Нет пунктов выдачи в указанном регионе',
-                            ]);
-                    }
-                }
-            }
-        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => ContactRegionFieldDTO::class,
-            'validation_groups' => false
+            'validation_groups' => false,
         ]);
     }
 }

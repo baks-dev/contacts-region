@@ -95,6 +95,7 @@ if ($addButtonCall) {
     }
 }
 
+
 /*document.querySelectorAll('.del-item-call').forEach(function (item) {
     item.addEventListener('click', deleteCall);
 });*/

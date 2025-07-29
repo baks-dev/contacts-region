@@ -25,41 +25,29 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\Form\ContactRegionChoice;
 
-use BaksDev\Contacts\Region\Type\Call\ContactsRegionCallUid;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
+use BaksDev\Users\Profile\UserProfile\Repository\UserProfileByRegion\UserProfileByRegionResult;
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class ContactRegionFieldDTO
 {
-	/** Регион доставки */
-	#[Assert\Uuid]
-	private ?RegionUid $region = null;
-	
-	/** Пункт выдачи товаров */
-	#[Assert\Uuid]
-	private ?ContactsRegionCallUid $call = null;
-	
-	/** Регион доставки */
-	public function getRegion() : ?RegionUid
-	{
-		return $this->region;
-	}
-	
-	public function setRegion(?RegionUid $region) : void
-	{
-		$this->region = $region;
-	}
-	
-	/** Пункт выдачи товаров */
-	public function getCall() : ?ContactsRegionCallUid
-	{
-		return $this->call;
-	}
-	
-	
-	public function setCall(?ContactsRegionCallUid $call) : void
-	{
-		$this->call = $call;
-	}
-	
+    #[Assert\Uuid]
+    private ?UserProfileUid $profile;
+
+    public function getProfile(): ?UserProfileUid
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(UserProfileUid|UserProfileByRegionResult|null $profile): self
+    {
+        if($profile instanceof UserProfileByRegionResult)
+        {
+            $profile = $profile->getId();
+        }
+
+        $this->profile = $profile;
+        return $this;
+    }
 }
