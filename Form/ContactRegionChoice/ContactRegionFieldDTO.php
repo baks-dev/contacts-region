@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class ContactRegionFieldDTO
 {
     #[Assert\Uuid]
-    private ?UserProfileUid $profile;
+    private ?UserProfileUid $profile = null;
 
     public function getProfile(): ?UserProfileUid
     {
