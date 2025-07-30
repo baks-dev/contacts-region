@@ -25,9 +25,6 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\Form\ContactRegionChoice;
 
-use BaksDev\Contacts\Region\Repository\ContactCallRegion\ContactCallRegionInterface;
-use BaksDev\Contacts\Region\Repository\ContactCallRegionChoice\ContactCallRegionChoiceInterface;
-use BaksDev\Contacts\Region\Repository\ContactRegionChoice\ContactRegionChoiceInterface;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use BaksDev\Users\Profile\UserProfile\Repository\UserProfileByRegion\UserProfileByRegionInterface;
 use BaksDev\Users\Profile\UserProfile\Repository\UserProfileByRegion\UserProfileByRegionResult;
@@ -41,15 +38,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ContactRegionFieldForm extends AbstractType
 {
-    private ?RegionUid $region = null;
-
     public function __construct(
-        private readonly ContactRegionChoiceInterface $regionChoice,
-        private readonly ContactCallRegionChoiceInterface $callChoice,
-        private readonly ContactCallRegionInterface $callRegion,
-
-        private readonly UserProfileByRegionInterface $UserProfileByRegionRepository,
-
+        private readonly UserProfileByRegionInterface $UserProfileByRegionRepository
     ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -117,5 +107,10 @@ final class ContactRegionFieldForm extends AbstractType
             'data_class' => ContactRegionFieldDTO::class,
             'validation_groups' => false,
         ]);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return 'contacts_region_type';
     }
 }

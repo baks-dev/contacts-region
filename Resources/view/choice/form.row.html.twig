@@ -2,15 +2,35 @@
 
 {% block contacts_region_type_row %}
 
-	{# <label class="form-label">{{ 'label'|trans }}</label> #}
-	<label class="form-label">{{ form.vars.label }}</label>
+	<label class="form-label">{{ form.vars.label }}:</label>
 
-	<div class="d-flex flex-column align-items-center pb-3 radio-buttons gap-3"
-			data-buttons="true"
-		 style='clear: both'> *************************
-		
-		{{ form_widget(form) }}
+	<div class="d-flex flex-column gap-3 justify-content-around pb-5 " data-buttons="true">
+		{% for profile in form.profile %}
+
+			<label class="btn p-2 border-dotted rounded-3 w-100 text-muted {{ profile.vars.data ? 'active' }}">
+				<span class="d-flex align-items-center">
+					<span class="flex-grow-1">
+						<span class="h5">
+							<span class="form-check d-flex align-items-center mb-0">
+
+							   <span class='mb-1 me-3'>
+								   {{ form_widget(profile, { label: false }) }}
+							   </span>
+
+								<span style="font-size: 1rem;" class="text-start">
+
+										{{ profile.vars.label }}
+								</span>
+							</span>
+						</span>
+					</span>
+				</span>
+			</label>
+
+		{% endfor %}
 	</div>
 
+	<script nonce='{{ csp_nonce() }}' async data-src="/assets/js/radio.input.min.js?v={{ version }}"
+			class="lazy"></script>
 
 {% endblock %}
