@@ -58,6 +58,11 @@ final class ContactRegionFieldForm extends AbstractType
                     ->onlyCurrentRegion()
                     ->findAll();
 
+                if(false === $profiles || false === $profiles->valid())
+                {
+                    return;
+                }
+
                 /** Если не указан профиль пользователя - присваиваем по умолчанию первый элемент списка */
                 if(false === ($data->getProfile() instanceof UserProfileUid))
                 {
