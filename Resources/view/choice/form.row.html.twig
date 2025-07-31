@@ -2,35 +2,39 @@
 
 {% block contacts_region_type_row %}
 
-	<label class="form-label">{{ form.vars.label }}:</label>
+	{% if form.profile is defined %}
 
-	<div class="d-flex flex-column gap-3 justify-content-around pb-5 " data-buttons="true">
-		{% for profile in form.profile %}
+		<label class="form-label">{{ form.vars.label }}:</label>
 
-			<label class="btn p-2 border-dotted rounded-3 w-100 text-muted {{ profile.vars.data ? 'active' }}">
-				<span class="d-flex align-items-center">
-					<span class="flex-grow-1">
-						<span class="h5">
-							<span class="form-check d-flex align-items-center mb-0">
+		<div class="d-flex flex-column gap-3 justify-content-around pb-5 " data-buttons="true">
+			{% for profile in form.profile %}
 
-							   <span class='mb-1 me-3'>
-								   {{ form_widget(profile, { label: false }) }}
-							   </span>
+				<label class="btn p-2 border-dotted rounded-3 w-100 text-muted {{ profile.vars.data ? 'active' }}">
+					<span class="d-flex align-items-center">
+						<span class="flex-grow-1">
+							<span class="h5">
+								<span class="form-check d-flex align-items-center mb-0">
 
-								<span style="font-size: 1rem;" class="text-start">
+								   <span class='mb-1 me-3'>
+									   {{ form_widget(profile, { label: false }) }}
+								   </span>
 
-										{{ profile.vars.label }}
+									<span style="font-size: 1rem;" class="text-start">
+
+											{{ profile.vars.label }}
+									</span>
 								</span>
 							</span>
 						</span>
 					</span>
-				</span>
-			</label>
+				</label>
 
-		{% endfor %}
-	</div>
+			{% endfor %}
+		</div>
 
-	<script nonce='{{ csp_nonce() }}' async data-src="/assets/js/radio.input.min.js?v={{ version }}"
-			class="lazy"></script>
+		<script nonce='{{ csp_nonce() }}' async data-src="/assets/js/radio.input.min.js?v={{ version }}"
+				class="lazy"></script>
+
+	{% endif %}
 
 {% endblock %}
