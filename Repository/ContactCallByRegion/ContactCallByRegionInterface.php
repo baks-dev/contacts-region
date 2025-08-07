@@ -24,9 +24,11 @@
 namespace BaksDev\Contacts\Region\Repository\ContactCallByRegion;
 
 use BaksDev\Reference\Region\Type\Id\RegionUid;
+use Generator;
 
 interface ContactCallByRegionInterface
 {
-	public function fetchContactCallByRegionAssociative(RegionUid $region, bool $pickup = false) : ?array;
+
+    public function fetchContactCallByRegionResult(?RegionUid $region, bool $pickup = false): Generator|false;
 	
 }
