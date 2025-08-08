@@ -37,6 +37,7 @@ use BaksDev\Reference\Region\Entity\Invariable\RegionInvariable;
 use BaksDev\Reference\Region\Entity\Region;
 use BaksDev\Reference\Region\Entity\Trans\RegionTrans;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
+use Generator;
 
 final class ContactCallByRegionRepository implements ContactCallByRegionInterface
 {
@@ -50,7 +51,7 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
     }
 
 
-    public function fetchContactCallByRegionAssociative(?RegionUid $region, bool $pickup = false): ?array
+    public function fetchContactCallByRegionResult(?RegionUid $region, bool $pickup = false): Generator|false
     {
         $dbal = $this->DBALQueryBuilder
             ->createQueryBuilder(self::class)
@@ -160,10 +161,12 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
 
         $dbal->allGroupByExclude();
 
-        return $dbal
-            ->enableCache('contacts-region', 86400)
-            ->fetchAllAssociative();
 
+        $result = $dbal
+            ->enableCache('contacts-region', 86400)
+            ->fetchAllHydrate(ContactCallByRegionResult::class);
+        
+        return $result->valid() ? $result : false;
 
     }
 
