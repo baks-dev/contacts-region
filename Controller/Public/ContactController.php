@@ -18,8 +18,6 @@
 
 namespace BaksDev\Contacts\Region\Controller\Public;
 
-use BaksDev\Contacts\Region\Form\RegionFilter\RegionFilterDTO;
-use BaksDev\Contacts\Region\Form\RegionFilter\RegionFilterForm;
 use BaksDev\Contacts\Region\Repository\ContactCallByRegion\ContactCallByRegionInterface;
 use BaksDev\Contacts\Region\Repository\ContactCallDetail\ContactCallDetailInterface;
 use BaksDev\Contacts\Region\Repository\ContactRegionDefault\ContactRegionDefaultInterface;
@@ -51,37 +49,39 @@ final class ContactController extends AbstractController
     ): Response
     {
 
-        $RegionFilterDTO = new RegionFilterDTO();
-        $DefaultRegion = $defaultRegion->getDefaultCallRegion();
-        $RegionFilterDTO->setRegion($DefaultRegion);
+        return $this->redirectToRoute('users-profile-user:public.contacts');
 
-        // Форма
-        $form = $this
-            ->createForm(
-                type: RegionFilterForm::class,
-                data: $RegionFilterDTO,
-                options: ['action' => $this->generateUrl('contacts-region:public.contact')],
-
-            )
-            ->handleRequest($request);
-
-        $calls = $callRegion
-            ->fetchContactCallByRegionAssociative($RegionFilterDTO->getRegion());
-
-        // Поиск по всему сайту
-        $allSearch = new SearchDTO();
-        $allSearchForm = $this->createForm(
-            type: SearchForm::class,
-            data: $allSearch,
-            options: ['action' => $this->generateUrl('contacts-region:admin.index')]
-        );
-
-
-        return $this->render([
-            'regions' => $callDetail->fetchContactCallAllAssociative(),
-            'calls' => $calls,
-            'form' => $form->createView(),
-            'all_search' => $allSearchForm->createView(),
-        ]);
+        //        $RegionFilterDTO = new RegionFilterDTO();
+        //        $DefaultRegion = $defaultRegion->getDefaultCallRegion();
+        //        $RegionFilterDTO->setRegion($DefaultRegion);
+        //
+        //        // Форма
+        //        $form = $this
+        //            ->createForm(
+        //                type: RegionFilterForm::class,
+        //                data: $RegionFilterDTO,
+        //                options: ['action' => $this->generateUrl('contacts-region:public.contact')],
+        //
+        //            )
+        //            ->handleRequest($request);
+        //
+        //        $calls = $callRegion
+        //            ->fetchContactCallByRegionAssociative($RegionFilterDTO->getRegion());
+        //
+        //        // Поиск по всему сайту
+        //        $allSearch = new SearchDTO();
+        //        $allSearchForm = $this->createForm(
+        //            type: SearchForm::class,
+        //            data: $allSearch,
+        //            options: ['action' => $this->generateUrl('contacts-region:admin.index')]
+        //        );
+        //
+        //
+        //        return $this->render([
+        //            'regions' => $callDetail->fetchContactCallAllAssociative(),
+        //            'calls' => $calls,
+        //            'form' => $form->createView(),
+        //            'all_search' => $allSearchForm->createView(),
+        //        ]);
     }
 }
