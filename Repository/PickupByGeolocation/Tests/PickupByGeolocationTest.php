@@ -27,13 +27,11 @@ namespace BaksDev\Contacts\Region\Repository\PickupByGeolocation\Tests;
 
 use BaksDev\Contacts\Region\Repository\PickupByGeolocation\PickupByGeolocationDTO;
 use BaksDev\Contacts\Region\Repository\PickupByGeolocation\PickupByGeolocationInterface;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-
-/**
- * @group contacts-region
- */
+#[Group('contacts-region')]
 #[When(env: 'test')]
 class PickupByGeolocationTest extends KernelTestCase
 {
