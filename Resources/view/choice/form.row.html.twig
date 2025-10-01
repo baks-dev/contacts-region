@@ -32,7 +32,7 @@
 			{% endfor %}
 		</div>
 
-		<script nonce='{{ csp_nonce() }}' async data-src="/assets/js/radio.input.min.js?v={{ version }}"
+		<script nonce='{{ csp_nonce() }}' async data-src="/assets/{{ version }}/js/radio.input.min.js?v={{ version }}"
 				class="lazy"></script>
 
 	{% endif %}
