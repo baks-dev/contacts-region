@@ -105,9 +105,6 @@ final class ContactsRegionHandler extends AbstractHandler
 //            /** @var ContactsRegionCall $ContactsRegionCall */
 ////            $ContactsRegionCall = $filter->current();
 ////            $ContactsRegionCall->setEntity($ContactsRegionCallDTO);
-////
-////            dd($this->entityManager->getUnitOfWork()->getIdentityMap());
-//
 //
 //            //dd($this->event);
 //
