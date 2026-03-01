@@ -27,9 +27,11 @@ namespace BaksDev\Contacts\Region\Messenger;
 
 use BaksDev\Core\Cache\AppCacheInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler]
+#[Autoconfigure(public: true)]
+#[AsMessageHandler(priority: 0)]
 final class ContactRegionDispatch
 {
     public function __invoke(ContactRegionMessage $message): void {}
