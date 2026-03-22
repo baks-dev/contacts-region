@@ -38,7 +38,7 @@ use BaksDev\Contacts\Region\Type\Event\ContactsRegionEventType;
 use BaksDev\Contacts\Region\Type\Event\ContactsRegionEventUid;
 use Symfony\Config\DoctrineConfig;
 
-return static function (ContainerConfigurator $container, DoctrineConfig $doctrine) {
+return static function(ContainerConfigurator $container, DoctrineConfig $doctrine) {
 
     $doctrine->dbal()
         ->type(ContactsRegionCallUid::TYPE)

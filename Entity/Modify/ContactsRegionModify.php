@@ -46,90 +46,90 @@ use InvalidArgumentException;
 #[ORM\Index(columns: ['action'])]
 class ContactsRegionModify extends EntityEvent
 {
-	/** ID события */
-	#[ORM\Id]
+    /** ID события */
+    #[ORM\Id]
     #[ORM\OneToOne(targetEntity: ContactsRegionEvent::class, inversedBy: 'modify')]
-	#[ORM\JoinColumn(name: 'event', referencedColumnName: 'id')]
-	private ContactsRegionEvent $event;
-	
-	/** Модификатор */
-	#[ORM\Column(type: ModifyAction::TYPE, nullable: false)]
-	private ModifyAction $action;
-	
-	/** Дата */
-	#[ORM\Column(name: 'mod_date', type: Types::DATETIME_IMMUTABLE, nullable: false)]
-	private DateTimeImmutable $modDate;
-	
-	/** ID пользователя  */
-	#[ORM\Column(type: UserUid::TYPE, nullable: true)]
-	private ?UserUid $usr = null;
-	
-	/** Ip адрес */
-	#[ORM\Column(type: IpAddress::TYPE, nullable: false)]
-	private IpAddress $ip;
-	
-	/** User-agent */
-	#[ORM\Column(type: Types::TEXT, nullable: false)]
-	private string $agent;
-	
-	
-	public function __construct(ContactsRegionEvent $event)
-	{
-		$this->event = $event;
-		$this->modDate = new DateTimeImmutable();
-		$this->ip = new IpAddress('127.0.0.1');
-		$this->agent = 'console';
-		$this->action = new ModifyAction(ModifyActionNew::class);
-	}
-	
-	
-	public function __clone() : void
-	{
-		$this->modDate = new DateTimeImmutable();
-		$this->action = new ModifyAction(ModifyActionUpdate::class);
-		$this->ip = new IpAddress('127.0.0.1');
-		$this->agent = 'console';
-	}
+    #[ORM\JoinColumn(name: 'event', referencedColumnName: 'id')]
+    private ContactsRegionEvent $event;
+
+    /** Модификатор */
+    #[ORM\Column(type: ModifyAction::TYPE, nullable: false)]
+    private ModifyAction $action;
+
+    /** Дата */
+    #[ORM\Column(name: 'mod_date', type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    private DateTimeImmutable $modDate;
+
+    /** ID пользователя  */
+    #[ORM\Column(type: UserUid::TYPE, nullable: true)]
+    private ?UserUid $usr = null;
+
+    /** Ip адрес */
+    #[ORM\Column(type: IpAddress::TYPE, nullable: false)]
+    private IpAddress $ip;
+
+    /** User-agent */
+    #[ORM\Column(type: Types::TEXT, nullable: false)]
+    private string $agent;
+
+
+    public function __construct(ContactsRegionEvent $event)
+    {
+        $this->event = $event;
+        $this->modDate = new DateTimeImmutable();
+        $this->ip = new IpAddress('127.0.0.1');
+        $this->agent = 'console';
+        $this->action = new ModifyAction(ModifyActionNew::class);
+    }
+
+
+    public function __clone(): void
+    {
+        $this->modDate = new DateTimeImmutable();
+        $this->action = new ModifyAction(ModifyActionUpdate::class);
+        $this->ip = new IpAddress('127.0.0.1');
+        $this->agent = 'console';
+    }
 
     public function __toString(): string
     {
         return (string) $this->event;
     }
-	
-	public function getDto($dto): mixed
-	{
+
+    public function getDto($dto): mixed
+    {
         $dto = is_string($dto) && class_exists($dto) ? new $dto() : $dto;
 
-		if($dto instanceof ContactsRegionModifyInterface)
-		{
-			return parent::getDto($dto);
-		}
-		
-		throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
-	}
-	
-	
-	public function setEntity($dto): mixed
-	{
-		if($dto instanceof ContactsRegionModifyInterface || $dto instanceof self)
-		{
-			return parent::setEntity($dto);
-		}
-		
-		throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
-	}
-	
-	
-	public function upModifyAgent(IpAddress $ip, ?string $agent) : void
-	{
-		$this->ip = $ip;
-		$this->agent = $agent ?: 'console';
-		$this->modDate = new DateTimeImmutable();
-	}
-	
-	
-	public function setUsr(UserUid|User|null $usr) : void
-	{
-		$this->usr = $usr instanceof User ? $usr->getId() : $usr;
-	}
+        if($dto instanceof ContactsRegionModifyInterface)
+        {
+            return parent::getDto($dto);
+        }
+
+        throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
+
+    public function setEntity($dto): mixed
+    {
+        if($dto instanceof ContactsRegionModifyInterface || $dto instanceof self)
+        {
+            return parent::setEntity($dto);
+        }
+
+        throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
+
+    public function upModifyAgent(IpAddress $ip, ?string $agent): void
+    {
+        $this->ip = $ip;
+        $this->agent = $agent ?: 'console';
+        $this->modDate = new DateTimeImmutable();
+    }
+
+
+    public function setUsr(UserUid|User|null $usr): void
+    {
+        $this->usr = $usr instanceof User ? $usr->getId() : $usr;
+    }
 }

@@ -46,73 +46,71 @@ final class ContactsRegionCallForm extends AbstractType
         $this->profileChoice = $profileChoice;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options) : void
-	{
-		$builder->add('info', Info\ContactsRegionCallInfoForm::class, ['label' => false]);
-		
-		$builder->add('translate', CollectionType::class, [
-			'entry_type' => Trans\ContactsRegionCallTransForm::class,
-			'entry_options' => ['label' => false],
-			'label' => false,
-			'by_reference' => false,
-			'allow_delete' => true,
-			'allow_add' => true,
-			'prototype_name' => '__call_translate__',
-		]);
-		
-		
-		$builder->add('phone', CollectionType::class, [
-			'entry_type' => Phone\ContactsRegionCallPhoneForm::class,
-			'entry_options' => ['label' => false],
-			'label' => false,
-			'by_reference' => false,
-			'allow_delete' => true,
-			'allow_add' => true,
-			'prototype_name' => '__call_phone__',
-		]);
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder->add('info', Info\ContactsRegionCallInfoForm::class, ['label' => false]);
+
+        $builder->add('translate', CollectionType::class, [
+            'entry_type' => Trans\ContactsRegionCallTransForm::class,
+            'entry_options' => ['label' => false],
+            'label' => false,
+            'by_reference' => false,
+            'allow_delete' => true,
+            'allow_add' => true,
+            'prototype_name' => '__call_translate__',
+        ]);
+
+
+        $builder->add('phone', CollectionType::class, [
+            'entry_type' => Phone\ContactsRegionCallPhoneForm::class,
+            'entry_options' => ['label' => false],
+            'label' => false,
+            'by_reference' => false,
+            'allow_delete' => true,
+            'allow_add' => true,
+            'prototype_name' => '__call_phone__',
+        ]);
 
 
         /* TextType */
         $builder
             ->add('profile', ChoiceType::class, [
                 'choices' => $this->profileChoice->getActiveUserProfile(),
-                'choice_value' => function (?UserProfileUid $profile)
-                {
+                'choice_value' => function(?UserProfileUid $profile) {
                     return $profile?->getValue();
                 },
-                'choice_label' => function (UserProfileUid $profile)
-                {
+                'choice_label' => function(UserProfileUid $profile) {
                     return $profile->getAttr();
                 },
                 'label' => false,
                 'expanded' => false,
                 'multiple' => false,
                 'required' => false,
-                'attr' => ['data-select' => 'select2',]
+                'attr' => ['data-select' => 'select2',],
             ]);
-		
-		/** Пункт самовывоза (выводит в списки вынктов самовывоза) */
-		$builder->add('pickup', CheckboxType::class, ['required' => false]);
+
+        /** Пункт самовывоза (выводит в списки вынктов самовывоза) */
+        $builder->add('pickup', CheckboxType::class, ['required' => false]);
 
         /** Склад (выводит в списки складских помещений) */
-		$builder->add('stock', CheckboxType::class, ['required' => false]);
+        $builder->add('stock', CheckboxType::class, ['required' => false]);
 
         /** Флаг активности */
         $builder->add('active', CheckboxType::class, ['required' => false]);
 
         /** Сортировка */
-		$builder->add('sort', IntegerType::class);
-		
-		$builder->add('cover', ContactsRegionCallCoverForm::class);
+        $builder->add('sort', IntegerType::class);
+
+        $builder->add('cover', ContactsRegionCallCoverForm::class);
 
     }
-	
-	
-	public function configureOptions(OptionsResolver $resolver) : void
-	{
-		$resolver->setDefaults([
-			'data_class' => ContactsRegionCallDTO::class,
-		]);
-	}
-	
+
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => ContactsRegionCallDTO::class,
+        ]);
+    }
+
 }

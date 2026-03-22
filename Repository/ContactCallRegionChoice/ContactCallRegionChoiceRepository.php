@@ -63,28 +63,28 @@ final class ContactCallRegionChoiceRepository implements ContactCallRegionChoice
             ContactsEntity\Event\ContactsRegionEvent::class,
             'event',
             'WITH',
-            'event.id = region.event'
+            'event.id = region.event',
         );
 
         $qb->leftJoin(
             ContactsEntity\Call\ContactsRegionCall::class,
             'call',
             'WITH',
-            'call.event = event.id and call.pickup = true'
+            'call.event = event.id and call.pickup = true',
         );
 
         $qb->join(
             ContactsEntity\Call\Info\ContactsRegionCallInfo::class,
             'info',
             'WITH',
-            'info.call = call.id'
+            'info.call = call.id',
         );
 
         $qb->leftJoin(
             ContactsEntity\Call\Trans\ContactsRegionCallTrans::class,
             'trans',
             'WITH',
-            'trans.call = call.id AND trans.local = :local'
+            'trans.call = call.id AND trans.local = :local',
         );
 
         $qb->where('region.id = :region');

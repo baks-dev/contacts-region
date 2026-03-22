@@ -82,21 +82,21 @@ final class AllContactsRegionRepository implements AllContactsRegionInterface
                 'contact',
                 ContactsRegionEvent::class,
                 'event',
-                'event.id = contact.event'
+                'event.id = contact.event',
             );
 
         $dbal->leftJoin(
             'contact',
             Region::class,
             'region',
-            'region.id = contact.id'
+            'region.id = contact.id',
         );
 
         $dbal->join(
             'region',
             RegionEvent::class,
             'region_event',
-            'region_event.id = region.event'
+            'region_event.id = region.event',
         );
 
         $dbal
@@ -106,7 +106,7 @@ final class AllContactsRegionRepository implements AllContactsRegionInterface
                 'region_event',
                 RegionTrans::class,
                 'region_trans',
-                'region_trans.event = region_event.id AND region_trans.local = :local'
+                'region_trans.event = region_event.id AND region_trans.local = :local',
             );
 
         $dbal
@@ -119,7 +119,7 @@ final class AllContactsRegionRepository implements AllContactsRegionInterface
                 'event',
                 ContactsRegionCall::class,
                 'call',
-                'call.event = event.id'
+                'call.event = event.id',
             );
 
         $dbal
@@ -129,7 +129,7 @@ final class AllContactsRegionRepository implements AllContactsRegionInterface
                 'call',
                 ContactsRegionCallTrans::class,
                 'call_trans',
-                'call_trans.call = call.id AND call_trans.local = :local'
+                'call_trans.call = call.id AND call_trans.local = :local',
             );
 
         // Обложка
@@ -143,13 +143,13 @@ final class AllContactsRegionRepository implements AllContactsRegionInterface
 			   THEN CONCAT ( '/upload/".$dbal->table(ContactsRegionCallCover::class)."' , '/', cover.name)
 			   ELSE NULL
 			END AS call_cover_name
-		"
+		",
             )
             ->leftJoin(
                 'event',
                 ContactsRegionCallCover::class,
                 'cover',
-                'cover.call = call.id'
+                'cover.call = call.id',
             );
 
         // Поиск

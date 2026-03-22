@@ -14,7 +14,7 @@ final class ContactRegionEmail
 
     public function __construct(?string $value = null)
     {
-        if (!empty($value) && !filter_var($value, FILTER_VALIDATE_EMAIL))
+        if(!empty($value) && !filter_var($value, FILTER_VALIDATE_EMAIL))
         {
             throw new InvalidArgumentException('Incorrect Email.');
         }

@@ -25,15 +25,15 @@ namespace BaksDev\Contacts\Region\Entity\Call\Info;
 
 interface ContactsRegionCallInfoInterface
 {
-	public function getAddress();
-	
-	
-	public function getEmail();
-	
-	
-	public function getLatitude();
-	
-	
-	public function getLongitude();
-	
+    public function getAddress();
+
+
+    public function getEmail();
+
+
+    public function getLatitude();
+
+
+    public function getLongitude();
+
 }

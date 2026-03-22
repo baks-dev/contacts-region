@@ -91,14 +91,14 @@ class ContactsRegionEvent extends EntityEvent
         return (string) $this->id;
     }
 
-    public function getId(): ContactsRegionEventUid
-    {
-        return $this->id;
-    }
-
     public function setMain(RegionUid|ContactsRegion $region): void
     {
         $this->region = $region instanceof ContactsRegion ? $region->getId() : $region;
+    }
+
+    public function getId(): ContactsRegionEventUid
+    {
+        return $this->id;
     }
 
     public function getMain(): ?RegionUid
@@ -115,7 +115,7 @@ class ContactsRegionEvent extends EntityEvent
     {
         $dto = is_string($dto) && class_exists($dto) ? new $dto() : $dto;
 
-        if ($dto instanceof ContactsRegionEventInterface)
+        if($dto instanceof ContactsRegionEventInterface)
         {
             return parent::getDto($dto);
         }
@@ -126,7 +126,7 @@ class ContactsRegionEvent extends EntityEvent
     public function setEntity($dto): mixed
     {
 
-        if ($dto instanceof ContactsRegionEventInterface || $dto instanceof self)
+        if($dto instanceof ContactsRegionEventInterface || $dto instanceof self)
         {
             return parent::setEntity($dto);
         }
@@ -139,9 +139,9 @@ class ContactsRegionEvent extends EntityEvent
         $name = null;
 
         /** @var ContactsRegionCallTrans $trans */
-        foreach ($this->call as $trans)
+        foreach($this->call as $trans)
         {
-            if ($name = $trans->name($locale))
+            if($name = $trans->name($locale))
             {
                 break;
             }

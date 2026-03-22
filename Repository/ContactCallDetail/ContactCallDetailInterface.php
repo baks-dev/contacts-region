@@ -28,11 +28,11 @@ use BaksDev\Reference\Region\Type\Id\RegionUid;
 
 interface ContactCallDetailInterface
 {
-	public function fetchContactCallAllAssociative(?RegionUid $region = null) : ?array;
+    public function fetchContactCallAllAssociative(?RegionUid $region = null): ?array;
 
     /**
      * Метод возвращает детальную информацию о региональном контакте по его идентификатору
      */
-    public function fetchContactCallDetailById(ContactsRegionCallUid $call) : ?array;
-	
+    public function fetchContactCallDetailById(ContactsRegionCallUid $call): ?array;
+
 }

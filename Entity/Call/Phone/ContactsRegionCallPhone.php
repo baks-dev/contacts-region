@@ -42,82 +42,82 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['name'])]
 class ContactsRegionCallPhone extends EntityEvent
 {
-	/** ID */
+    /** ID */
     #[Assert\NotBlank]
     #[Assert\Uuid]
-	#[ORM\Id]
-	#[ORM\Column(type: ContactsRegionCallPhoneUid::TYPE)]
-	private ContactsRegionCallPhoneUid $id;
-	
-	/** Связь на колл-центр */
+    #[ORM\Id]
+    #[ORM\Column(type: ContactsRegionCallPhoneUid::TYPE)]
+    private ContactsRegionCallPhoneUid $id;
+
+    /** Связь на колл-центр */
     #[Assert\NotBlank]
-	#[ORM\ManyToOne(targetEntity: ContactsRegionCall::class, inversedBy: "phone")]
-	#[ORM\JoinColumn(name: 'call', referencedColumnName: "id")]
-	private ContactsRegionCall $call;
-	
-	/** Название */
-	#[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
-	private string $name;
-	
-	/** Контактный телефон */
+    #[ORM\ManyToOne(targetEntity: ContactsRegionCall::class, inversedBy: "phone")]
+    #[ORM\JoinColumn(name: 'call', referencedColumnName: "id")]
+    private ContactsRegionCall $call;
+
+    /** Название */
+    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
+    private string $name;
+
+    /** Контактный телефон */
     #[Assert\NotBlank]
-	#[ORM\Column(type: Types::STRING, length: 100)]
-	private string $phone;
-	
-	public function __construct(ContactsRegionCall $call)
-	{
-		$this->id = new ContactsRegionCallPhoneUid();
-		$this->call = $call;
-	}
-	
-	public function __clone() : void
-	{
+    #[ORM\Column(type: Types::STRING, length: 100)]
+    private string $phone;
+
+    public function __construct(ContactsRegionCall $call)
+    {
+        $this->id = new ContactsRegionCallPhoneUid();
+        $this->call = $call;
+    }
+
+    public function __clone(): void
+    {
         $this->id = clone $this->id;
-	}
+    }
 
     public function __toString(): string
     {
         return (string) $this->id;
     }
-	
-	public function getDto($dto): mixed
-	{
+
+    public function getDto($dto): mixed
+    {
         $dto = is_string($dto) && class_exists($dto) ? new $dto() : $dto;
 
-		if($dto instanceof ContactsRegionCallPhoneInterface)
-		{
-			return parent::getDto($dto);
-		}
-		
-		throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
-	}
-	
-	
-	public function setEntity($dto): mixed
-	{
-		
-		if($dto instanceof ContactsRegionCallPhoneInterface || $dto instanceof self)
-		{
-			if(empty($dto->getName()) && empty($dto->getphone()))
-			{
-				return false;
-			}
-			
-			return parent::setEntity($dto);
-		}
-		
-		throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
-	}
-	
-	
-	public function name(Locale $locale) : ?string
-	{
-		if($this->local->getValue() === $locale->getLocalValue())
-		{
-			return $this->name;
-		}
-		
-		return null;
-	}
-	
+        if($dto instanceof ContactsRegionCallPhoneInterface)
+        {
+            return parent::getDto($dto);
+        }
+
+        throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
+
+    public function setEntity($dto): mixed
+    {
+
+        if($dto instanceof ContactsRegionCallPhoneInterface || $dto instanceof self)
+        {
+            if(empty($dto->getName()) && empty($dto->getphone()))
+            {
+                return false;
+            }
+
+            return parent::setEntity($dto);
+        }
+
+        throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
+
+    public function name(Locale $locale): ?string
+    {
+        if($this->local->getValue() === $locale->getLocalValue())
+        {
+            return $this->name;
+        }
+
+        return null;
+    }
+
 }

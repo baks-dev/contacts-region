@@ -2,25 +2,25 @@
 
 
 <div class='d-flex gap-3'>
-	
-	<div class='w-25'>
-		{{ form_widget(phone.delete, {
-			label: '<span class="svg-icon svg-icon-2 text-nowrap">
+
+    <div class='w-25'>
+        {{ form_widget(phone.delete, {
+            label: '<span class="svg-icon svg-icon-2 text-nowrap">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
                                                 <rect opacity="0.5" x="7.05025" y="15.5356" width="12" height="2" rx="1" transform="rotate(-45 7.05025 15.5356)" fill="currentColor"></rect>
                                                 <rect x="8.46447" y="7.05029" width="12" height="2" rx="1" transform="rotate(45 8.46447 7.05029)" fill="currentColor"></rect>
                                             </svg></span>',
-			attr: { class: 'btn-outline-danger btn-sm del-item-phone border-0 ',
-				'data-delete' : 'item_'~phone.vars.id }
-		}) }}
-	</div>
-	
-	<div class='w-100'>
-		{{ form_widget(phone.name) }}
-	</div>
-	
-	
-	{#<div class="input-group w-100">
+            attr: { class: 'btn-outline-danger btn-sm del-item-phone border-0 ',
+                'data-delete' : 'item_'~phone.vars.id }
+        }) }}
+    </div>
+
+    <div class='w-100'>
+        {{ form_widget(phone.name) }}
+    </div>
+
+
+    {# <div class="input-group w-100">
 		<span class="input-group-text">
 			<svg xmlns="http://www.w3.org/2000/svg"
 					width="16"
@@ -33,9 +33,9 @@
 		</span>
 
 		{{ form_widget(phone.phone) }}
-	</div>#}
+	</div> #}
 
-	{{ form_widget(phone.phone) }}
+    {{ form_widget(phone.phone) }}
 
 
 </div>

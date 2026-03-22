@@ -67,7 +67,7 @@ final readonly class ContactsRegionDeleteHandler
             $uniqid = uniqid('', false);
             $errorsString = sprintf(
                 'Not found event id in class: %s',
-                $command::class
+                $command::class,
             );
             $this->logger->error($uniqid.': '.$errorsString);
 
@@ -85,7 +85,7 @@ final readonly class ContactsRegionDeleteHandler
             $errorsString = sprintf(
                 'Not found %s by id: %s',
                 Entity\Call\ContactsRegionCall::class,
-                $command->getId()
+                $command->getId(),
             );
             $this->logger->error($uniqid.': '.$errorsString);
 
@@ -103,7 +103,7 @@ final readonly class ContactsRegionDeleteHandler
             $errorsString = sprintf(
                 'Not found %s by event: %s',
                 Entity\ContactsRegion::class,
-                $Call->getEvent()
+                $Call->getEvent(),
             );
             $this->logger->error($uniqid.': '.$errorsString);
 
@@ -118,7 +118,7 @@ final readonly class ContactsRegionDeleteHandler
         /* Отправляем событие в шину  */
         $this->messageDispatch->dispatch(
             message: new ContactRegionMessage($Main->getId(), $Main->getEvent()),
-            transport: 'contacts-region'
+            transport: 'contacts-region',
         );
 
 

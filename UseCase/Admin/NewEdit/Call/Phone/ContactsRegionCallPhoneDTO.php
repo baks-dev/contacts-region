@@ -30,41 +30,40 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class ContactsRegionCallPhoneDTO implements ContactsRegionCallPhoneInterface
 {
-	
-	/** Название */
-	private ?string $name = null;
-	
-	/** Контактный телефон */
-	#[Assert\NotBlank]
-	private ?string $phone = null;
-	
-	
-	
-	/** Название */
-	
-	public function getName() : ?string
-	{
-		return $this->name;
-	}
-	
-	
-	public function setName(?string $name) : void
-	{
-		$this->name = $name;
-	}
-	
-	
-	/** Контактный телефон */
-	
-	public function getPhone() : ?string
-	{
-		return $this->phone;
-	}
-	
-	
-	public function setPhone(string $phone) : void
-	{
-		$this->phone = $phone;
-	}
-	
+
+    /** Название */
+    private ?string $name = null;
+
+    /** Контактный телефон */
+    #[Assert\NotBlank]
+    private ?string $phone = null;
+
+
+    /** Название */
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
+    }
+
+
+    /** Контактный телефон */
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+
+    public function setPhone(string $phone): void
+    {
+        $this->phone = $phone;
+    }
+
 }

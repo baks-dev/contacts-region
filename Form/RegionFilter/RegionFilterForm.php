@@ -44,7 +44,7 @@ final class RegionFilterForm extends AbstractType
             'choice_label' => function(RegionUid $region) {
                 return $region->getOption();
             },
-            'label' => false
+            'label' => false,
         ]);
 
     }

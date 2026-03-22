@@ -51,14 +51,14 @@ final class ContactRegionChoiceRepository implements ContactRegionChoiceInterfac
         $qb->join(Region::class,
             'region',
             'WITH',
-            'region.id = contact.id'
+            'region.id = contact.id',
         );
 
 
         $qb->join(RegionInvariable::class,
             'invariable',
             'WITH',
-            'invariable.main = region.id AND invariable.active = true'
+            'invariable.main = region.id AND invariable.active = true',
         );
 
 
@@ -66,7 +66,7 @@ final class ContactRegionChoiceRepository implements ContactRegionChoiceInterfac
             ->leftJoin(RegionTrans::class,
                 'trans',
                 'WITH',
-                'trans.event = region.event AND trans.local = :local'
+                'trans.event = region.event AND trans.local = :local',
             );
 
         $qb->orderBy('invariable.sort');

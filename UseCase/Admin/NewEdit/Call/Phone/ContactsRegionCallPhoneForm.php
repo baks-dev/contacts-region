@@ -35,31 +35,31 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ContactsRegionCallPhoneForm extends AbstractType
 {
-	
-	public function buildForm(FormBuilderInterface $builder, array $options) : void
-	{
-		/** Название */
-		$builder->add('name', TextType::class, ['required' => false]);
-		
-		/** Контактный телефон */
-		//$builder->add('phone', TextType::class);
-		$builder->add('phone', PhoneFieldForm::class);
 
-		/** Удалить */
-		$builder->add(
-			'delete',
-			ButtonType::class,
-			['label_html' => true]
-		);
-		
-	}
-	
-	
-	public function configureOptions(OptionsResolver $resolver) : void
-	{
-		$resolver->setDefaults([
-			'data_class' => ContactsRegionCallPhoneDTO::class,
-		]);
-	}
-	
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        /** Название */
+        $builder->add('name', TextType::class, ['required' => false]);
+
+        /** Контактный телефон */
+        //$builder->add('phone', TextType::class);
+        $builder->add('phone', PhoneFieldForm::class);
+
+        /** Удалить */
+        $builder->add(
+            'delete',
+            ButtonType::class,
+            ['label_html' => true],
+        );
+
+    }
+
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => ContactsRegionCallPhoneDTO::class,
+        ]);
+    }
+
 }

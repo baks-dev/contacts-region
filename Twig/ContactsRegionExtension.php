@@ -35,68 +35,72 @@ use Twig\TwigFunction;
 
 final class ContactsRegionExtension extends AbstractExtension
 {
-//    private ContactCallDetailInterface $callDetail;
-//
-//    public function __construct(ContactCallDetailInterface $callDetail)
-//    {
-//        $this->callDetail = $callDetail;
-//    }
+    //    private ContactCallDetailInterface $callDetail;
+    //
+    //    public function __construct(ContactCallDetailInterface $callDetail)
+    //    {
+    //        $this->callDetail = $callDetail;
+    //    }
 
     private UserProfileByIdInterface $userProfile;
 
-    public function __construct(UserProfileByIdInterface $userProfile) {
+    public function __construct(UserProfileByIdInterface $userProfile)
+    {
         $this->userProfile = $userProfile;
     }
 
-    public function getFunctions() : array
-	{
-	    return [
-	    	new TwigFunction(ContactsRegionFieldChoice::TYPE, [$this, 'content'], ['needs_environment' => true, 'is_safe' => ['html']]),
-	    	new TwigFunction(ContactsRegionFieldChoice::TYPE.'_render', [$this, 'render'], ['needs_environment' => true, 'is_safe' => ['html']]),
-	    	new TwigFunction(ContactsRegionFieldChoice::TYPE.'_template', [$this, 'template'], ['needs_environment' => true, 'is_safe' => ['html']]),
-	    ];
-	}
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction(ContactsRegionFieldChoice::TYPE, [$this, 'content'], ['needs_environment' => true, 'is_safe' => ['html']]),
+            new TwigFunction(ContactsRegionFieldChoice::TYPE.'_render', [$this, 'render'], ['needs_environment' => true, 'is_safe' => ['html']]),
+            new TwigFunction(ContactsRegionFieldChoice::TYPE.'_template', [$this, 'template'], ['needs_environment' => true, 'is_safe' => ['html']]),
+        ];
+    }
 
-	public function content(Environment $twig, string $value): string
-	{
-	    //$data = $this->callDetail->fetchContactCallDetailById(new ContactsRegionCallUid($value));
+    public function content(Environment $twig, string $value): string
+    {
+        //$data = $this->callDetail->fetchContactCallDetailById(new ContactsRegionCallUid($value));
         $data = $this->userProfile->find(new UserProfileUid($value));
 
         //dump($data);
 
         return '';
 
-	    try
-	    {
-	        return $twig->render('@Template/ContactsRegion/content.html.twig', ['value' => $data]);
-	    } catch(LoaderError $loaderError)
-	    {
-	        return $twig->render('@contacts-region/choice/content.html.twig', ['value' => $data]);
-	    }
-	}
+        try
+        {
+            return $twig->render('@Template/ContactsRegion/content.html.twig', ['value' => $data]);
+        }
+        catch(LoaderError $loaderError)
+        {
+            return $twig->render('@contacts-region/choice/content.html.twig', ['value' => $data]);
+        }
+    }
 
-	public function render(Environment $twig, $value): string
-	{
+    public function render(Environment $twig, $value): string
+    {
 
 
-	    try
-	    {
-	        return $twig->render('@Template/ContactsRegion/render.html.twig', ['value' => $value]);
-	    } catch(LoaderError $loaderError)
-	    {
-	        return $twig->render('@contacts-region/choice/render.html.twig', ['value' => $value]);
-	    }
-	}
+        try
+        {
+            return $twig->render('@Template/ContactsRegion/render.html.twig', ['value' => $value]);
+        }
+        catch(LoaderError $loaderError)
+        {
+            return $twig->render('@contacts-region/choice/render.html.twig', ['value' => $value]);
+        }
+    }
 
-	public function template(Environment $twig, $value): string
-	{
+    public function template(Environment $twig, $value): string
+    {
 
-	    try
-	    {
-	        return $twig->render('@Template/ContactsRegion/template.html.twig', ['value' => $value]);
-	    } catch(LoaderError $loaderError)
-	    {
-	        return $twig->render('@contacts-region/choice/template.html.twig', ['value' => $value]);
-	    }
-	}
+        try
+        {
+            return $twig->render('@Template/ContactsRegion/template.html.twig', ['value' => $value]);
+        }
+        catch(LoaderError $loaderError)
+        {
+            return $twig->render('@contacts-region/choice/template.html.twig', ['value' => $value]);
+        }
+    }
 }

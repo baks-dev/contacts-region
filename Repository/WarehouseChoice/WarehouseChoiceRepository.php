@@ -139,7 +139,7 @@ final class WarehouseChoiceRepository implements WarehouseChoiceInterface
             ->setParameter(
                 key: 'profile',
                 value: $profile,
-                type: UserProfileUid::TYPE
+                type: UserProfileUid::TYPE,
             );
 
         /* Кешируем результат ORM */

@@ -28,9 +28,9 @@ use BaksDev\Reference\Region\Type\Id\RegionUid;
 
 interface ContactsRegionEventInterface
 {
-	public function getEvent() : ?ContactsRegionEventUid;
-	
-	public function getRegion() : ?RegionUid;
-	
-	public function setRegion(RegionUid $region) : void;
+    public function getEvent(): ?ContactsRegionEventUid;
+
+    public function getRegion(): ?RegionUid;
+
+    public function setRegion(RegionUid $region): void;
 }

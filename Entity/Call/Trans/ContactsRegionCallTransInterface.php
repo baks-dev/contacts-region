@@ -27,9 +27,9 @@ use BaksDev\Core\Type\Locale\Locale;
 
 interface ContactsRegionCallTransInterface
 {
-	public function getLocal() : Locale;
-	
-	
-	public function getName(): string;
-	
+    public function getLocal(): Locale;
+
+
+    public function getName(): string;
+
 }

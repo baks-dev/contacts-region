@@ -2,14 +2,14 @@
 
 {% block contacts_region_type_row %}
 
-	{% if form.profile is defined %}
+    {% if form.profile is defined %}
 
-		<label class="form-label">{{ form.vars.label }}:</label>
+        <label class="form-label">{{ form.vars.label }}:</label>
 
-		<div class="d-flex flex-column gap-1 justify-content-around pb-5 " data-buttons="true">
-			{% for profile in form.profile %}
+        <div class="d-flex flex-column gap-1 justify-content-around pb-5 " data-buttons="true">
+            {% for profile in form.profile %}
 
-				<label class="btn p-2 border-dotted rounded-3 w-100 text-muted {{ profile.vars.data ? 'active' }}">
+                <label class="btn p-2 border-dotted rounded-3 w-100 text-muted {{ profile.vars.data ? 'active' }}">
 					<span class="d-flex align-items-center">
 						<span class="flex-grow-1">
 							<span class="h5">
@@ -27,14 +27,14 @@
 							</span>
 						</span>
 					</span>
-				</label>
+                </label>
 
-			{% endfor %}
-		</div>
+            {% endfor %}
+        </div>
 
-		<script nonce='{{ csp_nonce() }}' async data-src="/assets/{{ version }}/js/radio.input.min.js?v={{ version }}"
-				class="lazy"></script>
+        <script nonce='{{ csp_nonce() }}' async data-src="/assets/{{ version }}/js/radio.input.min.js?v={{ version }}"
+                class="lazy"></script>
 
-	{% endif %}
+    {% endif %}
 
 {% endblock %}

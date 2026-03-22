@@ -152,7 +152,7 @@ class ContactsRegionCall extends EntityEvent
     {
         $dto = is_string($dto) && class_exists($dto) ? new $dto() : $dto;
 
-        if ($dto instanceof ContactsRegionCallInterface)
+        if($dto instanceof ContactsRegionCallInterface)
         {
             return parent::getDto($dto);
         }
@@ -162,7 +162,7 @@ class ContactsRegionCall extends EntityEvent
 
     public function setEntity($dto): mixed
     {
-        if ($dto instanceof ContactsRegionCallInterface || $dto instanceof self)
+        if($dto instanceof ContactsRegionCallInterface || $dto instanceof self)
         {
             return parent::setEntity($dto);
         }
@@ -171,21 +171,21 @@ class ContactsRegionCall extends EntityEvent
     }
 
 
-	public function getNameByLocale(Locale $locale) : ?string
-	{
-		$name = null;
+    public function getNameByLocale(Locale $locale): ?string
+    {
+        $name = null;
 
-		/** @var ContactsRegionCallTrans $trans */
-		foreach($this->translate as $trans)
-		{
-			if($name = $trans->name($locale))
-			{
-				break;
-			}
-		}
-		
-		return $name;
-	}
+        /** @var ContactsRegionCallTrans $trans */
+        foreach($this->translate as $trans)
+        {
+            if($name = $trans->name($locale))
+            {
+                break;
+            }
+        }
+
+        return $name;
+    }
 
 
     public function deactivate(): self
@@ -193,7 +193,6 @@ class ContactsRegionCall extends EntityEvent
         $this->active = false;
         return $this;
     }
-
 
 
 }

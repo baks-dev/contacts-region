@@ -26,7 +26,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use BaksDev\Contacts\Region\BaksDevContactsRegionBundle;
 use BaksDev\Contacts\Region\Choice\ContactsRegionFieldChoice;
 
-return static function (ContainerConfigurator $configurator) {
+return static function(ContainerConfigurator $configurator) {
 
     $services = $configurator->services()
         ->defaults()

@@ -75,7 +75,7 @@ final class EditController extends AbstractController
             ->createForm(
                 type: ContactsRegionForm::class,
                 data: $ContactsRegionDTO,
-                options: ['action' => $this->generateUrl('contacts-region:admin.newedit.edit', ['id' => $ContactsRegionCall->getId()])]
+                options: ['action' => $this->generateUrl('contacts-region:admin.newedit.edit', ['id' => $ContactsRegionCall->getId()])],
             )
             ->handleRequest($request);
 

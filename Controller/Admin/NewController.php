@@ -54,7 +54,7 @@ final class NewController extends AbstractController
             ->createForm(
                 type: ContactsRegionForm::class,
                 data: $ContactsRegionDTO,
-                options: ['action' => $this->generateUrl('contacts-region:admin.newedit.new')]
+                options: ['action' => $this->generateUrl('contacts-region:admin.newedit.new')],
             )
             ->handleRequest($request);
 

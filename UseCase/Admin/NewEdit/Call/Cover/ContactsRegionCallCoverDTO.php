@@ -30,38 +30,38 @@ use Symfony\Component\HttpFoundation\File\File;
 
 final class ContactsRegionCallCoverDTO implements ContactsRegionCallCoverInterface
 {
-	
-	/** Файл изображения */
-	public ?File $file = null;
-	
-	private ?string $name = null;
-	
-	private ?string $ext = null;
-	
-	private bool $cdn = false;
 
-	
-	/* NAME */
-	
-	public function getName() : ?string
-	{
-		return $this->name;
-	}
-	
-	
-	/* EXT */
-	public function getExt() : ?string
-	{
-		return $this->ext;
-	}
-	
-	
-	/* CDN */
-	
-	public function getCdn() : bool
-	{
-		return $this->cdn;
-	}
+    /** Файл изображения */
+    public ?File $file = null;
 
-	
+    private ?string $name = null;
+
+    private ?string $ext = null;
+
+    private bool $cdn = false;
+
+
+    /* NAME */
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+
+    /* EXT */
+    public function getExt(): ?string
+    {
+        return $this->ext;
+    }
+
+
+    /* CDN */
+
+    public function getCdn(): bool
+    {
+        return $this->cdn;
+    }
+
+
 }

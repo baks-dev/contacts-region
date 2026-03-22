@@ -49,7 +49,8 @@ final class ContactsRegionCallUid extends Uid
         mixed $attr = null,
         mixed $option = null,
         mixed $counter = null,
-    ) {
+    )
+    {
         parent::__construct($value);
 
         $this->name = $name;

@@ -47,13 +47,13 @@ final class ContactRegionDefaultRepository implements ContactRegionDefaultInterf
         $qb->join(ContactsRegionEvent::class,
             'contact_event',
             'WITH',
-            'contact_event.id = contact.event'
+            'contact_event.id = contact.event',
         );
 
         $qb->join(ContactsRegionCall::class,
             'contact_call',
             'WITH',
-            'contact_call.event = contact_event.id AND contact_call.active = true'
+            'contact_call.event = contact_event.id AND contact_call.active = true',
         );
 
         $qb->orderBy('contact_event.sort');

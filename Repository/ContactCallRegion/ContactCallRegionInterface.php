@@ -27,6 +27,6 @@ use BaksDev\Contacts\Region\Type\Call\ContactsRegionCallUid;
 
 interface ContactCallRegionInterface
 {
-	public function getContactCall(ContactsRegionCallUid $call) : ?ContactsRegionCallUid;
-	
+    public function getContactCall(ContactsRegionCallUid $call): ?ContactsRegionCallUid;
+
 }

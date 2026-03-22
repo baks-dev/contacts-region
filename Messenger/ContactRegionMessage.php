@@ -30,44 +30,44 @@ use BaksDev\Reference\Region\Type\Id\RegionUid;
 
 final class ContactRegionMessage
 {
-	/** Идентификатор */
-	private RegionUid $id;
-	
-	/** Идентификатор события */
-	private ContactsRegionEventUid $event;
-	
-	/** Идентификатор предыдущего события */
-	private ?ContactsRegionEventUid $last;
-	
-	public function __construct(RegionUid $id, ContactsRegionEventUid $event, ?ContactsRegionEventUid $last = null)
-	{
-		$this->last = $last;
-		$this->id = $id;
-		$this->event = $event;
-	}
-	
-	
-	/** Идентификатор */
-	
-	public function getId() : RegionUid
-	{
-		return $this->id;
-	}
-	
-	
-	/** Идентификатор события */
-	
-	public function getEvent() : ContactsRegionEventUid
-	{
-		return $this->event;
-	}
-	
-	
-	/** Идентификатор предыдущего события */
-	
-	public function getLast() : ?ContactsRegionEventUid
-	{
-		return $this->last;
-	}
-	
+    /** Идентификатор */
+    private RegionUid $id;
+
+    /** Идентификатор события */
+    private ContactsRegionEventUid $event;
+
+    /** Идентификатор предыдущего события */
+    private ?ContactsRegionEventUid $last;
+
+    public function __construct(RegionUid $id, ContactsRegionEventUid $event, ?ContactsRegionEventUid $last = null)
+    {
+        $this->last = $last;
+        $this->id = $id;
+        $this->event = $event;
+    }
+
+
+    /** Идентификатор */
+
+    public function getId(): RegionUid
+    {
+        return $this->id;
+    }
+
+
+    /** Идентификатор события */
+
+    public function getEvent(): ContactsRegionEventUid
+    {
+        return $this->event;
+    }
+
+
+    /** Идентификатор предыдущего события */
+
+    public function getLast(): ?ContactsRegionEventUid
+    {
+        return $this->last;
+    }
+
 }

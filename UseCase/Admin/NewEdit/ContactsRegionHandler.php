@@ -66,7 +66,7 @@ final class ContactsRegionHandler extends AbstractHandler
             ->setCommand($command)
             ->preEventPersistOrUpdate(
                 $Main ?: new ContactsRegion($command->getRegion()),
-                $ContactsRegionEvent
+                $ContactsRegionEvent,
             );
 
         $ContactsRegionCallDTO = $command->getCalls();
@@ -74,7 +74,7 @@ final class ContactsRegionHandler extends AbstractHandler
         $filter = $this->event->getCall()->filter(
             function(ContactsRegionCall $element) use ($ContactsRegionCallDTO) {
                 return $element->getConst()->equals($ContactsRegionCallDTO->getConst());
-            }
+            },
         );
 
 
@@ -87,29 +87,29 @@ final class ContactsRegionHandler extends AbstractHandler
         }
 
         // Обновляем существующий
-//        else
-//        {
-//
-//
-//            //$this->entityManager->clear();
-//
-//            //$ContactsRegionCall = $this->entityManager->getRepository(ContactsRegionCall::class)->findOneBy(['const' => $filter->current()->getConst()]);
-//
-//            //dd($ContactsRegionCall);
-//
-//            //$ContactsRegionCall->setEntity($ContactsRegionCallDTO);
-//            //$this->entityManager->flush();
-//
-//            //dd($ContactsRegionCall->setEntity($ContactsRegionCallDTO));
-//
-//            /** @var ContactsRegionCall $ContactsRegionCall */
-////            $ContactsRegionCall = $filter->current();
-////            $ContactsRegionCall->setEntity($ContactsRegionCallDTO);
-//
-//            //dd($this->event);
-//
-//
-//        }
+        //        else
+        //        {
+        //
+        //
+        //            //$this->entityManager->clear();
+        //
+        //            //$ContactsRegionCall = $this->entityManager->getRepository(ContactsRegionCall::class)->findOneBy(['const' => $filter->current()->getConst()]);
+        //
+        //            //dd($ContactsRegionCall);
+        //
+        //            //$ContactsRegionCall->setEntity($ContactsRegionCallDTO);
+        //            //$this->entityManager->flush();
+        //
+        //            //dd($ContactsRegionCall->setEntity($ContactsRegionCallDTO));
+        //
+        //            /** @var ContactsRegionCall $ContactsRegionCall */
+        ////            $ContactsRegionCall = $filter->current();
+        ////            $ContactsRegionCall->setEntity($ContactsRegionCallDTO);
+        //
+        //            //dd($this->event);
+        //
+        //
+        //        }
 
         /** Валидация всех объектов */
         if($this->validatorCollection->isInvalid())
@@ -123,7 +123,7 @@ final class ContactsRegionHandler extends AbstractHandler
         /* Отправляем событие в шину  */
         $this->messageDispatch->dispatch(
             message: new ContactRegionMessage($this->main->getId(), $this->main->getEvent()),
-            transport: 'contacts-region'
+            transport: 'contacts-region',
         );
 
 

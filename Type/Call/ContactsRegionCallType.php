@@ -30,15 +30,15 @@ use Doctrine\DBAL\Types\Types;
 
 final class ContactsRegionCallType extends UidType
 {
-	public function getClassType(): string
-	{
-		return ContactsRegionCallUid::class;
-	}
-	
-	
-	public function getName(): string
-	{
+    public function getClassType(): string
+    {
+        return ContactsRegionCallUid::class;
+    }
+
+
+    public function getName(): string
+    {
         return ContactsRegionCallUid::TYPE;
-	}
-	
+    }
+
 }

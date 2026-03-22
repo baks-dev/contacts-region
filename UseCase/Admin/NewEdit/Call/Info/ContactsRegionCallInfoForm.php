@@ -38,12 +38,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ContactsRegionCallInfoForm extends AbstractType
 {
-	
-	public function buildForm(FormBuilderInterface $builder, array $options) : void
-	{
-		/** Адрес колл-центра */
-		
-		$builder->add('address', TextType::class, ['required' => false, 'attr' => ['data-address' => true]]);
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        /** Адрес колл-центра */
+
+        $builder->add('address', TextType::class, ['required' => false, 'attr' => ['data-address' => true]]);
 
 
         /** Координаты на карте */
@@ -57,66 +57,66 @@ final class ContactsRegionCallInfoForm extends AbstractType
                 },
                 function($geocode) {
                     return $geocode ? new GeocodeAddressUid($geocode) : null;
-                }
-            )
+                },
+            ),
         );
-		
-		/** Контактный Email */
-		
-		$builder->add('email', EmailType::class, ['required' => false]);
-		
-		$builder->get('email')->addModelTransformer(
-			new CallbackTransformer(
-				function($email) {
-					return $email instanceof ContactRegionEmail ? $email->getValue() : $email;
-				},
-				function($email) {
-					return new ContactRegionEmail($email);
-				}
-			)
-		);
-		
-		/** Режим работы: */
-		
-		$builder->add('working', TextType::class, ['required' => false]);
-		
-		/** GPS широта:*/
 
-		$builder->add('latitude', TextType::class, ['required' => false, 'attr' => ['data-latitude' => 'true']]);
+        /** Контактный Email */
 
-		$builder->get('latitude')->addModelTransformer(
-			new CallbackTransformer(
-				function($gps) {
-					return $gps instanceof ContactRegionGps ? $gps->getValue() : $gps;
-				},
-				function($gps) {
-					return new ContactRegionGps($gps);
-				}
-			)
-		);
+        $builder->add('email', EmailType::class, ['required' => false]);
 
-		/** GPS долгота:*/
+        $builder->get('email')->addModelTransformer(
+            new CallbackTransformer(
+                function($email) {
+                    return $email instanceof ContactRegionEmail ? $email->getValue() : $email;
+                },
+                function($email) {
+                    return new ContactRegionEmail($email);
+                },
+            ),
+        );
 
-		$builder->add('longitude', TextType::class, ['required' => false, 'attr' => ['data-longitude' => 'true']]);
+        /** Режим работы: */
 
-		$builder->get('longitude')->addModelTransformer(
-			new CallbackTransformer(
-				function($gps) {
-					return $gps instanceof ContactRegionGps ? $gps->getValue() : $gps;
-				},
-				function($gps) {
-					return new ContactRegionGps($gps);
-				}
-			)
-		);
-	}
-	
-	
-	public function configureOptions(OptionsResolver $resolver) : void
-	{
-		$resolver->setDefaults([
-			'data_class' => ContactsRegionCallInfoDTO::class,
-		]);
-	}
-	
+        $builder->add('working', TextType::class, ['required' => false]);
+
+        /** GPS широта:*/
+
+        $builder->add('latitude', TextType::class, ['required' => false, 'attr' => ['data-latitude' => 'true']]);
+
+        $builder->get('latitude')->addModelTransformer(
+            new CallbackTransformer(
+                function($gps) {
+                    return $gps instanceof ContactRegionGps ? $gps->getValue() : $gps;
+                },
+                function($gps) {
+                    return new ContactRegionGps($gps);
+                },
+            ),
+        );
+
+        /** GPS долгота:*/
+
+        $builder->add('longitude', TextType::class, ['required' => false, 'attr' => ['data-longitude' => 'true']]);
+
+        $builder->get('longitude')->addModelTransformer(
+            new CallbackTransformer(
+                function($gps) {
+                    return $gps instanceof ContactRegionGps ? $gps->getValue() : $gps;
+                },
+                function($gps) {
+                    return new ContactRegionGps($gps);
+                },
+            ),
+        );
+    }
+
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => ContactsRegionCallInfoDTO::class,
+        ]);
+    }
+
 }

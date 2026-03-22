@@ -32,24 +32,24 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ContactsRegionDeleteForm extends AbstractType
 {
-	
-	public function buildForm(FormBuilderInterface $builder, array $options) : void
-	{
-		
-		/* Сохранить ******************************************************/
-		$builder->add(
-			'contacts_call_delete',
-			SubmitType::class,
-			['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-danger']]
-		);
-	}
-	
-	
-	public function configureOptions(OptionsResolver $resolver) : void
-	{
-		$resolver->setDefaults([
-			'data_class' => ContactsRegionDeleteDTO::class,
-		]);
-	}
-	
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+
+        /* Сохранить ******************************************************/
+        $builder->add(
+            'contacts_call_delete',
+            SubmitType::class,
+            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-danger']],
+        );
+    }
+
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => ContactsRegionDeleteDTO::class,
+        ]);
+    }
+
 }

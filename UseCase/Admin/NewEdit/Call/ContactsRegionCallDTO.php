@@ -38,8 +38,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /** @see ContactsRegionCall */
 final class ContactsRegionCallDTO implements ContactsRegionCallInterface
 {
-//    /** Идентификатор контактного региона */
-//    private ?ContactsRegionCallUid $id = null;
+    //    /** Идентификатор контактного региона */
+    //    private ?ContactsRegionCallUid $id = null;
 
     /** Постоянный неизменяемый идентификатор */
     #[Assert\Uuid]
@@ -83,32 +83,33 @@ final class ContactsRegionCallDTO implements ContactsRegionCallInterface
         $this->translate = new ArrayCollection();
         $this->cover = new Cover\ContactsRegionCallCoverDTO();
     }
-    
-//    public function setId(): ?ContactsRegionCallUid
-//    {
-//        return $this->id;
-//    }
-//
-//    public function getCallUid(): ?ContactsRegionCallUid
-//    {
-//        return $this->id;
-//    }
 
+    //    public function setId(): ?ContactsRegionCallUid
+    //    {
+    //        return $this->id;
+    //    }
+    //
+    //    public function getCallUid(): ?ContactsRegionCallUid
+    //    {
+    //        return $this->id;
+    //    }
 
 
     /** Постоянный неизменяемый идентификатор */
     public function getConst(): ContactsRegionCallConst
     {
-        if (!(new ReflectionProperty(self::class, 'const'))->isInitialized($this)) {
+        if(!(new ReflectionProperty(self::class, 'const'))->isInitialized($this))
+        {
             $this->const = new ContactsRegionCallConst();
         }
-        
+
         return $this->const;
     }
 
     public function setConst(ContactsRegionCallConst $const): void
     {
-        if (!(new ReflectionProperty(self::class, 'const'))->isInitialized($this)) {
+        if(!(new ReflectionProperty(self::class, 'const'))->isInitialized($this))
+        {
             $this->const = $const;
         }
     }
@@ -116,7 +117,8 @@ final class ContactsRegionCallDTO implements ContactsRegionCallInterface
     /** Контактные номера телефонов Колл-центра */
     public function getPhone(): ArrayCollection
     {
-        if ($this->phone->isEmpty()) {
+        if($this->phone->isEmpty())
+        {
             $this->addPhone(new Phone\ContactsRegionCallPhoneDTO());
         }
 
@@ -125,7 +127,8 @@ final class ContactsRegionCallDTO implements ContactsRegionCallInterface
 
     public function addPhone(Phone\ContactsRegionCallPhoneDTO $phone): void
     {
-        if (!$this->phone->contains($phone)) {
+        if(!$this->phone->contains($phone))
+        {
             $this->phone->add($phone);
         }
     }
@@ -146,22 +149,23 @@ final class ContactsRegionCallDTO implements ContactsRegionCallInterface
         $this->info = $info;
     }
 
-    /** Перевод */
-    public function setTranslate(ArrayCollection $trans): void
-    {
-        $this->translate = $trans;
-    }
-
     public function getTranslate(): ArrayCollection
     {
         // Вычисляем расхождение и добавляем неопределенные локали
-        foreach (Locale::diffLocale($this->translate) as $locale) {
+        foreach(Locale::diffLocale($this->translate) as $locale)
+        {
             $ContactsRegionCallTransDTO = new Trans\ContactsRegionCallTransDTO();
             $ContactsRegionCallTransDTO->setLocal($locale);
             $this->addTranslate($ContactsRegionCallTransDTO);
         }
 
         return $this->translate;
+    }
+
+    /** Перевод */
+    public function setTranslate(ArrayCollection $trans): void
+    {
+        $this->translate = $trans;
     }
 
     public function addTranslate(Trans\ContactsRegionCallTransDTO $trans): void
@@ -171,7 +175,8 @@ final class ContactsRegionCallDTO implements ContactsRegionCallInterface
             return;
         }
 
-        if (!$this->translate->contains($trans)) {
+        if(!$this->translate->contains($trans))
+        {
             $this->translate->add($trans);
         }
     }
@@ -249,7 +254,6 @@ final class ContactsRegionCallDTO implements ContactsRegionCallInterface
         $this->active = $active;
         return $this;
     }
-
 
 
 }

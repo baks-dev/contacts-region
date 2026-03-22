@@ -42,79 +42,79 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'contacts_region_call_info')]
 class ContactsRegionCallInfo extends EntityEvent
 {
-	/** ID колл-центра */
+    /** ID колл-центра */
     #[Assert\NotBlank]
-	#[ORM\Id]
+    #[ORM\Id]
     #[ORM\OneToOne(targetEntity: ContactsRegionCall::class, inversedBy: 'info')]
-	#[ORM\JoinColumn(name: 'call', referencedColumnName: 'id')]
-	private ContactsRegionCall $call;
-	
-	/** Адрес колл-центра */
-	#[ORM\Column(type: Types::STRING, nullable: true)]
-	private ?string $address = null;
-	
-	/** Контактный Email */
-	#[ORM\Column(type: ContactRegionEmail::TYPE, nullable: true)]
-	private ?ContactRegionEmail $email = null;
-	
-	/** Режим работы: */
-	#[ORM\Column(type: Types::STRING, nullable: true)]
-	private ?string $working = null;
+    #[ORM\JoinColumn(name: 'call', referencedColumnName: 'id')]
+    private ContactsRegionCall $call;
 
-	/** GPS широта:*/
-	#[ORM\Column(type: ContactRegionGps::TYPE, nullable: true)]
-	private ?ContactRegionGps $latitude = null;
-	
-	/** GPS долгота:*/
-	#[ORM\Column(type: ContactRegionGps::TYPE, nullable: true)]
-	private ?ContactRegionGps $longitude = null;
+    /** Адрес колл-центра */
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $address = null;
+
+    /** Контактный Email */
+    #[ORM\Column(type: ContactRegionEmail::TYPE, nullable: true)]
+    private ?ContactRegionEmail $email = null;
+
+    /** Режим работы: */
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $working = null;
+
+    /** GPS широта:*/
+    #[ORM\Column(type: ContactRegionGps::TYPE, nullable: true)]
+    private ?ContactRegionGps $latitude = null;
+
+    /** GPS долгота:*/
+    #[ORM\Column(type: ContactRegionGps::TYPE, nullable: true)]
+    private ?ContactRegionGps $longitude = null;
 
     /** Координаты на карте */
     #[ORM\Column(type: GeocodeAddressUid::TYPE, nullable: true)]
     private ?GeocodeAddressUid $geocode = null;
-	
-	
-	public function __construct(ContactsRegionCall $call)
-	{
-		$this->call = $call;
-	}
+
+
+    public function __construct(ContactsRegionCall $call)
+    {
+        $this->call = $call;
+    }
 
     public function __toString(): string
     {
         return (string) $this->call;
     }
-	
-	public function getDto($dto): mixed
-	{
+
+    public function getDto($dto): mixed
+    {
         $dto = is_string($dto) && class_exists($dto) ? new $dto() : $dto;
 
-		if($dto instanceof ContactsRegionCallInfoInterface)
-		{
-			return parent::getDto($dto);
-		}
-		
-		throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
-	}
-	
-	
-	public function setEntity($dto): mixed
-	{
-		if($dto instanceof ContactsRegionCallInfoInterface || $dto instanceof self)
-		{
-			if(
-				empty($dto->getAddress()) &&
-				empty($dto->getEmail()) &&
-				empty($dto->getLatitude()) &&
-				empty($dto->getLength())
-			)
-			{
-				return false;
-			}
-			
-			return parent::setEntity($dto);
-		}
-		
-		throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
-	}
-	
+        if($dto instanceof ContactsRegionCallInfoInterface)
+        {
+            return parent::getDto($dto);
+        }
+
+        throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
+
+    public function setEntity($dto): mixed
+    {
+        if($dto instanceof ContactsRegionCallInfoInterface || $dto instanceof self)
+        {
+            if(
+                empty($dto->getAddress()) &&
+                empty($dto->getEmail()) &&
+                empty($dto->getLatitude()) &&
+                empty($dto->getLength())
+            )
+            {
+                return false;
+            }
+
+            return parent::setEntity($dto);
+        }
+
+        throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
+    }
+
 }

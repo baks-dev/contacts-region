@@ -23,16 +23,14 @@
 
 namespace BaksDev\Contacts\Region\Entity\Call\Cover;
 
-use BaksDev\Contacts\Region\Type\Call\ContactsRegionCallUid;
-
 interface ContactsRegionCallCoverInterface
 {
-	public function getName() : ?string;
+    public function getName(): ?string;
 
 
-	public function getExt() : ?string;
+    public function getExt(): ?string;
 
 
-	public function getCdn() : bool;
+    public function getCdn(): bool;
 
 }

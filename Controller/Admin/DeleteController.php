@@ -57,7 +57,7 @@ final class DeleteController extends AbstractController
             ->createForm(
                 type: ContactsRegionDeleteForm::class,
                 data: $ContactsRegionCallDeleteDTO,
-                options: ['action' => $this->generateUrl('contacts-region:admin.delete', ['id' => $ContactsRegionCallDeleteDTO->getId()]),]
+                options: ['action' => $this->generateUrl('contacts-region:admin.delete', ['id' => $ContactsRegionCallDeleteDTO->getId()]),],
             )
             ->handleRequest($request);
 
@@ -78,7 +78,7 @@ final class DeleteController extends AbstractController
                 'admin.page.delete',
                 'admin.danger.delete',
                 'admin.contacts.region',
-                $ContactsRegionCall
+                $ContactsRegionCall,
             );
 
             return $this->redirectToRoute('contacts-region:admin.index', status: 400);

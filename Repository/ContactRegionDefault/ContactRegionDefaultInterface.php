@@ -27,6 +27,6 @@ use BaksDev\Reference\Region\Type\Id\RegionUid;
 
 interface ContactRegionDefaultInterface
 {
-	public function getDefaultCallRegion() : ?RegionUid;
-	
+    public function getDefaultCallRegion(): ?RegionUid;
+
 }

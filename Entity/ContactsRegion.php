@@ -55,12 +55,6 @@ class ContactsRegion
         return (string) $this->id;
     }
 
-    public function getId(): RegionUid
-    {
-        return $this->id;
-    }
-
-
     public function getEvent(): ContactsRegionEventUid
     {
         return $this->event;
@@ -69,6 +63,11 @@ class ContactsRegion
     public function setEvent(ContactsRegionEventUid|ContactsRegionEvent $event): void
     {
         $this->event = $event instanceof ContactsRegionEvent ? $event->getId() : $event;
+    }
+
+    public function getId(): RegionUid
+    {
+        return $this->id;
     }
 
     public function restore(RegionUid $id): void

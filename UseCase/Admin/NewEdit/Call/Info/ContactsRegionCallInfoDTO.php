@@ -97,7 +97,7 @@ final class ContactsRegionCallInfoDTO implements ContactsRegionCallInfoInterface
     }
 
     /** GPS долгота:*/
-    
+
     public function getLongitude(): ?ContactRegionGps
     {
         return $this->longitude;

@@ -52,13 +52,13 @@ final readonly class ContactCallByGeocodeRepository implements ContactCallByGeoc
             ->setParameter(
                 'const',
                 $const,
-                ContactsRegionCallConst::TYPE
+                ContactsRegionCallConst::TYPE,
             );
 
         $qb->join('call',
             ContactsRegion::class,
             'region',
-            'region.event = call.event'
+            'region.event = call.event',
         );
 
 
@@ -68,7 +68,7 @@ final readonly class ContactCallByGeocodeRepository implements ContactCallByGeoc
             ->join('call',
                 ContactsRegionCallInfo::class,
                 'call_info',
-                'call_info.call = call.id'
+                'call_info.call = call.id',
             );
 
 
@@ -102,21 +102,21 @@ final readonly class ContactCallByGeocodeRepository implements ContactCallByGeoc
             'info',
             ContactsRegionCall::class,
             'call',
-            'call.id = info.call AND call.pickup = true'
+            'call.id = info.call AND call.pickup = true',
         );
 
         $qbExist->join(
             'call',
             ContactsRegionEvent::class,
             'event',
-            'event.id = call.event'
+            'event.id = call.event',
         );
 
         $qbExist->join(
             'event',
             ContactsRegion::class,
             'region',
-            'region.event = event.id'
+            'region.event = event.id',
         );
 
         return $qbExist->enableCache('contacts-region', 3600)->fetchExist();

@@ -101,14 +101,14 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
             'call',
             ContactsRegionCallInfo::class,
             'call_info',
-            'call_info.call = call.id'
+            'call_info.call = call.id',
         );
 
         $qb->leftJoin(
             'call',
             ContactsRegionCallTrans::class,
             'call_trans',
-            'call_trans.call = call.id AND call_trans.local = :local'
+            'call_trans.call = call.id AND call_trans.local = :local',
         );
 
 
@@ -122,13 +122,13 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
 					)
 					
 			) AS calls_phone
-		"
+		",
         );
 
         $qb->leftJoin('call',
             ContactsRegionCallPhone::class,
             'call_phone',
-            'call_phone.call = call.id'
+            'call_phone.call = call.id',
         );
 
         $qb->where('call.id = :call');
@@ -157,21 +157,21 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
             'contact_region',
             Region::class,
             'region',
-            'region.id = contact_region.id'
+            'region.id = contact_region.id',
         );
 
         $qb->join(
             'region',
             RegionInvariable::class,
             'region_invariable',
-            'region_invariable.main = region.id AND region_invariable.active = true'
+            'region_invariable.main = region.id AND region_invariable.active = true',
         );
 
         $qb->join(
             'region',
             RegionEvent::class,
             'region_event',
-            'region_event.id = region.event'
+            'region_event.id = region.event',
         );
 
         $qb->addSelect('region_trans.name AS region_name')
@@ -183,21 +183,21 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
             'region',
             RegionTrans::class,
             'region_trans',
-            'region_trans.event = region.event AND region_trans.local = :local'
+            'region_trans.event = region.event AND region_trans.local = :local',
         );
 
         $qb->leftJoin(
             'contact_region',
             ContactsRegionEvent::class,
             'contact_region_event',
-            'contact_region_event.id = contact_region.event'
+            'contact_region_event.id = contact_region.event',
         );
 
         $qb->leftJoin(
             'contact_region_event',
             ContactsRegionCall::class,
             'contact_region_call',
-            'contact_region_call.event = contact_region_event.id'
+            'contact_region_call.event = contact_region_event.id',
         );
 
         $qb->addSelect(
@@ -231,14 +231,14 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
 					)
 					
 			) AS calls
-		"
+		",
         );
 
         $qb->leftJoin(
             'contact_region_call',
             ContactsRegionCallTrans::class,
             'contact_region_call_trans',
-            'contact_region_call_trans.call = contact_region_call.id AND contact_region_call_trans.local = :local'
+            'contact_region_call_trans.call = contact_region_call.id AND contact_region_call_trans.local = :local',
         );
 
         $qb->addSelect(
@@ -254,28 +254,28 @@ final class ContactCallDetailRepository implements ContactCallDetailInterface
 					)
 					
 			) AS calls_phone
-		"
+		",
         );
 
         $qb->leftJoin(
             'contact_region_call',
             ContactsRegionCallPhone::class,
             'contact_region_call_phone',
-            'contact_region_call_phone.call = contact_region_call.id'
+            'contact_region_call_phone.call = contact_region_call.id',
         );
 
         $qb->leftJoin(
             'contact_region_call',
             ContactsRegionCallInfo::class,
             'contact_region_call_info',
-            'contact_region_call_info.call = contact_region_call.id'
+            'contact_region_call_info.call = contact_region_call.id',
         );
 
         $qb->leftJoin(
             'contact_region_call',
             ContactsRegionCallCover::class,
             'contact_region_call_cover',
-            'contact_region_call_cover.call = contact_region_call.id'
+            'contact_region_call_cover.call = contact_region_call.id',
         );
 
         if($region)

@@ -102,7 +102,7 @@ final class PickupByGeolocationRepository implements PickupByGeolocationInterfac
                 'info',
                 ContactsRegionCall::class,
                 'call',
-                'call.id = info.call'
+                'call.id = info.call',
             );
 
         $dbal
@@ -110,7 +110,7 @@ final class PickupByGeolocationRepository implements PickupByGeolocationInterfac
                 'call',
                 ContactsRegion::class,
                 'region',
-                'region.event = call.event'
+                'region.event = call.event',
             );
 
         $dbal->select('call.id AS id');

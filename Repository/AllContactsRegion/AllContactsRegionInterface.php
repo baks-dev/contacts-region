@@ -34,5 +34,5 @@ interface AllContactsRegionInterface
     /**
      * Метод возвращает массив всех добавленных региональных контактов
      */
-    public function findAllPaginator() : PaginatorInterface;
+    public function findAllPaginator(): PaginatorInterface;
 }

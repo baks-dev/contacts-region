@@ -70,7 +70,7 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
             'contact_region',
             Region::class,
             'region',
-            'region.id = contact_region.id'
+            'region.id = contact_region.id',
         );
 
         $dbal
@@ -78,7 +78,7 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
                 'region',
                 RegionInvariable::class,
                 'region_invariable',
-                'region_invariable.main = region.id AND region_invariable.active = true'
+                'region_invariable.main = region.id AND region_invariable.active = true',
             );
 
         $dbal
@@ -88,14 +88,14 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
                 'region',
                 RegionTrans::class,
                 'region_trans',
-                'region_trans.event = region.event AND region_trans.local = :local'
+                'region_trans.event = region.event AND region_trans.local = :local',
             );
 
         $dbal->leftJoin(
             'contact_region',
             ContactsRegionCall::class,
             'contact_region_call',
-            'contact_region_call.event = contact_region.event AND contact_region_call.active = true '.($pickup ? ' AND contact_region_call.pickup = true' : '')
+            'contact_region_call.event = contact_region.event AND contact_region_call.active = true '.($pickup ? ' AND contact_region_call.pickup = true' : ''),
         );
 
         $dbal
@@ -104,7 +104,7 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
             ->leftJoin('contact_region_call',
                 ContactsRegionCallTrans::class,
                 'contact_region_call_trans',
-                'contact_region_call_trans.call = contact_region_call.id AND contact_region_call_trans.local = :local'
+                'contact_region_call_trans.call = contact_region_call.id AND contact_region_call_trans.local = :local',
             );
 
         $dbal->addSelect("JSON_AGG
@@ -117,14 +117,14 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
 					)
 					
 			) AS calls_phone
-		"
+		",
         );
 
         $dbal->leftJoin(
             'contact_region_call',
             ContactsRegionCallPhone::class,
             'contact_region_call_phone',
-            'contact_region_call_phone.call = contact_region_call.id'
+            'contact_region_call_phone.call = contact_region_call.id',
         );
 
         $dbal
@@ -136,7 +136,7 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
             ->leftJoin('contact_region_call',
                 ContactsRegionCallInfo::class,
                 'contact_region_call_info',
-                'contact_region_call_info.call = contact_region_call.id'
+                'contact_region_call_info.call = contact_region_call.id',
             );
 
         $dbal->addSelect("
@@ -152,7 +152,7 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
                 'contact_region_call',
                 ContactsRegionCallCover::class,
                 'contact_region_call_cover',
-                'contact_region_call_cover.call = contact_region_call.id'
+                'contact_region_call_cover.call = contact_region_call.id',
             );
 
 
@@ -165,7 +165,7 @@ final class ContactCallByRegionRepository implements ContactCallByRegionInterfac
         $result = $dbal
             ->enableCache('contacts-region', 86400)
             ->fetchAllHydrate(ContactCallByRegionResult::class);
-        
+
         return $result->valid() ? $result : false;
 
     }

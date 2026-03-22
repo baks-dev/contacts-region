@@ -28,5 +28,5 @@ use BaksDev\Reference\Region\Type\Id\RegionUid;
 interface ContactCallRegionChoiceInterface
 {
     public function fetchCallRegion(?RegionUid $region): ?array;
-	
+
 }

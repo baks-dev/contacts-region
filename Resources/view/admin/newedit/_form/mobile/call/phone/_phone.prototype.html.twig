@@ -2,23 +2,23 @@
 
 <div class='d-flex flex-column gap-2'>
 
-	<div class='w-25'>
-		{{ phone_delete|raw }}
-	</div>
+    <div class='w-25'>
+        {{ phone_delete|raw }}
+    </div>
 
 
-	<div>
-		<div>
-			{{ 'Название '|trans }}
-			<span class='small text-muted ms-3'>
+    <div>
+        <div>
+            {{ 'Название '|trans }}
+            <span class='small text-muted ms-3'>
 							<small>тел, факс, оператор</small>
 						</span>
-		</div>
-		{{ phone_name|raw }}
-	</div>
+        </div>
+        {{ phone_name|raw }}
+    </div>
 
 
-	{#<div class="input-group w-100">
+    {# <div class="input-group w-100">
 		<span class="input-group-text">
 			<svg xmlns="http://www.w3.org/2000/svg"
 					width="16"
@@ -31,11 +31,11 @@
 		</span>
 
 		{{ form_widget(phone.phone) }}
-	</div>#}
+	</div> #}
 
-	<div>
-		{{ 'Контактный телефон'|trans }}
-		{{ phone_phone|raw }}
-	</div>
+    <div>
+        {{ 'Контактный телефон'|trans }}
+        {{ phone_phone|raw }}
+    </div>
 
 </div>

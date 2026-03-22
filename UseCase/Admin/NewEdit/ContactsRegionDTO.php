@@ -25,9 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\UseCase\Admin\NewEdit;
 
-use BaksDev\Contacts\Region\Entity\Call\ContactsRegionCall;
 use BaksDev\Contacts\Region\Entity\Event\ContactsRegionEventInterface;
-use BaksDev\Contacts\Region\Type\Call\Const\ContactsRegionCallConst;
 use BaksDev\Contacts\Region\Type\Event\ContactsRegionEventUid;
 use BaksDev\Reference\Region\Type\Id\RegionUid;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -60,7 +58,7 @@ final class ContactsRegionDTO implements ContactsRegionEventInterface
         $this->calls = new Call\ContactsRegionCallDTO();
         $this->call = new ArrayCollection();
     }
-    
+
     /** Идентификатор региона */
     public function getRegion(): ?RegionUid
     {
@@ -125,7 +123,8 @@ final class ContactsRegionDTO implements ContactsRegionEventInterface
 
     public function addCall(Call\ContactsRegionCallDTO $call): self
     {
-        if (!(new ReflectionProperty($call, 'const'))->isInitialized($call)) {
+        if(!(new ReflectionProperty($call, 'const'))->isInitialized($call))
+        {
             $this->call->add($this->calls);
             return $this;
         }

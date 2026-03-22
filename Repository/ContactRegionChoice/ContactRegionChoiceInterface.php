@@ -25,6 +25,6 @@ namespace BaksDev\Contacts\Region\Repository\ContactRegionChoice;
 
 interface ContactRegionChoiceInterface
 {
-	public function getRegionChoice();
-	
+    public function getRegionChoice();
+
 }

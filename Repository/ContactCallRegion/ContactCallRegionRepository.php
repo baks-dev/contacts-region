@@ -32,30 +32,30 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class ContactCallRegionRepository implements ContactCallRegionInterface
 {
-	private EntityManagerInterface $entityManager;
-	
-	
-	public function __construct(EntityManagerInterface $entityManager)
-	{
-		$this->entityManager = $entityManager;
-	}
-	
-	
-	public function getContactCall(ContactsRegionCallUid $call) : ?ContactsRegionCallUid
-	{
-		$qb = $this->entityManager->createQueryBuilder();
-		
-		$select = sprintf('new %s(call.id, event.id, event.region)', ContactsRegionCallUid::class);
-		$qb->select($select);
-		
-		$qb->from(ContactsRegionCall::class, 'call');
-		$qb->join(ContactsRegionEvent::class, 'event', 'WITH', 'event.id = call.event');
-		
-		
-		$qb->where('call.id = :call');
-		$qb->setParameter('call', $call, ContactsRegionCallUid::TYPE);
-		
-		return $qb->getQuery()->getOneOrNullResult();
-	}
-	
+    private EntityManagerInterface $entityManager;
+
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+
+    public function getContactCall(ContactsRegionCallUid $call): ?ContactsRegionCallUid
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+
+        $select = sprintf('new %s(call.id, event.id, event.region)', ContactsRegionCallUid::class);
+        $qb->select($select);
+
+        $qb->from(ContactsRegionCall::class, 'call');
+        $qb->join(ContactsRegionEvent::class, 'event', 'WITH', 'event.id = call.event');
+
+
+        $qb->where('call.id = :call');
+        $qb->setParameter('call', $call, ContactsRegionCallUid::TYPE);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
 }

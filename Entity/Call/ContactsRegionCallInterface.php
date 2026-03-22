@@ -28,7 +28,7 @@ use BaksDev\Contacts\Region\Type\Call\Const\ContactsRegionCallConst;
 /** @see ContactsRegionCall */
 interface ContactsRegionCallInterface
 {
-   // public function getCallUid(): ?ContactsRegionCallUid;
+    // public function getCallUid(): ?ContactsRegionCallUid;
 
     public function getConst(): ContactsRegionCallConst;
 }

@@ -25,5 +25,5 @@ namespace BaksDev\Contacts\Region\Entity\Call\Phone;
 
 interface ContactsRegionCallPhoneInterface
 {
-	
+
 }

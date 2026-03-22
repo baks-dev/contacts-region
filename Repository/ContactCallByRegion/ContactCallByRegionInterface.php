@@ -30,5 +30,5 @@ interface ContactCallByRegionInterface
 {
 
     public function fetchContactCallByRegionResult(?RegionUid $region, bool $pickup = false): Generator|false;
-	
+
 }

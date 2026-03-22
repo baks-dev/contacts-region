@@ -46,7 +46,8 @@ final class ContactsRegionCallConst extends Uid
         mixed $attr = null,
         mixed $option = null,
         mixed $property = null,
-    ) {
+    )
+    {
         parent::__construct($value);
 
         $this->attr = $attr;
