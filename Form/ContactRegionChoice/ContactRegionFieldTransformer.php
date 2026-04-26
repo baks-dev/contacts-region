@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Contacts\Region\Form\ContactRegionChoice;
 
+use BaksDev\Core\Type\UidType\Uid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Component\Form\DataTransformerInterface;
 
@@ -34,7 +35,7 @@ final readonly class ContactRegionFieldTransformer implements DataTransformerInt
     {
         $ContactRegionFieldDTO = new ContactRegionFieldDTO();
 
-        if($value)
+        if($value && Uid::isUid($value))
         {
             $UserProfileUid = new UserProfileUid($value);
             $ContactRegionFieldDTO->setProfile($UserProfileUid);
