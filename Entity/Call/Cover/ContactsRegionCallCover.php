@@ -152,6 +152,11 @@ class ContactsRegionCallCover extends EntityEvent implements UploadEntityInterfa
         return $this->ext;
     }
 
+    public function isCdn(): bool
+    {
+        return $this->cdn === true;
+    }
+
 
     //    public function getDir(): ContactsRegionCallUid
     //    {
